@@ -1,0 +1,81 @@
+/*
+ * aspect-ratios.css — Responsive aspect ratio containers and media embeds
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="aspect-ratios.css">
+ *   <div class="aspect-video"><img src="photo.jpg"></div>
+ *   <div class="aspect-square"><img src="avatar.jpg"></div>
+ *   <div class="embed-responsive"><iframe src="..."></iframe></div>
+ */
+
+/* ============================================================
+   ASPECT RATIO BOXES (modern approach)
+   ============================================================ */
+
+.aspect-square   { aspect-ratio: 1 / 1; }
+.aspect-video    { aspect-ratio: 16 / 9; }
+.aspect-photo    { aspect-ratio: 4 / 3; }
+.aspect-portrait { aspect-ratio: 3 / 4; }
+.aspect-cinema   { aspect-ratio: 21 / 9; }
+.aspect-golden   { aspect-ratio: 1.618 / 1; }
+
+/* Fill the aspect ratio container */
+.aspect-square img,
+.aspect-video img,
+.aspect-photo img,
+.aspect-portrait img,
+.aspect-cinema img,
+.aspect-golden img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   RESPONSIVE EMBEDS (iframes, videos)
+   ============================================================ */
+
+.embed-responsive {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.embed-responsive iframe,
+.embed-responsive video,
+.embed-responsive embed,
+.embed-responsive object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.embed-responsive-4x3 {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.embed-responsive-1x1 {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* ============================================================
+   OBJECT-FIT UTILITIES
+   ============================================================ */
+
+.object-cover   { object-fit: cover; }
+.object-contain { object-fit: contain; }
+.object-fill    { object-fit: fill; }
+.object-none    { object-fit: none; }
+
+.object-top     { object-position: top; }
+.object-bottom  { object-position: bottom; }
+.object-center  { object-position: center; }
+.object-left    { object-position: left; }
+.object-right   { object-position: right; }

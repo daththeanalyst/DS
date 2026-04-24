@@ -1,0 +1,248 @@
+/*
+ * shadows.css — Layered shadows, long shadows, neon glow, inner shadows
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="shadows.css">
+ *   <div class="shadow-layered">Layered depth</div>
+ *   <div class="shadow-neon-blue">Neon glow</div>
+ *   <h1 class="shadow-long">Long shadow text</h1>
+ *   <div class="shadow-inner">Inner shadow</div>
+ */
+
+/* ============================================================
+   LAYERED SHADOWS (realistic depth)
+   Multiple shadow layers create a more natural depth effect
+   ============================================================ */
+
+.shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-md {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-xl {
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Layered: multiple layers for photorealistic depth */
+.shadow-layered {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 2px 2px rgba(0, 0, 0, 0.06),
+    0 4px 4px rgba(0, 0, 0, 0.05),
+    0 8px 8px rgba(0, 0, 0, 0.04),
+    0 16px 16px rgba(0, 0, 0, 0.03);
+}
+
+/* Dreamy: soft, expansive shadow */
+.shadow-dreamy {
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 24px 48px rgba(0, 0, 0, 0.06);
+}
+
+/* Sharp: crisp edge shadow */
+.shadow-sharp {
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.15);
+}
+
+.shadow-sharp-dark {
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Brutalist: thick, hard shadow */
+.shadow-brutal {
+  box-shadow: 4px 4px 0 #000;
+}
+
+.shadow-brutal-lg {
+  box-shadow: 8px 8px 0 #000;
+}
+
+/* ============================================================
+   NEON GLOW SHADOWS
+   ============================================================ */
+
+.shadow-neon-blue {
+  box-shadow:
+    0 0 5px rgba(59, 130, 246, 0.5),
+    0 0 20px rgba(59, 130, 246, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.15);
+}
+
+.shadow-neon-purple {
+  box-shadow:
+    0 0 5px rgba(139, 92, 246, 0.5),
+    0 0 20px rgba(139, 92, 246, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.15);
+}
+
+.shadow-neon-pink {
+  box-shadow:
+    0 0 5px rgba(236, 72, 153, 0.5),
+    0 0 20px rgba(236, 72, 153, 0.3),
+    0 0 40px rgba(236, 72, 153, 0.15);
+}
+
+.shadow-neon-green {
+  box-shadow:
+    0 0 5px rgba(34, 197, 94, 0.5),
+    0 0 20px rgba(34, 197, 94, 0.3),
+    0 0 40px rgba(34, 197, 94, 0.15);
+}
+
+.shadow-neon-red {
+  box-shadow:
+    0 0 5px rgba(239, 68, 68, 0.5),
+    0 0 20px rgba(239, 68, 68, 0.3),
+    0 0 40px rgba(239, 68, 68, 0.15);
+}
+
+.shadow-neon-cyan {
+  box-shadow:
+    0 0 5px rgba(6, 182, 212, 0.5),
+    0 0 20px rgba(6, 182, 212, 0.3),
+    0 0 40px rgba(6, 182, 212, 0.15);
+}
+
+/* Intense neon (pulsing) */
+.shadow-neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+  from {
+    box-shadow:
+      0 0 5px rgba(99, 102, 241, 0.4),
+      0 0 20px rgba(99, 102, 241, 0.2),
+      0 0 40px rgba(99, 102, 241, 0.1);
+  }
+  to {
+    box-shadow:
+      0 0 10px rgba(99, 102, 241, 0.6),
+      0 0 30px rgba(99, 102, 241, 0.4),
+      0 0 60px rgba(99, 102, 241, 0.2),
+      0 0 80px rgba(99, 102, 241, 0.1);
+  }
+}
+
+/* Neon text glow */
+.shadow-neon-text {
+  text-shadow:
+    0 0 7px rgba(99, 102, 241, 0.7),
+    0 0 20px rgba(99, 102, 241, 0.4),
+    0 0 40px rgba(99, 102, 241, 0.2);
+}
+
+.shadow-neon-text-pink {
+  text-shadow:
+    0 0 7px rgba(236, 72, 153, 0.7),
+    0 0 20px rgba(236, 72, 153, 0.4),
+    0 0 40px rgba(236, 72, 153, 0.2);
+}
+
+/* ============================================================
+   LONG SHADOWS (text or box)
+   ============================================================ */
+
+.shadow-long {
+  text-shadow:
+    1px 1px 0 rgba(0,0,0,0.2),
+    2px 2px 0 rgba(0,0,0,0.18),
+    3px 3px 0 rgba(0,0,0,0.16),
+    4px 4px 0 rgba(0,0,0,0.14),
+    5px 5px 0 rgba(0,0,0,0.12),
+    6px 6px 0 rgba(0,0,0,0.10),
+    7px 7px 0 rgba(0,0,0,0.08),
+    8px 8px 0 rgba(0,0,0,0.06),
+    9px 9px 0 rgba(0,0,0,0.04),
+    10px 10px 0 rgba(0,0,0,0.02);
+}
+
+.shadow-long-box {
+  box-shadow:
+    1px 1px 0 rgba(0,0,0,0.15),
+    2px 2px 0 rgba(0,0,0,0.13),
+    3px 3px 0 rgba(0,0,0,0.11),
+    4px 4px 0 rgba(0,0,0,0.09),
+    5px 5px 0 rgba(0,0,0,0.07),
+    6px 6px 0 rgba(0,0,0,0.05),
+    7px 7px 0 rgba(0,0,0,0.03),
+    8px 8px 0 rgba(0,0,0,0.01);
+}
+
+/* ============================================================
+   INNER SHADOWS
+   ============================================================ */
+
+.shadow-inner {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-inner-lg {
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Inner glow */
+.shadow-inner-glow {
+  box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+/* Pressed / sunken effect */
+.shadow-sunken {
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.12),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Neumorphism (soft UI) */
+.shadow-neu {
+  box-shadow:
+    8px 8px 16px rgba(0, 0, 0, 0.1),
+    -8px -8px 16px rgba(255, 255, 255, 0.7);
+}
+
+.shadow-neu-inset {
+  box-shadow:
+    inset 4px 4px 8px rgba(0, 0, 0, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================
+   COLORED SHADOWS (shadow matches element color vibe)
+   ============================================================ */
+
+.shadow-colored {
+  box-shadow: 0 8px 24px -4px currentColor;
+  filter: saturate(1.5);
+}
+
+/* ============================================================
+   HOVER SHADOW TRANSITIONS
+   ============================================================ */
+
+.shadow-hover {
+  transition: box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.shadow-hover:hover {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 2px 2px rgba(0, 0, 0, 0.06),
+    0 4px 4px rgba(0, 0, 0, 0.05),
+    0 8px 8px rgba(0, 0, 0, 0.04),
+    0 16px 16px rgba(0, 0, 0, 0.03);
+}

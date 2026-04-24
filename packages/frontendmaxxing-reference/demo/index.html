@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>frontendmaxxing — Demo</title>
+
+  <!-- Phase 1 CSS -->
+  <link rel="stylesheet" href="../animations/keyframes.css">
+  <link rel="stylesheet" href="../animations/transitions.css">
+  <link rel="stylesheet" href="../animations/scroll-animations.css">
+  <link rel="stylesheet" href="../effects/glassmorphism.css">
+  <link rel="stylesheet" href="../effects/gradients.css">
+  <link rel="stylesheet" href="../effects/glitch.css">
+  <link rel="stylesheet" href="../effects/shadows.css">
+  <link rel="stylesheet" href="../effects/morphing.css">
+  <link rel="stylesheet" href="../effects/noise-grain.css">
+  <link rel="stylesheet" href="../layout/grid-systems.css">
+  <link rel="stylesheet" href="../layout/flexbox-patterns.css">
+  <link rel="stylesheet" href="../typography/fluid-type.css">
+  <link rel="stylesheet" href="../typography/text-effects.css">
+  <link rel="stylesheet" href="../typography/text-animations.css">
+  <link rel="stylesheet" href="../responsive/dark-mode.css">
+
+  <!-- Phase 2 CSS -->
+  <link rel="stylesheet" href="../blocks/buttons.css">
+  <link rel="stylesheet" href="../blocks/dividers.css">
+  <link rel="stylesheet" href="../blocks/loaders.css">
+  <link rel="stylesheet" href="../blocks/toasts.css">
+  <link rel="stylesheet" href="../blocks/tooltips.css">
+  <link rel="stylesheet" href="../blocks/badges.css">
+  <link rel="stylesheet" href="../blocks/avatars.css">
+  <link rel="stylesheet" href="../components/heroes.css">
+  <link rel="stylesheet" href="../components/navbars.css">
+  <link rel="stylesheet" href="../components/cards.css">
+  <link rel="stylesheet" href="../components/modals.css">
+  <link rel="stylesheet" href="../components/forms.css">
+  <link rel="stylesheet" href="../components/tabs.css">
+  <link rel="stylesheet" href="../components/faq.css">
+  <link rel="stylesheet" href="../components/pricing.css">
+  <link rel="stylesheet" href="../components/testimonials.css">
+  <link rel="stylesheet" href="../components/timeline.css">
+  <link rel="stylesheet" href="../components/stats.css">
+  <link rel="stylesheet" href="../components/footers.css">
+  <link rel="stylesheet" href="../backgrounds/patterns.css">
+  <link rel="stylesheet" href="../backgrounds/aurora.css">
+  <link rel="stylesheet" href="../backgrounds/animated-bg.css">
+  <link rel="stylesheet" href="../borders/animated-borders.css">
+  <link rel="stylesheet" href="../svg/svg-animations.css">
+  <link rel="stylesheet" href="../micro/interactions.css">
+
+  <!-- Phase 3 CSS -->
+  <link rel="stylesheet" href="../effects/hover-effects.css">
+  <link rel="stylesheet" href="../effects/spotlight-reveal.css">
+  <link rel="stylesheet" href="../effects/post-processing.css">
+  <link rel="stylesheet" href="../animations/inview.css">
+  <link rel="stylesheet" href="../components/marquee.css">
+  <link rel="stylesheet" href="../components/notification-stack.css">
+  <link rel="stylesheet" href="../layout/fade-masks.css">
+  <link rel="stylesheet" href="../responsive/viewport.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    section {
+      padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 5vw, 4rem);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .section-subtitle {
+      color: var(--text-secondary, #94a3b8);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: 1.5rem;
+    }
+
+    .demo-grid-sm {
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    }
+
+    .demo-card {
+      background: var(--surface, #1e1e2e);
+      border: 1px solid var(--border, #2d2d3f);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+      text-align: center;
+    }
+
+    .demo-card .label {
+      margin-top: 1rem;
+      font-size: 0.8125rem;
+      color: var(--text-secondary, #94a3b8);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .demo-box {
+      width: 60px;
+      height: 60px;
+      background: var(--primary, #818cf8);
+      border-radius: 12px;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .demo-section-gap { margin-top: 3rem; }
+
+    .full-width {
+      max-width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    /* Hero custom */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: var(--text-secondary);
+      margin-top: 1.5rem;
+      max-width: 600px;
+    }
+
+    .hero .hero-actions { margin-top: 2rem; }
+
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .spring-demo { cursor: pointer; }
+
+    /* Divider section full width */
+    .divider-showcase {
+      max-width: 100%;
+      padding: 0;
+    }
+    .divider-showcase > * { margin-bottom: 0; }
+
+    /* Avatar placeholder images */
+    .avatar-demo { background: linear-gradient(135deg, #667eea, #764ba2); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════ -->
+  <section class="hero grain">
+    <div class="bg-aurora bg-aurora-subtle hero-bg"></div>
+    <canvas id="hero-particles" class="hero-bg" style="z-index:1;"></canvas>
+    <div class="hero-content">
+      <div class="tag glass" style="color: var(--primary)">Frontend Toolkit v2</div>
+      <h1 class="animate-fadeInUp">
+        <span class="text-gradient-animated">frontend</span><br>
+        <span style="color: var(--text)">maxxing</span>
+      </h1>
+      <p class="animate-fadeInUp delay-200">
+        95+ copy-paste snippets for components, animations, effects, backgrounds, and micro-interactions.
+        No build step. No dependencies.
+      </p>
+      <div class="hero-actions animate-fadeInUp delay-400">
+        <button class="btn btn-gradient btn-lg btn-pill" onclick="document.getElementById('buttons-section').scrollIntoView({behavior:'smooth'})">Explore Components</button>
+        <button class="btn btn-glass btn-lg btn-pill" onclick="document.getElementById('animations-section').scrollIntoView({behavior:'smooth'})">View Animations</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BUTTONS
+       ═══════════════════════════════════════════════ -->
+  <section id="buttons-section">
+    <h2 class="section-title">Buttons</h2>
+    <p class="section-subtitle">12+ button styles with hover animations — blocks/buttons.css</p>
+    <div class="demo-row">
+      <button class="btn btn-primary">Primary</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <button class="btn btn-ghost">Ghost</button>
+      <button class="btn btn-outline">Outline</button>
+      <button class="btn btn-gradient">Gradient</button>
+      <button class="btn btn-glass">Glass</button>
+      <button class="btn btn-neon">Neon</button>
+      <button class="btn btn-3d">3D Push</button>
+      <button class="btn btn-underline">Underline</button>
+      <button class="btn btn-arrow">Arrow</button>
+    </div>
+    <div class="demo-row demo-section-gap">
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+      <button class="btn btn-primary btn-pill">Pill</button>
+      <button class="btn btn-primary btn-icon" data-tooltip="Icon Button" data-tooltip-pos="top">+</button>
+      <button class="btn btn-primary btn-loading btn-lg">Loading</button>
+    </div>
+    <div class="demo-row demo-section-gap">
+      <p style="color:var(--text-secondary); font-size:0.875rem;">Ripple effect (click):</p>
+      <button class="btn btn-primary ripple-btn">Click me</button>
+      <button class="btn btn-gradient ripple-btn">Click me</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CARDS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Cards</h2>
+    <p class="section-subtitle">10 card styles — components/cards.css</p>
+    <div class="demo-grid">
+      <div class="card-hover-lift" style="padding:2rem;">
+        <h3 style="font-size:1.125rem; font-weight:600; margin-bottom:0.5rem;">Hover Lift</h3>
+        <p style="color:var(--text-secondary); font-size:0.875rem;">Lifts with shadow on hover.</p>
+        <div class="label">.card-hover-lift</div>
+      </div>
+
+      <div class="card-glass" style="padding:2rem;">
+        <h3 style="font-size:1.125rem; font-weight:600; margin-bottom:0.5rem;">Glass Card</h3>
+        <p style="color:var(--text-secondary); font-size:0.875rem;">Frosted glass effect.</p>
+        <div class="label">.card-glass</div>
+      </div>
+
+      <div class="card-gradient-border" style="padding:2rem;">
+        <h3 style="font-size:1.125rem; font-weight:600; margin-bottom:0.5rem;">Gradient Border</h3>
+        <p style="color:var(--text-secondary); font-size:0.875rem;">Animated gradient border.</p>
+        <div class="label">.card-gradient-border</div>
+      </div>
+
+      <div class="card-neumorphic" style="padding:2rem;">
+        <h3 style="font-size:1.125rem; font-weight:600; margin-bottom:0.5rem;">Neumorphic</h3>
+        <p style="color:var(--text-secondary); font-size:0.875rem;">Soft UI raised effect.</p>
+        <div class="label">.card-neumorphic</div>
+      </div>
+
+      <div class="card-spotlight" id="spotlight-card" style="padding:2rem;">
+        <h3 style="font-size:1.125rem; font-weight:600; margin-bottom:0.5rem;">Spotlight</h3>
+        <p style="color:var(--text-secondary); font-size:0.875rem;">Cursor spotlight follows mouse.</p>
+        <div class="label">.card-spotlight</div>
+      </div>
+
+      <div class="card-flip" style="height:200px;">
+        <div class="card-flip-inner">
+          <div class="card-flip-front" style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
+            <h3 style="font-size:1.125rem; font-weight:600;">Flip Card</h3>
+            <p style="color:var(--text-secondary); font-size:0.875rem; margin-top:0.5rem;">Hover to flip</p>
+          </div>
+          <div class="card-flip-back" style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
+            <h3 style="font-size:1.125rem; font-weight:600;">Back Side</h3>
+            <p style="color:var(--text-secondary); font-size:0.875rem; margin-top:0.5rem;">.card-flip</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BADGES & AVATARS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Badges & Avatars</h2>
+    <p class="section-subtitle">blocks/badges.css + blocks/avatars.css</p>
+
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:1rem;">Badges</h3>
+    <div class="demo-row">
+      <span class="badge">Default</span>
+      <span class="badge badge-primary">Primary</span>
+      <span class="badge badge-success">Success</span>
+      <span class="badge badge-warning">Warning</span>
+      <span class="badge badge-danger">Danger</span>
+      <span class="badge badge-info">Info</span>
+      <span class="badge badge-outline">Outline</span>
+      <span class="badge badge-pill badge-primary">Pill</span>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Status Dots</h3>
+    <div class="demo-row">
+      <span class="badge-dot badge-dot-online"></span> Online
+      <span class="badge-dot badge-dot-offline"></span> Offline
+      <span class="badge-dot badge-dot-busy"></span> Busy
+      <span class="badge-dot badge-dot-away"></span> Away
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Avatars</h3>
+    <div class="demo-row">
+      <div class="avatar avatar-xs avatar-initials">XS</div>
+      <div class="avatar avatar-sm avatar-initials avatar-blue">SM</div>
+      <div class="avatar avatar-initials avatar-green">MD</div>
+      <div class="avatar avatar-lg avatar-initials avatar-pink">LG</div>
+      <div class="avatar avatar-xl avatar-initials avatar-orange">XL</div>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Avatar Group</h3>
+    <div class="avatar-group">
+      <div class="avatar avatar-initials avatar-blue">A</div>
+      <div class="avatar avatar-initials avatar-green">B</div>
+      <div class="avatar avatar-initials avatar-pink">C</div>
+      <div class="avatar avatar-initials avatar-orange">D</div>
+      <div class="avatar avatar-initials avatar-more">+5</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TABS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Tabs</h2>
+    <p class="section-subtitle">Tab switching with keyboard navigation — components/tabs.css + tabs.js</p>
+
+    <div class="tabs tabs-underline" id="demo-tabs">
+      <div class="tab-list" role="tablist">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="tab1">Overview</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="tab2">Features</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="tab3">Code</button>
+        <div class="tab-indicator"></div>
+      </div>
+      <div class="tab-content">
+        <div class="tab-panel active" id="tab1" role="tabpanel">
+          <p>The <strong>frontendmaxxing</strong> toolkit gives you 80+ production-ready snippets. Each file is self-contained — just copy and paste.</p>
+        </div>
+        <div class="tab-panel" id="tab2" role="tabpanel">
+          <p>Animations, effects, layout, typography, components, backgrounds, borders, SVG animations, micro-interactions, and more. All framework-agnostic.</p>
+        </div>
+        <div class="tab-panel" id="tab3" role="tabpanel">
+          <code style="font-size:0.875rem; color:var(--primary);">&lt;link rel="stylesheet" href="buttons.css"&gt;<br>&lt;script src="buttons.js"&gt;&lt;/script&gt;</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FAQ / ACCORDION
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">FAQ Accordion</h2>
+    <p class="section-subtitle">Smooth height animation — components/faq.css + faq.js</p>
+
+    <div class="faq-accordion" id="demo-faq">
+      <div class="faq-item">
+        <button class="faq-question">What is frontendmaxxing?</button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            A collection of 80+ copy-paste CSS and JS snippets for building modern, animated frontends. No frameworks needed.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Do I need a build step?</button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Nope! Every file is standalone. Just link the CSS or include the JS script tag. Works with any framework or plain HTML.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Is it accessible?</button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Yes. All animations respect <code>prefers-reduced-motion</code>. Interactive components include proper ARIA attributes, keyboard navigation, and focus management.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FORMS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Form Components</h2>
+    <p class="section-subtitle">Floating labels, validation, toggles — components/forms.css + forms.js</p>
+
+    <div class="demo-grid">
+      <div class="demo-card" style="align-items:stretch; text-align:left;">
+        <div class="form-group">
+          <div class="input-float">
+            <input type="text" class="input" id="demo-name" placeholder=" ">
+            <label for="demo-name">Your Name</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-float">
+            <input type="email" class="input" id="demo-email" placeholder=" ">
+            <label for="demo-email">Email Address</label>
+          </div>
+        </div>
+        <div class="label" style="text-align:center;">.input-float</div>
+      </div>
+
+      <div class="demo-card" style="gap:1.5rem;">
+        <label class="toggle-switch">
+          <input type="checkbox" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <div>
+          <label class="checkbox-custom">
+            <input type="checkbox" checked>
+            <span class="checkmark"></span>
+            Custom Checkbox
+          </label>
+        </div>
+        <div>
+          <label class="radio-custom">
+            <input type="radio" name="demo-radio" checked>
+            <span class="radio-dot"></span>
+            Custom Radio
+          </label>
+        </div>
+        <div class="label">.toggle-switch, .checkbox-custom, .radio-custom</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TOASTS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Toast Notifications</h2>
+    <p class="section-subtitle">Show/dismiss/stack/auto-close — blocks/toasts.css + toasts.js</p>
+    <div class="demo-row">
+      <button class="btn btn-primary" id="toast-success">Success Toast</button>
+      <button class="btn btn-outline" style="--btn-text:#ef4444; border-color:#ef4444;" id="toast-error">Error Toast</button>
+      <button class="btn btn-outline" style="--btn-text:#f59e0b; border-color:#f59e0b;" id="toast-warning">Warning Toast</button>
+      <button class="btn btn-outline" style="--btn-text:#3b82f6; border-color:#3b82f6;" id="toast-info">Info Toast</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       LOADERS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Loaders</h2>
+    <p class="section-subtitle">Spinners, skeletons, progress bars — blocks/loaders.css + loaders.js</p>
+
+    <div class="demo-grid demo-grid-sm">
+      <div class="demo-card">
+        <div class="spinner"></div>
+        <div class="label">.spinner</div>
+      </div>
+      <div class="demo-card">
+        <div class="spinner spinner-sm"></div>
+        <div class="label">.spinner-sm</div>
+      </div>
+      <div class="demo-card">
+        <div class="dots-pulse">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="label">.dots-pulse</div>
+      </div>
+      <div class="demo-card">
+        <div class="bounce-loader">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="label">.bounce-loader</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Skeleton Loading</h3>
+    <div style="max-width:400px; padding:1.5rem; background:var(--surface); border-radius:16px; border:1px solid var(--border);">
+      <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
+        <div class="skeleton skeleton-avatar"></div>
+        <div style="flex:1;">
+          <div class="skeleton skeleton-title" style="width:60%;"></div>
+          <div class="skeleton skeleton-text" style="width:40%; margin-top:0.5rem;"></div>
+        </div>
+      </div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text" style="width:80%;"></div>
+      <div class="skeleton skeleton-text" style="width:65%;"></div>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Progress Bar</h3>
+    <div class="progress-bar" style="max-width:400px;">
+      <div class="progress-bar-fill progress-bar-gradient" id="demo-progress" style="width:0%;"></div>
+    </div>
+    <button class="btn btn-sm btn-primary" style="margin-top:1rem;" id="progress-btn">Animate Progress</button>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TOOLTIPS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Tooltips</h2>
+    <p class="section-subtitle">CSS-only and JS-positioned — blocks/tooltips.css + tooltips.js</p>
+    <div class="demo-row" style="gap:2rem;">
+      <button class="btn btn-secondary" data-tooltip="Tooltip on top" data-tooltip-pos="top">Top</button>
+      <button class="btn btn-secondary" data-tooltip="Tooltip on bottom" data-tooltip-pos="bottom">Bottom</button>
+      <button class="btn btn-secondary" data-tooltip="Tooltip on left" data-tooltip-pos="left">Left</button>
+      <button class="btn btn-secondary" data-tooltip="Tooltip on right" data-tooltip-pos="right">Right</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       DIVIDERS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Section Dividers</h2>
+    <p class="section-subtitle">SVG wave, diagonal, blob, zigzag, curved — blocks/dividers.css</p>
+  </section>
+  <div class="divider-wave"></div>
+  <div style="background:#1e1e2e; padding:3rem; text-align:center;">
+    <p style="color:var(--text-secondary); font-family:monospace;">.divider-wave</p>
+  </div>
+  <div class="divider-wave-bottom"></div>
+
+  <div style="height:2rem;"></div>
+  <div class="divider-diagonal"></div>
+  <div style="background:#1e1e2e; padding:2rem; text-align:center;">
+    <p style="color:var(--text-secondary); font-family:monospace;">.divider-diagonal</p>
+  </div>
+  <div class="divider-curved-reverse"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       ANIMATED BORDERS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Animated Borders</h2>
+    <p class="section-subtitle">Rotating gradients, neon pulse, shimmer — borders/animated-borders.css</p>
+    <div class="demo-grid">
+      <div class="demo-card border-gradient-rotate">
+        <div style="font-size:1.125rem; font-weight:600;">Gradient Rotate</div>
+        <div class="label">.border-gradient-rotate</div>
+      </div>
+      <div class="demo-card border-neon-pulse" style="border-color:#818cf8;">
+        <div style="font-size:1.125rem; font-weight:600;">Neon Pulse</div>
+        <div class="label">.border-neon-pulse</div>
+      </div>
+      <div class="demo-card border-dash-animate">
+        <div style="font-size:1.125rem; font-weight:600;">Animated Dashes</div>
+        <div class="label">.border-dash-animate</div>
+      </div>
+      <div class="demo-card border-shimmer">
+        <div style="font-size:1.125rem; font-weight:600;">Shimmer</div>
+        <div class="label">.border-shimmer</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BACKGROUNDS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Backgrounds</h2>
+    <p class="section-subtitle">Patterns, aurora, animated — backgrounds/</p>
+    <div class="demo-grid">
+      <div class="demo-card bg-dots" style="border:none; min-height:200px;">
+        <div style="font-size:1.125rem; font-weight:600; position:relative; z-index:1;">.bg-dots</div>
+      </div>
+      <div class="demo-card bg-grid" style="border:none; min-height:200px;">
+        <div style="font-size:1.125rem; font-weight:600; position:relative; z-index:1;">.bg-grid</div>
+      </div>
+      <div class="demo-card bg-diagonal" style="border:none; min-height:200px;">
+        <div style="font-size:1.125rem; font-weight:600; position:relative; z-index:1;">.bg-diagonal</div>
+      </div>
+      <div class="demo-card bg-cross" style="border:none; min-height:200px;">
+        <div style="font-size:1.125rem; font-weight:600; position:relative; z-index:1;">.bg-cross</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Aurora Background</h3>
+    <div style="position:relative; border-radius:16px; overflow:hidden; height:250px; display:flex; align-items:center; justify-content:center;">
+      <div class="bg-aurora" style="position:absolute; inset:0;"></div>
+      <p style="position:relative; z-index:1; font-size:1.5rem; font-weight:700;">.bg-aurora</p>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin:2rem 0 1rem;">Animated Gradient</h3>
+    <div style="position:relative; border-radius:16px; overflow:hidden; height:200px; display:flex; align-items:center; justify-content:center;">
+      <div class="bg-gradient-flow" style="position:absolute; inset:0;"></div>
+      <p style="position:relative; z-index:1; font-size:1.25rem; font-weight:700;">.bg-gradient-flow</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MICRO INTERACTIONS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Micro Interactions</h2>
+    <p class="section-subtitle">Toggles, likes, copy, counters — micro/interactions.css + interactions.js</p>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <label class="toggle-ios">
+          <input type="checkbox">
+          <span class="toggle-ios-slider"></span>
+        </label>
+        <div class="label">.toggle-ios</div>
+      </div>
+
+      <div class="demo-card">
+        <button class="like-btn" aria-label="Like">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <div class="label">.like-btn</div>
+      </div>
+
+      <div class="demo-card">
+        <button class="copy-btn btn btn-secondary btn-sm" data-copy-text="Hello, frontendmaxxing!">Copy Text</button>
+        <div class="label">.copy-btn</div>
+      </div>
+
+      <div class="demo-card">
+        <div class="counter-group">
+          <button class="counter-btn">-</button>
+          <span class="counter-value">0</span>
+          <button class="counter-btn">+</button>
+        </div>
+        <div class="label">.counter-group</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MODALS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Modals</h2>
+    <p class="section-subtitle">6 modal styles with focus trap — components/modals.css + modals.js</p>
+    <div class="demo-row">
+      <button class="btn btn-primary" data-modal-open="#demo-modal">Open Modal</button>
+      <button class="btn btn-outline" data-modal-open="#demo-modal-slide">Slide Panel</button>
+    </div>
+  </section>
+
+  <!-- Center Modal -->
+  <div class="modal-backdrop" id="demo-modal">
+    <div class="modal modal-center">
+      <div class="modal-header">
+        <h3>Modal Title</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>This is a centered modal with backdrop blur, focus trapping, and ESC to close.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost btn-sm" data-modal-close>Cancel</button>
+        <button class="btn btn-primary btn-sm" data-modal-close>Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide Panel Modal -->
+  <div class="modal-backdrop" id="demo-modal-slide">
+    <div class="modal modal-slide">
+      <div class="modal-header">
+        <h3>Slide Panel</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>A slide-in panel from the right. Great for settings, filters, or detail views.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STATS / COUNTERS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Stats</h2>
+    <p class="section-subtitle">Scroll-triggered counting animation — components/stats.css + stats.js</p>
+    <div class="stats-row">
+      <div class="stats-card">
+        <div class="stats-number" data-count-to="80">0</div>
+        <div class="stats-label">Snippets</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" data-count-to="37">0</div>
+        <div class="stats-label">New Files</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" data-count-to="6">0</div>
+        <div class="stats-label">Categories</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" data-count-to="0" data-count-suffix="$" data-count-prefix="">0</div>
+        <div class="stats-label">Cost</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TIMELINE
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Timeline</h2>
+    <p class="section-subtitle">Vertical and horizontal timelines — components/timeline.css</p>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">Phase 1</div>
+          <h3 class="timeline-title">Foundation</h3>
+          <p>40+ files: animations, effects, layout, typography, responsive, utilities.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">Phase 2A–2C</div>
+          <h3 class="timeline-title">Components</h3>
+          <p>Heroes, navbars, cards, modals, forms, tabs, FAQ, pricing, testimonials, stats, footers, badges, avatars.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">Phase 2D</div>
+          <h3 class="timeline-title">Visual Polish</h3>
+          <p>Background patterns, aurora, animated backgrounds, animated borders, SVG animations, micro-interactions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       ANIMATIONS (Phase 1)
+       ═══════════════════════════════════════════════ -->
+  <section id="animations-section">
+    <h2 class="section-title">Animations</h2>
+    <p class="section-subtitle">CSS keyframe animations — animations/keyframes.css</p>
+    <div class="demo-grid demo-grid-sm">
+      <div class="demo-card">
+        <div class="demo-box animate-bounce"></div>
+        <div class="label">.animate-bounce</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box animate-pulse"></div>
+        <div class="label">.animate-pulse</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box animate-rubberBand"></div>
+        <div class="label">.animate-rubberBand</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box animate-wobble"></div>
+        <div class="label">.animate-wobble</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box animate-heartbeat"></div>
+        <div class="label">.animate-heartbeat</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box animate-float"></div>
+        <div class="label">.animate-float</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SPRING PHYSICS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Spring Physics</h2>
+    <p class="section-subtitle">Click the boxes to trigger spring animations — animations/spring.js</p>
+    <div class="demo-grid demo-grid-sm">
+      <div class="demo-card">
+        <div class="demo-box spring-demo" data-preset="gentle"></div>
+        <div class="label">Spring.presets.gentle</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box spring-demo" data-preset="wobbly"></div>
+        <div class="label">Spring.presets.wobbly</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box spring-demo" data-preset="stiff"></div>
+        <div class="label">Spring.presets.stiff</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box spring-demo" data-preset="snappy"></div>
+        <div class="label">Spring.presets.snappy</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       EFFECTS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Effects</h2>
+    <p class="section-subtitle">Glass, gradients, glitch, shadows, morphing — effects/</p>
+    <div class="demo-grid">
+      <div class="demo-card glass-card">
+        <div style="font-size:2rem; margin-bottom:0.5rem;">&#9632;</div>
+        <div class="label">.glass-card</div>
+      </div>
+      <div class="demo-card" style="background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size:400% 400%; animation: gradient-flow 4s ease infinite;">
+        <div style="font-size:1.1rem; font-weight:700; color:#fff;">Gradient Flow</div>
+      </div>
+      <div class="demo-card">
+        <h3 class="glitch" data-text="GLITCH" style="font-size:2rem; color:#fff;">GLITCH</h3>
+        <div class="label">.glitch</div>
+      </div>
+      <div class="demo-card shadow-neon-purple" style="border:none;">
+        <div style="font-size:1.1rem; font-weight:600;">.shadow-neon-purple</div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-box morph-blob" style="width:80px; height:80px; background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+        <div class="label">.morph-blob</div>
+      </div>
+      <div class="demo-card" id="tilt-card">
+        <div style="font-size:1.1rem; font-weight:600;">Tilt me</div>
+        <div class="label">Parallax.tilt()</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TYPOGRAPHY
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Typography</h2>
+    <p class="section-subtitle">Text effects and animations — typography/</p>
+    <div style="display:flex; flex-direction:column; gap:2rem;">
+      <div>
+        <h3 class="text-gradient-sunset display-3">Gradient Text</h3>
+        <p class="label">.text-gradient-sunset .display-3</p>
+      </div>
+      <div>
+        <h3 class="text-stroke-2 display-3" style="font-size:clamp(2rem,5vw,4rem);">Stroke Text</h3>
+        <p class="label">.text-stroke-2</p>
+      </div>
+      <div>
+        <h3 class="text-neon" style="font-size:2rem;">Neon Glow</h3>
+        <p class="label">.text-neon</p>
+      </div>
+      <div>
+        <h3 id="scramble-text" style="font-size:2rem; font-weight:700; cursor:pointer;">HOVER TO DECODE</h3>
+        <p class="label">TextReveal.scramble() — click to trigger</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SVG ANIMATIONS
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">SVG Animations</h2>
+    <p class="section-subtitle">Path drawing and morphing — svg/svg-animations.css + svg-animations.js</p>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" class="svg-draw" style="--path-length:314;">
+          <circle cx="50" cy="50" r="40" stroke="var(--primary, #818cf8)" stroke-width="3"/>
+        </svg>
+        <div class="label">.svg-draw (circle)</div>
+      </div>
+      <div class="demo-card">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" class="svg-draw" style="--path-length:280;">
+          <path d="M20,80 Q50,10 80,80" stroke="var(--primary, #818cf8)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div class="label">.svg-draw (path)</div>
+      </div>
+      <div class="demo-card">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" class="svg-pulse" stroke="var(--primary, #818cf8)" stroke-width="2">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+        <div class="label">.svg-pulse</div>
+      </div>
+      <div class="demo-card">
+        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" class="svg-float" stroke="var(--primary, #818cf8)" stroke-width="2">
+          <polygon points="12 2 22 20 2 20"/>
+        </svg>
+        <div class="label">.svg-float</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       PARTICLES
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Particles</h2>
+    <p class="section-subtitle">Interactive particle systems — effects/particles.js</p>
+    <canvas id="demo-particles" style="width:100%; height:300px; border-radius:16px; background: var(--surface); border:1px solid var(--border);"></canvas>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       HOVER EFFECTS (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Hover Effects</h2>
+    <p class="section-subtitle">Premium hover interactions stolen from award-winning sites — effects/hover-effects.css</p>
+
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:1rem;">Text Slide (text-shadow method)</h3>
+    <div class="demo-row" style="font-size:1.5rem; font-weight:700; gap:2rem; margin-bottom:2rem;">
+      <a href="#" class="hover-text-slide" style="text-decoration:none; color:inherit;"><span>Hover me</span></a>
+      <a href="#" class="hover-text-slide" style="text-decoration:none; color:var(--primary);"><span>Slide up</span></a>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:1rem;">Text Replace (clip-path + attr)</h3>
+    <div class="demo-row" style="font-size:1.5rem; font-weight:700; gap:2rem; margin-bottom:2rem;">
+      <a href="#" class="hover-text-replace" data-hover="Replaced!" style="text-decoration:none; color:inherit;"><span>Hover me</span></a>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:1rem;">Direction-Aware Underlines</h3>
+    <div class="demo-row" style="font-size:1.25rem; gap:2.5rem; margin-bottom:2rem;">
+      <a href="#" class="hover-underline-dir" style="text-decoration:none; color:inherit;">Direction Aware</a>
+      <a href="#" class="hover-underline-in" style="text-decoration:none; color:inherit;">From Center</a>
+      <a href="#" class="hover-underline-left" style="text-decoration:none; color:inherit;">From Left</a>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:600; margin-bottom:1rem;">More Effects</h3>
+    <div class="demo-grid demo-grid-sm">
+      <div class="demo-card hover-fill-up">
+        <div style="font-size:1rem; font-weight:600;">Fill Up</div>
+        <div class="label">.hover-fill-up</div>
+      </div>
+      <div class="demo-card hover-shine">
+        <div style="font-size:1rem; font-weight:600;">Shine Sweep</div>
+        <div class="label">.hover-shine</div>
+      </div>
+      <div class="demo-card hover-border-draw" style="padding:2rem;">
+        <div style="font-size:1rem; font-weight:600;">Border Draw</div>
+        <div class="label">.hover-border-draw</div>
+      </div>
+      <div class="demo-card">
+        <span class="hover-letter-space" style="font-size:1.25rem; font-weight:700;">SPACING</span>
+        <div class="label">.hover-letter-space</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TEXT WAVE (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Text Wave</h2>
+    <p class="section-subtitle">Character-by-character shimmer scanning effect — effects/text-wave.js</p>
+    <div style="font-size:clamp(1.5rem, 4vw, 3rem); font-weight:800; letter-spacing:-0.02em;">
+      <span id="text-wave-demo">frontendmaxxing is beautiful</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MARQUEE (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section style="max-width:100%; padding-left:0; padding-right:0;">
+    <div style="max-width:1200px; margin:0 auto; padding:0 clamp(1rem, 5vw, 4rem);">
+      <h2 class="section-title">Infinite Marquee</h2>
+      <p class="section-subtitle">Scroll-velocity influenced infinite rail — components/marquee.css + marquee.js</p>
+    </div>
+
+    <div class="marquee marquee-bordered marquee-fade marquee-xl" id="demo-marquee" style="margin-top:1rem;">
+      <div class="marquee-track">
+        <span class="marquee-item">DESIGN</span>
+        <span class="marquee-item">ANIMATE</span>
+        <span class="marquee-item">CREATE</span>
+        <span class="marquee-item">SHIP</span>
+        <span class="marquee-item">REPEAT</span>
+      </div>
+    </div>
+
+    <div class="marquee marquee-fade" style="margin-top:1rem; font-size:0.875rem; color:var(--text-secondary);">
+      <div class="marquee-track" style="animation-direction:reverse; --marquee-speed:40s;">
+        <span class="marquee-item">CSS Animations</span>
+        <span class="marquee-item">Spring Physics</span>
+        <span class="marquee-item">Glassmorphism</span>
+        <span class="marquee-item">Scroll Reveals</span>
+        <span class="marquee-item">SVG Drawing</span>
+        <span class="marquee-item">Micro Interactions</span>
+        <span class="marquee-item">Post-Processing</span>
+        <span class="marquee-item">Parallax</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       NOTIFICATION STACK (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Notification Stack</h2>
+    <p class="section-subtitle">Cards stacked behind each other, fan out on hover — components/notification-stack.css</p>
+    <div class="demo-grid">
+      <div>
+        <h3 style="font-size:0.875rem; font-weight:600; margin-bottom:1rem; color:var(--text-secondary);">Fan variant (hover)</h3>
+        <div class="notif-stack notif-stack-fan">
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">New Message</span><span class="notif-card-time">2m ago</span></div>
+            <div class="notif-card-body">Hey, check out the new component library!</div>
+          </div>
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">Deploy Complete</span><span class="notif-card-time">5m ago</span></div>
+            <div class="notif-card-body">Production build v2.1.0 deployed successfully.</div>
+          </div>
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">PR Merged</span><span class="notif-card-time">12m ago</span></div>
+            <div class="notif-card-body">feat: add hover effects and text wave</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:0.875rem; font-weight:600; margin-bottom:1rem; color:var(--text-secondary);">Spread variant (hover)</h3>
+        <div class="notif-stack notif-stack-spread">
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">Build Passed</span><span class="notif-card-time">1m ago</span></div>
+            <div class="notif-card-body">All 42 tests passing. Coverage: 94%</div>
+          </div>
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">Review Request</span><span class="notif-card-time">8m ago</span></div>
+            <div class="notif-card-body">Please review: smooth-scroll.js implementation</div>
+          </div>
+          <div class="notif-card notif-card-glass">
+            <div class="notif-card-header"><span class="notif-card-title">Alert</span><span class="notif-card-time">15m ago</span></div>
+            <div class="notif-card-body">Memory usage above 80% threshold</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SPOTLIGHT REVEAL (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Spotlight Reveal</h2>
+    <p class="section-subtitle">Dot pattern with mouse-tracking radial spotlight — effects/spotlight-reveal.css + .js</p>
+    <div class="spotlight-reveal spotlight-dots" id="spotlight-demo"
+         style="border-radius:16px; padding:4rem 2rem; text-align:center; background:var(--bg, #0a0a0a); border:1px solid var(--border, #2d2d3f); min-height:250px; display:flex; align-items:center; justify-content:center;">
+      <h3 class="spotlight-reveal-text" style="font-size:clamp(2rem, 5vw, 4rem); font-weight:800; letter-spacing:-0.02em;">
+        Move your mouse here
+      </h3>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       INVIEW ANIMATIONS (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Inview Animations</h2>
+    <p class="section-subtitle">Scroll-triggered entrance effects — animations/inview.css</p>
+    <div class="demo-grid demo-grid-sm" id="inview-demo">
+      <div class="demo-card inview-fade-up">
+        <div style="font-size:1rem; font-weight:600;">Fade Up</div>
+        <div class="label">.inview-fade-up</div>
+      </div>
+      <div class="demo-card inview-blur-up">
+        <div style="font-size:1rem; font-weight:600;">Blur Up</div>
+        <div class="label">.inview-blur-up</div>
+      </div>
+      <div class="demo-card inview-scale">
+        <div style="font-size:1rem; font-weight:600;">Scale</div>
+        <div class="label">.inview-scale</div>
+      </div>
+      <div class="demo-card inview-clip-up">
+        <div style="font-size:1rem; font-weight:600;">Clip Up</div>
+        <div class="label">.inview-clip-up</div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;" data-border-parent id="inview-border-demo">
+      <div class="inview-border" style="padding:1rem 0; --index:0;">Line 1 — scales from left on scroll</div>
+      <div class="inview-border" style="padding:1rem 0; --index:1;">Line 2 — staggered delay</div>
+      <div class="inview-border" style="padding:1rem 0; --index:2;">Line 3 — smooth cubic-bezier</div>
+      <div class="inview-border inview-border-bottom" style="padding:1rem 0; --index:3;">Line 4 — top + bottom borders</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       POST-PROCESSING FILTERS (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Post-Processing Filters</h2>
+    <p class="section-subtitle">CSS filter presets for cinematic moods — effects/post-processing.css</p>
+    <div class="demo-grid demo-grid-sm">
+      <div class="demo-card filter-cinematic" style="background:linear-gradient(135deg, #667eea, #764ba2); border:none; color:#fff;">
+        <div style="font-size:1rem; font-weight:600;">Cinematic</div>
+        <div class="label" style="color:rgba(255,255,255,0.7);">.filter-cinematic</div>
+      </div>
+      <div class="demo-card filter-vintage" style="background:linear-gradient(135deg, #f093fb, #f5576c); border:none; color:#fff;">
+        <div style="font-size:1rem; font-weight:600;">Vintage</div>
+        <div class="label" style="color:rgba(255,255,255,0.7);">.filter-vintage</div>
+      </div>
+      <div class="demo-card filter-noir" style="background:linear-gradient(135deg, #667eea, #764ba2); border:none; color:#fff;">
+        <div style="font-size:1rem; font-weight:600;">Film Noir</div>
+        <div class="label" style="color:rgba(255,255,255,0.7);">.filter-noir</div>
+      </div>
+      <div class="demo-card filter-dreamy" style="background:linear-gradient(135deg, #a8edea, #fed6e3); border:none; color:#1a1a2e;">
+        <div style="font-size:1rem; font-weight:600;">Dreamy</div>
+        <div class="label" style="color:rgba(0,0,0,0.5);">.filter-dreamy</div>
+      </div>
+      <div class="demo-card filter-neon-night" style="background:linear-gradient(135deg, #0f0c29, #302b63, #24243e); border:none; color:#fff;">
+        <div style="font-size:1rem; font-weight:600;">Neon Night</div>
+        <div class="label" style="color:rgba(255,255,255,0.7);">.filter-neon-night</div>
+      </div>
+      <div class="demo-card filter-grain filter-vignette" style="background:linear-gradient(135deg, #ee7752, #e73c7e); border:none; color:#fff; position:relative; overflow:hidden;">
+        <div style="font-size:1rem; font-weight:600; position:relative; z-index:2;">Grain + Vignette</div>
+        <div class="label" style="color:rgba(255,255,255,0.7); position:relative; z-index:2;">.filter-grain .filter-vignette</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FADE MASKS (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Fade Masks</h2>
+    <p class="section-subtitle">CSS gradient masks for smooth edge fading — layout/fade-masks.css</p>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <div class="fade-tb" style="height:120px; overflow:hidden; width:100%;">
+          <div style="font-size:0.75rem; line-height:1.8; color:var(--text-secondary);">
+            Line 1 — fades at top<br>Line 2<br>Line 3<br>Line 4<br>Line 5<br>Line 6<br>Line 7<br>Line 8 — fades at bottom
+          </div>
+        </div>
+        <div class="label">.fade-tb</div>
+      </div>
+      <div class="demo-card">
+        <div class="fade-lr" style="overflow:hidden; width:100%; white-space:nowrap; font-size:0.875rem; color:var(--text-secondary);">
+          &#x2190; faded left edge &mdash; visible content in the middle &mdash; faded right edge &#x2192;
+        </div>
+        <div class="label">.fade-lr</div>
+      </div>
+      <div class="demo-card">
+        <div class="fade-radial" style="width:100px; height:100px; background:var(--primary); border-radius:8px; margin:0 auto;"></div>
+        <div class="label">.fade-radial</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       DRAGGABLE PANELS (Phase 3)
+       ═══════════════════════════════════════════════ -->
+  <section>
+    <h2 class="section-title">Draggable Panels</h2>
+    <p class="section-subtitle">macOS-style drag-to-move windows — components/draggable.js</p>
+    <div style="position:relative; height:350px; border:1px solid var(--border, #2d2d3f); border-radius:16px; overflow:hidden; background:var(--bg, #0a0a0a);">
+      <div class="draggable-panel" style="position:absolute; top:30px; left:40px; width:260px; background:var(--surface, #1e1e2e); border:1px solid var(--border, #2d2d3f); border-radius:12px; overflow:hidden; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
+        <div class="panel-handle" style="background:#343434; padding:6px 12px; display:flex; align-items:center; gap:6px; border-bottom:1px solid #000; cursor:grab;">
+          <span style="width:10px; height:10px; border-radius:50%; background:#fe5f57;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#febc2c;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#28c840;"></span>
+          <span style="font-size:0.75rem; margin-left:auto; opacity:0.5;">Panel A</span>
+        </div>
+        <div style="padding:1rem; font-size:0.8125rem; color:var(--text-secondary);">Drag me by the title bar! I stack on click.</div>
+      </div>
+      <div class="draggable-panel" style="position:absolute; top:80px; left:180px; width:260px; background:var(--surface, #1e1e2e); border:1px solid var(--border, #2d2d3f); border-radius:12px; overflow:hidden; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
+        <div class="panel-handle" style="background:#343434; padding:6px 12px; display:flex; align-items:center; gap:6px; border-bottom:1px solid #000; cursor:grab;">
+          <span style="width:10px; height:10px; border-radius:50%; background:#fe5f57;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#febc2c;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#28c840;"></span>
+          <span style="font-size:0.75rem; margin-left:auto; opacity:0.5;">Panel B</span>
+        </div>
+        <div style="padding:1rem; font-size:0.8125rem; color:var(--text-secondary);">I'm another draggable panel. Click to bring to front!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════ -->
+  <footer style="text-align:center; padding:3rem 1rem; border-top:1px solid var(--border, #2d2d3f); color:var(--text-secondary, #94a3b8);">
+    <p><strong style="color:var(--text, #e2e8f0);">frontendmaxxing</strong> — 95+ snippets. No build step. No dependencies.</p>
+    <p style="margin-top:0.5rem; font-size:0.875rem;">Phase 1 + Phase 2 + Phase 3 Complete</p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════ -->
+  <!-- Phase 1 JS -->
+  <script src="../animations/spring.js"></script>
+  <script src="../animations/stagger.js"></script>
+  <script src="../animations/scroll-animations.js"></script>
+  <script src="../effects/particles.js"></script>
+  <script src="../effects/cursor-effects.js"></script>
+  <script src="../effects/text-reveal.js"></script>
+  <script src="../effects/parallax.js"></script>
+
+  <!-- Phase 2 JS -->
+  <script src="../blocks/buttons.js"></script>
+  <!-- Phase 3 JS will be loaded after Phase 2 -->
+  <script src="../blocks/loaders.js"></script>
+  <script src="../blocks/toasts.js"></script>
+  <script src="../blocks/tooltips.js"></script>
+  <script src="../components/cards.js"></script>
+  <script src="../components/modals.js"></script>
+  <script src="../components/forms.js"></script>
+  <script src="../components/tabs.js"></script>
+  <script src="../components/faq.js"></script>
+  <script src="../components/stats.js"></script>
+  <script src="../components/testimonials.js"></script>
+  <script src="../micro/interactions.js"></script>
+  <script src="../svg/svg-animations.js"></script>
+
+  <!-- Phase 3 JS -->
+  <script src="../effects/text-wave.js"></script>
+  <script src="../effects/spotlight-reveal.js"></script>
+  <script src="../components/marquee.js"></script>
+  <script src="../components/draggable.js"></script>
+  <script src="../layout/horizontal-scroll.js"></script>
+  <script src="../utils/smooth-scroll.js"></script>
+
+  <script>
+    // ── Hero particles ──
+    Particles.create('#hero-particles', {
+      count: 60,
+      color: '#818cf8',
+      connect: true,
+      connectDistance: 150,
+      speed: 0.3,
+      size: { min: 1, max: 2 },
+      opacity: 0.5,
+      interactive: true,
+      interactRadius: 120,
+    });
+
+    // ── Demo particles ──
+    Particles.create('#demo-particles', Particles.presets.network);
+
+    // ── Buttons: ripple ──
+    Buttons.ripple('.ripple-btn');
+
+    // ── Cards: spotlight ──
+    Cards.spotlight('#spotlight-card');
+
+    // ── Tabs ──
+    Tabs.init('#demo-tabs');
+
+    // ── FAQ accordion ──
+    FAQ.init('#demo-faq', { singleOpen: true });
+
+    // ── Forms: floating labels ──
+    Forms.floatingLabel('.input-float');
+
+    // ── Modals: bind triggers ──
+    Modal.bindTriggers();
+
+    // ── Toasts ──
+    document.getElementById('toast-success').addEventListener('click', function () {
+      Toast.success('Operation completed successfully!');
+    });
+    document.getElementById('toast-error').addEventListener('click', function () {
+      Toast.error('Something went wrong. Please try again.');
+    });
+    document.getElementById('toast-warning').addEventListener('click', function () {
+      Toast.warning('This action cannot be undone.');
+    });
+    document.getElementById('toast-info').addEventListener('click', function () {
+      Toast.info('New version available. Refresh to update.');
+    });
+
+    // ── Tooltips: init CSS tooltips ──
+    // CSS tooltips work without JS. Tooltip.init() adds JS-positioned tooltips.
+
+    // ── Progress bar ──
+    document.getElementById('progress-btn').addEventListener('click', function () {
+      Loaders.progress('#demo-progress', { to: 100, duration: 2000 });
+      var btn = this;
+      btn.disabled = true;
+      setTimeout(function () {
+        document.getElementById('demo-progress').style.width = '0%';
+        btn.disabled = false;
+      }, 3000);
+    });
+
+    // ── Stats: count up on scroll ──
+    Stats.init();
+
+    // ── Micro interactions ──
+    Micro.like('.like-btn');
+    Micro.copy('.copy-btn');
+    Micro.counter('.counter-group');
+
+    // ── SVG: auto-calc paths ──
+    SVGAnim.calcPaths('.svg-draw');
+
+    // ── Spring physics demos ──
+    document.querySelectorAll('.spring-demo').forEach(function (box) {
+      box.addEventListener('click', function () {
+        var preset = Spring.presets[box.dataset.preset] || Spring.presets.default;
+        animateSpring(box, {
+          from: { y: 0, scale: 1 },
+          to: { y: -60, scale: 1.2 },
+          stiffness: preset.stiffness,
+          damping: preset.damping,
+          onComplete: function () {
+            animateSpring(box, {
+              from: { y: -60, scale: 1.2 },
+              to: { y: 0, scale: 1 },
+              stiffness: preset.stiffness,
+              damping: preset.damping,
+            });
+          },
+        });
+      });
+    });
+
+    // ── Cursor effects ──
+    // CursorFX.magnetic('.magnetic-btn', { strength: 0.4, radius: 120 });
+
+    // ── Tilt card ──
+    Parallax.tilt('#tilt-card', { maxTilt: 15, glare: true, scale: 1.05 });
+
+    // ── Text scramble ──
+    document.getElementById('scramble-text').addEventListener('click', function () {
+      TextReveal.scramble('#scramble-text', { speed: 25, iterations: 4 });
+    });
+
+    // ── Scroll reveals ──
+    ScrollAnim.reveal('.demo-card', {
+      animation: 'animate-fadeInUp',
+      threshold: 0.1,
+      stagger: 60,
+    });
+
+    // ═══ Phase 3 initializations ═══
+
+    // ── Text wave ──
+    TextWave.init('#text-wave-demo', { speed: 'normal', blur: 1.5 });
+
+    // ── Marquee with scroll velocity ──
+    Marquee.init('#demo-marquee', { speed: 1.5, scrollInfluence: 0.3 });
+
+    // ── Spotlight reveal ──
+    SpotlightReveal.init('#spotlight-demo', { radius: 350, lerp: 0.08 });
+
+    // ── Draggable panels ──
+    Draggable.init('.draggable-panel', { handle: '.panel-handle', bounds: false, stack: true });
+
+    // ── Inview animations (add .is-inview on scroll) ──
+    var inviewEls = document.querySelectorAll('[class*="inview-"]');
+    if (inviewEls.length) {
+      var inviewObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) e.target.classList.add('is-inview');
+        });
+      }, { threshold: 0.15 });
+      inviewEls.forEach(function (el) { inviewObs.observe(el); });
+    }
+
+    // ── Inview border parent ──
+    var borderParents = document.querySelectorAll('[data-border-parent]');
+    if (borderParents.length) {
+      var borderObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) e.target.classList.add('is-inview');
+        });
+      }, { threshold: 0.1 });
+      borderParents.forEach(function (el) { borderObs.observe(el); });
+    }
+  </script>
+</body>
+</html>

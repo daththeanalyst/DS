@@ -1,0 +1,235 @@
+/*
+ * scroll-animations.css — Native CSS scroll-driven animations
+ *
+ * Uses the CSS Scroll-Driven Animations API (scroll-timeline).
+ * Supported in Chrome 115+, Edge 115+. Firefox/Safari need JS fallback.
+ * Use scroll-animations.js as the fallback.
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="scroll-animations.css">
+ *   <div class="scroll-fade-in">Fades in on scroll</div>
+ *   <div class="scroll-slide-up">Slides up on scroll</div>
+ *   <div class="scroll-parallax" style="--parallax-speed: 0.3">Parallax</div>
+ *
+ * The .scroll-progress-bar class creates a page progress indicator.
+ */
+
+/* ============================================================
+   SCROLL PROGRESS BAR
+   A fixed bar at the top showing page scroll progress.
+   ============================================================ */
+
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9999;
+  animation: scroll-progress-grow auto linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes scroll-progress-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ============================================================
+   VIEW-TIMELINE ANIMATIONS
+   These animate as the element enters/exits the viewport.
+   ============================================================ */
+
+/* Fade in as element enters viewport */
+.scroll-fade-in {
+  animation: scroll-fade-in-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes scroll-fade-in-kf {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Slide up + fade in */
+.scroll-slide-up {
+  animation: scroll-slide-up-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes scroll-slide-up-kf {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide in from left */
+.scroll-slide-left {
+  animation: scroll-slide-left-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes scroll-slide-left-kf {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from right */
+.scroll-slide-right {
+  animation: scroll-slide-right-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes scroll-slide-right-kf {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale in */
+.scroll-scale-in {
+  animation: scroll-scale-in-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 100%;
+}
+
+@keyframes scroll-scale-in-kf {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Rotate in */
+.scroll-rotate-in {
+  animation: scroll-rotate-in-kf auto ease both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes scroll-rotate-in-kf {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* ============================================================
+   PARALLAX
+   Uses scroll() timeline to move elements at different rates.
+   Set --parallax-speed via inline style or CSS variable.
+   ============================================================ */
+
+.scroll-parallax {
+  --parallax-speed: 0.3;
+  animation: scroll-parallax-kf auto linear both;
+  animation-timeline: scroll(root);
+  will-change: transform;
+}
+
+@keyframes scroll-parallax-kf {
+  from {
+    transform: translateY(calc(var(--parallax-speed) * -100px));
+  }
+  to {
+    transform: translateY(calc(var(--parallax-speed) * 100px));
+  }
+}
+
+/* Parallax variants */
+.scroll-parallax-slow  { --parallax-speed: 0.15; }
+.scroll-parallax-fast  { --parallax-speed: 0.5; }
+
+/* ============================================================
+   REVEAL ON CONTAIN (animate while in view)
+   These run through the entire time the element is visible.
+   ============================================================ */
+
+/* Continuous fade: transparent at edges, opaque in center */
+.scroll-fade-through {
+  animation: scroll-fade-through-kf auto ease both;
+  animation-timeline: view();
+}
+
+@keyframes scroll-fade-through-kf {
+  0%, 100% { opacity: 0; }
+  25%, 75% { opacity: 1; }
+}
+
+/* Scale through: grows as it enters, shrinks as it exits */
+.scroll-scale-through {
+  animation: scroll-scale-through-kf auto ease both;
+  animation-timeline: view();
+}
+
+@keyframes scroll-scale-through-kf {
+  0%   { transform: scale(0.8); opacity: 0; }
+  25%  { transform: scale(1); opacity: 1; }
+  75%  { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+
+/* Horizontal slide through */
+.scroll-slide-through {
+  animation: scroll-slide-through-kf auto ease both;
+  animation-timeline: view();
+}
+
+@keyframes scroll-slide-through-kf {
+  0%   { transform: translateX(-40px); opacity: 0; }
+  25%  { transform: translateX(0); opacity: 1; }
+  75%  { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(40px); opacity: 0; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-fade-in,
+  .scroll-slide-up,
+  .scroll-slide-left,
+  .scroll-slide-right,
+  .scroll-scale-in,
+  .scroll-rotate-in,
+  .scroll-parallax,
+  .scroll-fade-through,
+  .scroll-scale-through,
+  .scroll-slide-through {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

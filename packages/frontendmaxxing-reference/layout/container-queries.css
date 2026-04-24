@@ -1,0 +1,197 @@
+/*
+ * container-queries.css — Component-level responsive design
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="container-queries.css">
+ *
+ *   <div class="container-inline">
+ *     <div class="cq-card">
+ *       <img src="photo.jpg">
+ *       <div>
+ *         <h3>Title</h3>
+ *         <p>Description</p>
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * Container queries let components respond to their CONTAINER's
+ * width, not the viewport. Perfect for reusable components.
+ */
+
+/* ============================================================
+   CONTAINER SETUP
+   Mark an element as a container for size queries.
+   ============================================================ */
+
+.container-inline {
+  container-type: inline-size;
+}
+
+.container-size {
+  container-type: size;
+}
+
+/* Named containers */
+.container-card {
+  container-type: inline-size;
+  container-name: card;
+}
+
+.container-sidebar {
+  container-type: inline-size;
+  container-name: sidebar;
+}
+
+.container-main {
+  container-type: inline-size;
+  container-name: main;
+}
+
+/* ============================================================
+   RESPONSIVE CARD
+   Switches between horizontal and vertical layout
+   based on container width.
+   ============================================================ */
+
+.cq-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cq-card img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* When container is wide enough, go horizontal */
+@container (min-width: 500px) {
+  .cq-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .cq-card img {
+    width: 200px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+  }
+}
+
+/* When container is very wide, add more space */
+@container (min-width: 800px) {
+  .cq-card img {
+    width: 300px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE NAVIGATION
+   Switches between icons-only, icons+text, and full layout.
+   ============================================================ */
+
+.cq-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cq-nav-label {
+  display: none;
+}
+
+/* Show labels when container is wide enough */
+@container (min-width: 300px) {
+  .cq-nav-label {
+    display: inline;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE GRID WITHIN CONTAINER
+   ============================================================ */
+
+.cq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@container (min-width: 400px) {
+  .cq-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container (min-width: 700px) {
+  .cq-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@container (min-width: 1000px) {
+  .cq-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE FONT SIZE (container-based)
+   ============================================================ */
+
+.cq-text-responsive {
+  font-size: 1rem;
+}
+
+@container (min-width: 300px) {
+  .cq-text-responsive { font-size: 1.125rem; }
+}
+
+@container (min-width: 500px) {
+  .cq-text-responsive { font-size: 1.25rem; }
+}
+
+@container (min-width: 700px) {
+  .cq-text-responsive { font-size: 1.5rem; }
+}
+
+/* ============================================================
+   RESPONSIVE PADDING
+   ============================================================ */
+
+.cq-padding {
+  padding: 1rem;
+}
+
+@container (min-width: 400px) {
+  .cq-padding { padding: 1.5rem; }
+}
+
+@container (min-width: 700px) {
+  .cq-padding { padding: 2rem; }
+}
+
+@container (min-width: 1000px) {
+  .cq-padding { padding: 3rem; }
+}
+
+/* ============================================================
+   HIDE / SHOW BASED ON CONTAINER SIZE
+   ============================================================ */
+
+.cq-hide-sm {
+  display: block;
+}
+
+@container (max-width: 400px) {
+  .cq-hide-sm { display: none; }
+}
+
+.cq-show-lg {
+  display: none;
+}
+
+@container (min-width: 700px) {
+  .cq-show-lg { display: block; }
+}

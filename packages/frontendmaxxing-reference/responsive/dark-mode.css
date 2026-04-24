@@ -1,0 +1,162 @@
+/*
+ * dark-mode.css — Theme switching with CSS custom properties
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="dark-mode.css">
+ *   <html data-theme="light">   <!-- or "dark" -->
+ *
+ *   <!-- Toggle button -->
+ *   <button onclick="document.documentElement.dataset.theme =
+ *     document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">
+ *     Toggle theme
+ *   </button>
+ *
+ *   <!-- Use the variables in your CSS -->
+ *   body { background: var(--bg); color: var(--text); }
+ *
+ * Auto-detects system preference. Manual toggle overrides it.
+ */
+
+/* ============================================================
+   LIGHT THEME (default)
+   ============================================================ */
+
+:root,
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+
+  --surface: #ffffff;
+  --surface-hover: #f8f9fa;
+  --surface-active: #e9ecef;
+
+  --text: #1a1a2e;
+  --text-secondary: #495057;
+  --text-tertiary: #868e96;
+  --text-inverse: #ffffff;
+
+  --border: #dee2e6;
+  --border-hover: #adb5bd;
+
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-text: #ffffff;
+
+  --accent: #ec4899;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 1px 2px var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+
+  --overlay: rgba(0, 0, 0, 0.5);
+  --code-bg: #f1f3f5;
+
+  color-scheme: light;
+}
+
+/* ============================================================
+   DARK THEME
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg: #0a0a1a;
+  --bg-secondary: #111128;
+  --bg-tertiary: #1a1a3e;
+
+  --surface: #16163a;
+  --surface-hover: #1e1e4a;
+  --surface-active: #262660;
+
+  --text: #e4e4f0;
+  --text-secondary: #a0a0c0;
+  --text-tertiary: #6c6c8a;
+  --text-inverse: #0a0a1a;
+
+  --border: #2a2a5a;
+  --border-hover: #3a3a7a;
+
+  --primary: #818cf8;
+  --primary-hover: #6366f1;
+  --primary-text: #0a0a1a;
+
+  --accent: #f472b6;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color);
+
+  --overlay: rgba(0, 0, 0, 0.7);
+  --code-bg: #1e1e3a;
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   AUTO-DETECT SYSTEM PREFERENCE
+   Applied when no data-theme is set.
+   ============================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0a0a1a;
+    --bg-secondary: #111128;
+    --bg-tertiary: #1a1a3e;
+    --surface: #16163a;
+    --surface-hover: #1e1e4a;
+    --surface-active: #262660;
+    --text: #e4e4f0;
+    --text-secondary: #a0a0c0;
+    --text-tertiary: #6c6c8a;
+    --text-inverse: #0a0a1a;
+    --border: #2a2a5a;
+    --border-hover: #3a3a7a;
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --primary-text: #0a0a1a;
+    --accent: #f472b6;
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --error: #f87171;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --overlay: rgba(0, 0, 0, 0.7);
+    --code-bg: #1e1e3a;
+    color-scheme: dark;
+  }
+}
+
+/* ============================================================
+   THEME TRANSITION (smooth switch)
+   ============================================================ */
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color 300ms ease,
+              color 300ms ease,
+              border-color 300ms ease,
+              box-shadow 300ms ease;
+}
+
+/* ============================================================
+   UTILITY CLASSES USING THEME VARIABLES
+   ============================================================ */
+
+.bg-primary   { background-color: var(--bg); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-surface   { background-color: var(--surface); }
+
+.text-primary   { color: var(--text); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-tertiary); }
+
+.border-themed  { border-color: var(--border); }

@@ -1,0 +1,118 @@
+/*
+ * breakpoints.css — Modern breakpoint system with CSS custom properties
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="breakpoints.css">
+ *   <div class="show-md">Visible on tablet+</div>
+ *   <div class="hide-lg">Hidden on desktop+</div>
+ *   <div class="container">Responsive container</div>
+ *
+ * Breakpoints:
+ *   sm:  480px   (large phones)
+ *   md:  768px   (tablets)
+ *   lg:  1024px  (laptops)
+ *   xl:  1280px  (desktops)
+ *   2xl: 1536px  (large screens)
+ */
+
+/* ============================================================
+   RESPONSIVE CONTAINER
+   ============================================================ */
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 480px)  { .container { max-width: 480px; } }
+@media (min-width: 768px)  { .container { max-width: 720px; padding-inline: 1.5rem; } }
+@media (min-width: 1024px) { .container { max-width: 960px; padding-inline: 2rem; } }
+@media (min-width: 1280px) { .container { max-width: 1200px; } }
+@media (min-width: 1536px) { .container { max-width: 1440px; } }
+
+/* Fluid container (always full-width with padding) */
+.container-fluid {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 4rem);
+}
+
+/* ============================================================
+   SHOW / HIDE UTILITIES
+   ============================================================ */
+
+/* Hide below breakpoint (mobile-first show) */
+.show-sm  { display: none; }
+.show-md  { display: none; }
+.show-lg  { display: none; }
+.show-xl  { display: none; }
+.show-2xl { display: none; }
+
+@media (min-width: 480px)  { .show-sm  { display: block; } }
+@media (min-width: 768px)  { .show-md  { display: block; } }
+@media (min-width: 1024px) { .show-lg  { display: block; } }
+@media (min-width: 1280px) { .show-xl  { display: block; } }
+@media (min-width: 1536px) { .show-2xl { display: block; } }
+
+/* Hide above breakpoint */
+@media (min-width: 480px)  { .hide-sm  { display: none; } }
+@media (min-width: 768px)  { .hide-md  { display: none; } }
+@media (min-width: 1024px) { .hide-lg  { display: none; } }
+@media (min-width: 1280px) { .hide-xl  { display: none; } }
+@media (min-width: 1536px) { .hide-2xl { display: none; } }
+
+/* Show only on specific range */
+.show-mobile-only {
+  display: block;
+}
+@media (min-width: 768px) {
+  .show-mobile-only { display: none; }
+}
+
+.show-tablet-only {
+  display: none;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .show-tablet-only { display: block; }
+}
+
+.show-desktop-only {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .show-desktop-only { display: block; }
+}
+
+/* ============================================================
+   RESPONSIVE TEXT ALIGNMENT
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .text-center-mobile { text-align: center; }
+}
+
+@media (min-width: 768px) {
+  .text-left-tablet { text-align: left; }
+}
+
+/* ============================================================
+   RESPONSIVE SPACING
+   ============================================================ */
+
+.space-responsive {
+  padding: clamp(1rem, 3vw, 3rem);
+}
+
+.space-responsive-y {
+  padding-block: clamp(2rem, 5vw, 6rem);
+}
+
+.space-responsive-x {
+  padding-inline: clamp(1rem, 5vw, 4rem);
+}
+
+/* Section spacing (vertical) */
+.section-spacing {
+  padding-block: clamp(3rem, 8vw, 8rem);
+}

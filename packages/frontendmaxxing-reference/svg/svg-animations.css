@@ -1,0 +1,141 @@
+/**
+ * svg-animations.css — SVG path draw, pulse, morph keyframes
+ *
+ * Usage:
+ *   <svg class="svg-draw" viewBox="0 0 100 100">
+ *     <path d="M10,80 Q50,10 90,80" fill="none" stroke="#818cf8" stroke-width="2"/>
+ *   </svg>
+ *
+ *   <svg class="svg-draw-scroll">...</svg>  (draw on scroll — use with JS)
+ */
+
+/* ── Path Drawing Animation ──────────────────── */
+.svg-draw path,
+.svg-draw line,
+.svg-draw polyline,
+.svg-draw polygon,
+.svg-draw circle,
+.svg-draw rect {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: var(--path-length, 1000);
+  animation: svg-draw-in 2s ease forwards;
+}
+
+@keyframes svg-draw-in {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Delays for sequential drawing */
+.svg-draw [data-draw-delay="1"] { animation-delay: 0.3s; }
+.svg-draw [data-draw-delay="2"] { animation-delay: 0.6s; }
+.svg-draw [data-draw-delay="3"] { animation-delay: 0.9s; }
+.svg-draw [data-draw-delay="4"] { animation-delay: 1.2s; }
+.svg-draw [data-draw-delay="5"] { animation-delay: 1.5s; }
+
+/* Speed variants */
+.svg-draw-slow path  { animation-duration: 4s; }
+.svg-draw-fast path  { animation-duration: 1s; }
+
+/* ── Draw on hover ───────────────────────────── */
+.svg-draw-hover path {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: var(--path-length, 1000);
+  transition: stroke-dashoffset 1s ease;
+}
+
+.svg-draw-hover:hover path {
+  stroke-dashoffset: 0;
+}
+
+/* ── Continuous draw loop ────────────────────── */
+.svg-draw-loop path {
+  stroke-dasharray: var(--path-length, 1000);
+  animation: svg-draw-loop 3s linear infinite;
+}
+
+@keyframes svg-draw-loop {
+  0% { stroke-dashoffset: var(--path-length, 1000); }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: calc(var(--path-length, 1000) * -1); }
+}
+
+/* ── Pulsing SVG ─────────────────────────────── */
+.svg-pulse {
+  animation: svg-pulse-anim 2s ease-in-out infinite;
+}
+
+@keyframes svg-pulse-anim {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+/* ── Float Animation ─────────────────────────── */
+.svg-float {
+  animation: svg-float-anim 4s ease-in-out infinite;
+}
+
+@keyframes svg-float-anim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ── Spin ────────────────────────────────────── */
+.svg-spin {
+  animation: svg-spin-anim 2s linear infinite;
+}
+
+@keyframes svg-spin-anim {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Bounce ──────────────────────────────────── */
+.svg-bounce {
+  animation: svg-bounce-anim 1s ease infinite;
+}
+
+@keyframes svg-bounce-anim {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Stroke Color Animation ──────────────────── */
+.svg-stroke-cycle path {
+  animation: svg-stroke-color 4s linear infinite;
+}
+
+@keyframes svg-stroke-color {
+  0%   { stroke: #818cf8; }
+  25%  { stroke: #ec4899; }
+  50%  { stroke: #10b981; }
+  75%  { stroke: #f59e0b; }
+  100% { stroke: #818cf8; }
+}
+
+/* ── Handwritten effect ──────────────────────── */
+.svg-handwritten path {
+  stroke-dasharray: var(--path-length, 1000);
+  stroke-dashoffset: var(--path-length, 1000);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: svg-draw-in 3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .svg-draw path,
+  .svg-draw line,
+  .svg-draw polyline,
+  .svg-draw polygon,
+  .svg-draw circle,
+  .svg-draw rect,
+  .svg-draw-loop path,
+  .svg-pulse,
+  .svg-float,
+  .svg-spin,
+  .svg-bounce,
+  .svg-stroke-cycle path,
+  .svg-handwritten path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

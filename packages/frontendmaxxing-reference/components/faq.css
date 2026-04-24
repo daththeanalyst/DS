@@ -1,0 +1,158 @@
+/**
+ * faq.css — Accordion styles for FAQ sections
+ *
+ * Usage:
+ *   <div class="faq-accordion">
+ *     <div class="faq-item">
+ *       <button class="faq-trigger">
+ *         <span>Question here?</span>
+ *         <span class="faq-icon">+</span>
+ *       </button>
+ *       <div class="faq-content">
+ *         <p>Answer here.</p>
+ *       </div>
+ *     </div>
+ *   </div>
+ */
+
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 720px;
+}
+
+.faq-item {
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.faq-item.active {
+  border-color: rgba(129,140,248,0.3);
+}
+
+.faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text, #e2e8f0);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+  transition: color 0.2s ease;
+}
+
+.faq-trigger:hover {
+  color: var(--primary, #818cf8);
+}
+
+.faq-icon {
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--text-secondary, #94a3b8);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  color: var(--primary, #818cf8);
+}
+
+.faq-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item.active .faq-content {
+  grid-template-rows: 1fr;
+}
+
+.faq-content > div,
+.faq-content > p {
+  overflow: hidden;
+}
+
+.faq-content-inner {
+  overflow: hidden;
+  padding: 0 1.25rem;
+}
+
+.faq-item.active .faq-content-inner {
+  padding: 0 1.25rem 1.25rem;
+}
+
+.faq-content p {
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.7;
+  font-size: 0.9375rem;
+}
+
+/* ── Minimal variant ─────────────────────────── */
+.faq-minimal .faq-item {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border, #2d2d3f);
+  border-radius: 0;
+}
+
+.faq-minimal .faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-minimal .faq-trigger {
+  padding: 1.25rem 0;
+}
+
+.faq-minimal .faq-content-inner {
+  padding: 0;
+}
+
+.faq-minimal .faq-item.active .faq-content-inner {
+  padding: 0 0 1.25rem;
+}
+
+/* ── Chevron icon variant ────────────────────── */
+.faq-chevron .faq-icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.faq-chevron .faq-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border: 2px solid currentColor;
+  border-top: none;
+  border-left: none;
+  transform: translate(-50%, -70%) rotate(45deg);
+  transition: transform 0.3s ease;
+}
+
+.faq-chevron .faq-item.active .faq-icon::before {
+  transform: translate(-50%, -30%) rotate(-135deg);
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .faq-content,
+  .faq-icon {
+    transition: none;
+  }
+}

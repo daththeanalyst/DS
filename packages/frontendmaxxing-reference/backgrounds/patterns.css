@@ -1,0 +1,170 @@
+/**
+ * patterns.css — Dot grid, line grid, diagonal stripes, checkerboard, cross
+ *
+ * Usage:
+ *   <div class="bg-dots">Content over dots</div>
+ *   <div class="bg-grid">Content over grid</div>
+ *
+ * Customize:
+ *   --pattern-color: rgba(255,255,255,0.05);
+ *   --pattern-size: 24px;
+ *   --pattern-opacity: 1;
+ */
+
+/* ── Dot Grid ────────────────────────────────── */
+.bg-dots {
+  --pattern-color: rgba(255,255,255,0.07);
+  --pattern-size: 24px;
+  --pattern-dot: 1px;
+
+  background-image: radial-gradient(circle, var(--pattern-color) var(--pattern-dot), transparent var(--pattern-dot));
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+/* Large dots */
+.bg-dots-lg {
+  --pattern-color: rgba(255,255,255,0.05);
+  --pattern-size: 40px;
+  --pattern-dot: 2px;
+
+  background-image: radial-gradient(circle, var(--pattern-color) var(--pattern-dot), transparent var(--pattern-dot));
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+/* ── Line Grid ───────────────────────────────── */
+.bg-grid {
+  --pattern-color: rgba(255,255,255,0.04);
+  --pattern-size: 40px;
+
+  background-image:
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-color) 1px, transparent 1px);
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+/* Fine grid */
+.bg-grid-fine {
+  --pattern-color: rgba(255,255,255,0.03);
+  --pattern-size: 20px;
+
+  background-image:
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-color) 1px, transparent 1px);
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+/* Grid with emphasis lines */
+.bg-grid-accent {
+  --pattern-color: rgba(255,255,255,0.03);
+  --accent-color: rgba(255,255,255,0.06);
+  --pattern-size: 20px;
+
+  background-image:
+    linear-gradient(var(--accent-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent-color) 1px, transparent 1px),
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-color) 1px, transparent 1px);
+  background-size:
+    calc(var(--pattern-size) * 5) calc(var(--pattern-size) * 5),
+    calc(var(--pattern-size) * 5) calc(var(--pattern-size) * 5),
+    var(--pattern-size) var(--pattern-size),
+    var(--pattern-size) var(--pattern-size);
+}
+
+/* ── Diagonal Stripes ────────────────────────── */
+.bg-diagonal {
+  --pattern-color: rgba(255,255,255,0.03);
+  --pattern-size: 10px;
+
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent var(--pattern-size),
+    var(--pattern-color) var(--pattern-size),
+    var(--pattern-color) calc(var(--pattern-size) + 1px)
+  );
+}
+
+/* Thicker stripes */
+.bg-diagonal-thick {
+  --pattern-color: rgba(255,255,255,0.04);
+
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    var(--pattern-color) 10px,
+    var(--pattern-color) 14px
+  );
+}
+
+/* ── Checkerboard ────────────────────────────── */
+.bg-checkerboard {
+  --pattern-color: rgba(255,255,255,0.03);
+  --pattern-size: 20px;
+
+  background-image:
+    linear-gradient(45deg, var(--pattern-color) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--pattern-color) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--pattern-color) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--pattern-color) 75%);
+  background-size: var(--pattern-size) var(--pattern-size);
+  background-position:
+    0 0,
+    0 calc(var(--pattern-size) / 2),
+    calc(var(--pattern-size) / 2) calc(var(--pattern-size) / -2),
+    calc(var(--pattern-size) / -2) 0;
+}
+
+/* ── Cross Pattern ───────────────────────────── */
+.bg-cross {
+  --pattern-color: rgba(255,255,255,0.04);
+  --pattern-size: 24px;
+
+  background-image:
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pattern-color) 1px, transparent 1px);
+  background-size: var(--pattern-size) var(--pattern-size);
+  background-position: center center;
+}
+
+/* ── Honeycomb ───────────────────────────────── */
+.bg-honeycomb {
+  --pattern-color: rgba(255,255,255,0.04);
+  --pattern-size: 56px;
+  --s: calc(var(--pattern-size) / 2);
+
+  background-image:
+    radial-gradient(circle farthest-side at 0% 50%, transparent 23%, var(--pattern-color) 25%, var(--pattern-color) 30%, transparent 32%),
+    radial-gradient(circle farthest-side at 100% 50%, transparent 23%, var(--pattern-color) 25%, var(--pattern-color) 30%, transparent 32%);
+  background-size: var(--s) calc(var(--s) * 1.732);
+  background-position: 0 0, calc(var(--s) / 2) calc(var(--s) * 0.866);
+}
+
+/* ── Noise (subtle texture) ──────────────────── */
+.bg-noise {
+  position: relative;
+}
+.bg-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-noise > * { position: relative; z-index: 1; }
+
+/* ── Fade Edge (combine with any pattern) ────── */
+.bg-fade-edges {
+  -webkit-mask-image: radial-gradient(ellipse at center, black 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse at center, black 50%, transparent 100%);
+}
+
+.bg-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}

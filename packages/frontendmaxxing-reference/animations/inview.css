@@ -1,0 +1,203 @@
+/* ============================================
+   INVIEW — Scroll-triggered entrance animations
+   Inspired by trucknroll.com + ssscript.app
+   ============================================
+   Usage:
+     Add .inview-* class + .is-inview triggers animation.
+     Use with IntersectionObserver or scroll-animations.js:
+       ScrollAnim.reveal('.inview-fade-up');
+
+   Contents:
+     .inview-fade-up         — Fade + slide up
+     .inview-fade-down       — Fade + slide down
+     .inview-fade-left       — Fade + slide left
+     .inview-fade-right      — Fade + slide right
+     .inview-blur            — Blur to clear
+     .inview-blur-up         — Blur + slide up
+     .inview-scale           — Scale from 0.8
+     .inview-clip-up         — Clip-path reveal upward
+     .inview-clip-left       — Clip-path reveal from left
+     .inview-border           — Border line scales in
+     .inview-border-bottom   — Bottom border scales in
+     .inview-stagger         — Staggered children via --index
+     .inview-heading         — Word-by-word heading reveal
+   ============================================ */
+
+/* ── Shared transition ── */
+[class*="inview-"] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: 0.8s;
+  transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* ── Stagger delay via --index ── */
+.inview-stagger > * {
+  transition-delay: calc(var(--index, 0) * 80ms);
+}
+
+/* ── FADE UP ── */
+.inview-fade-up {
+  opacity: 0;
+  transform: translateY(2rem);
+}
+.inview-fade-up.is-inview { opacity: 1; transform: translateY(0); }
+
+/* ── FADE DOWN ── */
+.inview-fade-down {
+  opacity: 0;
+  transform: translateY(-2rem);
+}
+.inview-fade-down.is-inview { opacity: 1; transform: translateY(0); }
+
+/* ── FADE LEFT ── */
+.inview-fade-left {
+  opacity: 0;
+  transform: translateX(-2rem);
+}
+.inview-fade-left.is-inview { opacity: 1; transform: translateX(0); }
+
+/* ── FADE RIGHT ── */
+.inview-fade-right {
+  opacity: 0;
+  transform: translateX(2rem);
+}
+.inview-fade-right.is-inview { opacity: 1; transform: translateX(0); }
+
+/* ── BLUR ── */
+.inview-blur {
+  opacity: 0;
+  filter: blur(8px);
+}
+.inview-blur.is-inview { opacity: 1; filter: blur(0); }
+
+/* ── BLUR + UP ── */
+.inview-blur-up {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(1.5rem);
+}
+.inview-blur-up.is-inview {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* ── SCALE ── */
+.inview-scale {
+  opacity: 0;
+  transform: scale(0.85);
+}
+.inview-scale.is-inview { opacity: 1; transform: scale(1); }
+
+/* ── CLIP UP (wipe reveal) ── */
+.inview-clip-up {
+  clip-path: inset(100% 0 0 0);
+}
+.inview-clip-up.is-inview {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ── CLIP LEFT ── */
+.inview-clip-left {
+  clip-path: inset(0 100% 0 0);
+}
+.inview-clip-left.is-inview {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ── BORDER SCALE (top border line) ── */
+.inview-border {
+  position: relative;
+}
+
+.inview-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  transition-delay: calc(var(--index, 0) * 60ms);
+}
+
+.inview-border.is-inview::before,
+[data-border-parent].is-inview .inview-border::before {
+  transform: scaleX(1);
+}
+
+/* ── BORDER BOTTOM ── */
+.inview-border-bottom {
+  position: relative;
+}
+
+.inview-border-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  transition-delay: calc(var(--index, 0) * 60ms);
+}
+
+.inview-border-bottom.is-inview::after,
+[data-border-parent].is-inview .inview-border-bottom::after {
+  transform: scaleX(1);
+}
+
+/* ── HEADING REVEAL (line-by-line clip) ── */
+.inview-heading {
+  overflow: hidden;
+}
+
+.inview-heading > * {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition-delay: calc(var(--index, 0) * 0.1s + 0.15s);
+}
+
+.inview-heading.is-inview > * {
+  transform: translateY(0);
+}
+
+/* ── Speed modifiers ── */
+.inview-fast { transition-duration: 0.4s !important; }
+.inview-slow { transition-duration: 1.2s !important; }
+
+/* ── Distance modifiers ── */
+.inview-near { --inview-distance: 1rem; }
+.inview-far  { --inview-distance: 4rem; }
+
+.inview-near.inview-fade-up { transform: translateY(1rem); }
+.inview-far.inview-fade-up  { transform: translateY(4rem); }
+.inview-near.inview-fade-left { transform: translateX(-1rem); }
+.inview-far.inview-fade-left  { transform: translateX(-4rem); }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  [class*="inview-"] {
+    transition-duration: 0.01ms !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+  .inview-border::before,
+  .inview-border-bottom::after {
+    transform: scaleX(1) !important;
+    transition-duration: 0.01ms !important;
+  }
+  .inview-heading > * {
+    transform: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

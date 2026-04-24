@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const i=JSON.parse(d);const cmd=i.tool_input?.command||'';if(/git push/.test(cmd)){console.error('[Hook] Reminder: review changes before pushing')}if(/rm -rf/.test(cmd)){console.error('[Hook] Destructive: rm -rf detected — confirm scope before proceeding')}}catch{}console.log(d)})\""
+          }
+        ],
+        "description": "Reminders before git push and rm -rf"
+      }
+    ]
+  }
+}

@@ -1,0 +1,260 @@
+/*
+ * flexbox-patterns.css — Common flexbox layout patterns
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="flexbox-patterns.css">
+ *   <div class="flex-center">Perfectly centered</div>
+ *   <div class="flex-between">Spaced items</div>
+ *   <div class="holy-grail">Header / Sidebar + Main + Sidebar / Footer</div>
+ */
+
+/* ============================================================
+   CENTERING
+   ============================================================ */
+
+/* Center everything (horizontal + vertical) */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center horizontally only */
+.flex-center-x {
+  display: flex;
+  justify-content: center;
+}
+
+/* Center vertically only */
+.flex-center-y {
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================================
+   DISTRIBUTION
+   ============================================================ */
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.flex-evenly {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   DIRECTION
+   ============================================================ */
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-col-between {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+/* ============================================================
+   WRAPPING
+   ============================================================ */
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.flex-wrap-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ============================================================
+   HOLY GRAIL LAYOUT
+   Header + (Sidebar / Main / Sidebar) + Footer
+   ============================================================ */
+
+.holy-grail {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.holy-grail > header,
+.holy-grail > footer {
+  flex-shrink: 0;
+}
+
+.holy-grail > main {
+  display: flex;
+  flex: 1;
+}
+
+.holy-grail > main > article {
+  flex: 1;
+}
+
+.holy-grail > main > nav,
+.holy-grail > main > aside {
+  flex: 0 0 200px;
+}
+
+@media (max-width: 768px) {
+  .holy-grail > main {
+    flex-direction: column;
+  }
+  .holy-grail > main > nav,
+  .holy-grail > main > aside {
+    flex: 0 0 auto;
+  }
+}
+
+/* ============================================================
+   STICKY FOOTER
+   Footer stays at the bottom even with little content.
+   ============================================================ */
+
+.sticky-footer-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.sticky-footer-layout > main {
+  flex: 1;
+}
+
+/* ============================================================
+   CARD DECK
+   Equal-height cards in a row, wrapping responsively.
+   ============================================================ */
+
+.card-deck {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.card-deck > * {
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Push card footer to bottom */
+.card-deck > * > :last-child {
+  margin-top: auto;
+}
+
+/* ============================================================
+   MEDIA OBJECT
+   Image + text side-by-side (classic pattern).
+   ============================================================ */
+
+.media-object {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.media-object > :first-child {
+  flex-shrink: 0;
+}
+
+.media-object > :last-child {
+  flex: 1;
+  min-width: 0; /* prevent text overflow */
+}
+
+/* ============================================================
+   INLINE GROUP
+   Items in a horizontal row with gap, wrapping naturally.
+   Great for tags, buttons, chips.
+   ============================================================ */
+
+.inline-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.inline-group-sm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.inline-group-lg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ============================================================
+   SPLIT (push items to opposite ends)
+   ============================================================ */
+
+.flex-split > :first-child {
+  margin-right: auto;
+}
+
+.flex-split > :last-child {
+  margin-left: auto;
+}
+
+/* ============================================================
+   FLEX UTILITIES
+   ============================================================ */
+
+.flex-1    { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+.flex-grow { flex-grow: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.self-start   { align-self: flex-start; }
+.self-center  { align-self: center; }
+.self-end     { align-self: flex-end; }
+.self-stretch { align-self: stretch; }

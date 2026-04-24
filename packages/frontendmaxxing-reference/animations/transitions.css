@@ -1,0 +1,341 @@
+/*
+ * transitions.css — Hover/state transition utilities
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="transitions.css">
+ *   <button class="tr-lift">Hover me</button>
+ *   <a class="tr-underline-slide">Link</a>
+ *
+ * All transitions use GPU-accelerated properties where possible.
+ * Respects prefers-reduced-motion automatically.
+ */
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+:root {
+  --tr-duration: 300ms;
+  --tr-easing: cubic-bezier(0.22, 1, 0.36, 1); /* smooth ease-out */
+  --tr-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring overshoot */
+}
+
+/* ============================================================
+   TRANSFORM TRANSITIONS
+   ============================================================ */
+
+/* Lift — subtle upward shift + shadow on hover */
+.tr-lift {
+  transition: transform var(--tr-duration) var(--tr-easing),
+              box-shadow var(--tr-duration) var(--tr-easing);
+}
+.tr-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* Scale — grow on hover */
+.tr-scale {
+  transition: transform var(--tr-duration) var(--tr-spring);
+}
+.tr-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Scale subtle */
+.tr-scale-sm {
+  transition: transform var(--tr-duration) var(--tr-spring);
+}
+.tr-scale-sm:hover {
+  transform: scale(1.02);
+}
+
+/* Scale down on press */
+.tr-press {
+  transition: transform 150ms var(--tr-easing);
+}
+.tr-press:hover {
+  transform: scale(1.02);
+}
+.tr-press:active {
+  transform: scale(0.97);
+}
+
+/* Tilt — 3D perspective tilt */
+.tr-tilt {
+  transition: transform var(--tr-duration) var(--tr-easing);
+  transform-style: preserve-3d;
+}
+.tr-tilt:hover {
+  transform: perspective(500px) rotateX(5deg) rotateY(-5deg);
+}
+
+/* Rotate on hover */
+.tr-rotate {
+  transition: transform var(--tr-duration) var(--tr-spring);
+}
+.tr-rotate:hover {
+  transform: rotate(5deg);
+}
+
+/* Rotate full */
+.tr-spin-hover {
+  transition: transform 500ms var(--tr-easing);
+}
+.tr-spin-hover:hover {
+  transform: rotate(360deg);
+}
+
+/* ============================================================
+   COLOR / OPACITY TRANSITIONS
+   ============================================================ */
+
+/* Smooth opacity */
+.tr-fade {
+  transition: opacity var(--tr-duration) var(--tr-easing);
+}
+.tr-fade:hover {
+  opacity: 0.7;
+}
+
+/* Background color shift */
+.tr-bg {
+  transition: background-color var(--tr-duration) var(--tr-easing),
+              color var(--tr-duration) var(--tr-easing);
+}
+
+/* Brightness on hover */
+.tr-brighten {
+  transition: filter var(--tr-duration) var(--tr-easing);
+}
+.tr-brighten:hover {
+  filter: brightness(1.1);
+}
+
+/* Dim on hover */
+.tr-dim {
+  transition: filter var(--tr-duration) var(--tr-easing);
+}
+.tr-dim:hover {
+  filter: brightness(0.85);
+}
+
+/* Saturate on hover (great for grayscale images) */
+.tr-saturate {
+  filter: grayscale(100%);
+  transition: filter var(--tr-duration) var(--tr-easing);
+}
+.tr-saturate:hover {
+  filter: grayscale(0%);
+}
+
+/* ============================================================
+   BORDER & OUTLINE TRANSITIONS
+   ============================================================ */
+
+/* Glow — colored box-shadow on hover */
+.tr-glow {
+  transition: box-shadow var(--tr-duration) var(--tr-easing);
+}
+.tr-glow:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
+              0 0 40px rgba(99, 102, 241, 0.2);
+}
+
+/* Ring — focus/hover ring */
+.tr-ring {
+  transition: box-shadow var(--tr-duration) var(--tr-easing);
+}
+.tr-ring:hover,
+.tr-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5);
+}
+
+/* Border color */
+.tr-border {
+  transition: border-color var(--tr-duration) var(--tr-easing);
+}
+
+/* ============================================================
+   UNDERLINE ANIMATIONS (for links/nav)
+   ============================================================ */
+
+/* Slide underline from left */
+.tr-underline-slide {
+  position: relative;
+  text-decoration: none;
+}
+.tr-underline-slide::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width var(--tr-duration) var(--tr-easing);
+}
+.tr-underline-slide:hover::after {
+  width: 100%;
+}
+
+/* Slide underline from center */
+.tr-underline-center {
+  position: relative;
+  text-decoration: none;
+}
+.tr-underline-center::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width var(--tr-duration) var(--tr-easing),
+              left var(--tr-duration) var(--tr-easing);
+}
+.tr-underline-center:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Underline reveal (always there, fades in) */
+.tr-underline-fade {
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--tr-duration) var(--tr-easing);
+}
+.tr-underline-fade:hover {
+  border-bottom-color: currentColor;
+}
+
+/* ============================================================
+   CARD TRANSITIONS
+   ============================================================ */
+
+/* Card lift — combines multiple effects */
+.tr-card {
+  transition: transform var(--tr-duration) var(--tr-easing),
+              box-shadow var(--tr-duration) var(--tr-easing);
+}
+.tr-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+}
+
+/* Card with border highlight */
+.tr-card-border {
+  border: 1px solid transparent;
+  transition: transform var(--tr-duration) var(--tr-easing),
+              box-shadow var(--tr-duration) var(--tr-easing),
+              border-color var(--tr-duration) var(--tr-easing);
+}
+.tr-card-border:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Card with overlay reveal */
+.tr-card-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.tr-card-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--tr-duration) var(--tr-easing);
+  z-index: 1;
+}
+.tr-card-overlay:hover::before {
+  opacity: 1;
+}
+
+/* ============================================================
+   BUTTON TRANSITIONS
+   ============================================================ */
+
+/* Fill from left */
+.tr-btn-fill {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.tr-btn-fill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0.1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--tr-duration) var(--tr-easing);
+  z-index: -1;
+}
+.tr-btn-fill:hover::before {
+  transform: scaleX(1);
+}
+
+/* Slide background from bottom */
+.tr-btn-slide {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.tr-btn-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0.1;
+  transform: translateY(100%);
+  transition: transform var(--tr-duration) var(--tr-easing);
+  z-index: -1;
+}
+.tr-btn-slide:hover::before {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   IMAGE TRANSITIONS
+   ============================================================ */
+
+/* Zoom on hover (for image containers) */
+.tr-img-zoom {
+  overflow: hidden;
+}
+.tr-img-zoom img {
+  transition: transform var(--tr-duration) var(--tr-easing);
+}
+.tr-img-zoom:hover img {
+  transform: scale(1.1);
+}
+
+/* Ken Burns (slow zoom) */
+.tr-img-ken-burns {
+  overflow: hidden;
+}
+.tr-img-ken-burns img {
+  transition: transform 8s linear;
+}
+.tr-img-ken-burns:hover img {
+  transform: scale(1.15);
+}
+
+/* Blur reveal */
+.tr-img-blur {
+  overflow: hidden;
+}
+.tr-img-blur img {
+  filter: blur(5px);
+  transition: filter var(--tr-duration) var(--tr-easing),
+              transform var(--tr-duration) var(--tr-easing);
+}
+.tr-img-blur:hover img {
+  filter: blur(0);
+  transform: scale(1.02);
+}

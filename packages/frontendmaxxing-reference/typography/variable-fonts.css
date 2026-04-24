@@ -1,0 +1,165 @@
+/*
+ * variable-fonts.css — Variable font weight/width/slant animations
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="variable-fonts.css">
+ *
+ *   <!-- Weight animation on hover -->
+ *   <h1 class="vf-weight-hover">Hover to bold</h1>
+ *
+ *   <!-- Continuous weight animation -->
+ *   <h1 class="vf-weight-breathe">Breathing weight</h1>
+ *
+ * IMPORTANT: These only work with variable fonts loaded via @font-face.
+ * Common free variable fonts: Inter, Roboto Flex, Source Sans 3, Outfit.
+ */
+
+/* ============================================================
+   WEIGHT TRANSITIONS
+   ============================================================ */
+
+/* Smooth weight change on hover */
+.vf-weight-hover {
+  font-weight: 400;
+  transition: font-weight 300ms ease;
+}
+.vf-weight-hover:hover {
+  font-weight: 700;
+}
+
+/* Light to heavy on hover */
+.vf-weight-hover-heavy {
+  font-weight: 300;
+  transition: font-weight 300ms ease;
+}
+.vf-weight-hover-heavy:hover {
+  font-weight: 900;
+}
+
+/* ============================================================
+   WEIGHT ANIMATIONS
+   ============================================================ */
+
+/* Breathing: weight oscillates */
+.vf-weight-breathe {
+  animation: vf-breathe 3s ease-in-out infinite;
+}
+
+@keyframes vf-breathe {
+  0%, 100% { font-weight: 300; }
+  50%      { font-weight: 700; }
+}
+
+/* Pulse weight */
+.vf-weight-pulse {
+  animation: vf-weight-pulse 2s ease-in-out infinite;
+}
+
+@keyframes vf-weight-pulse {
+  0%, 100% { font-weight: 400; }
+  50%      { font-weight: 800; }
+}
+
+/* ============================================================
+   WIDTH (font-stretch) TRANSITIONS
+   Only works with fonts that have a wdth axis.
+   ============================================================ */
+
+.vf-width-hover {
+  font-stretch: 100%;
+  transition: font-stretch 300ms ease;
+}
+.vf-width-hover:hover {
+  font-stretch: 125%;
+}
+
+.vf-width-condense-hover {
+  font-stretch: 100%;
+  transition: font-stretch 300ms ease;
+}
+.vf-width-condense-hover:hover {
+  font-stretch: 75%;
+}
+
+/* Width breathing animation */
+.vf-width-breathe {
+  animation: vf-width-breathe 4s ease-in-out infinite;
+}
+
+@keyframes vf-width-breathe {
+  0%, 100% { font-stretch: 75%; }
+  50%      { font-stretch: 125%; }
+}
+
+/* ============================================================
+   SLANT / ITALIC (font-style: oblique)
+   Works with fonts that have a slnt or ital axis.
+   ============================================================ */
+
+.vf-slant-hover {
+  font-style: normal;
+  transition: font-style 300ms ease;
+}
+.vf-slant-hover:hover {
+  font-style: oblique 12deg;
+}
+
+/* ============================================================
+   COMBINED VARIABLE FONT ANIMATIONS
+   ============================================================ */
+
+/* Weight + width morphing */
+.vf-morph {
+  animation: vf-morph 6s ease-in-out infinite;
+}
+
+@keyframes vf-morph {
+  0%, 100% { font-weight: 300; font-stretch: 75%; }
+  25%      { font-weight: 700; font-stretch: 100%; }
+  50%      { font-weight: 900; font-stretch: 125%; }
+  75%      { font-weight: 500; font-stretch: 100%; }
+}
+
+/* Per-letter weight stagger (wrap each letter in a span with --i) */
+.vf-stagger span {
+  display: inline-block;
+  animation: vf-stagger-weight 2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+@keyframes vf-stagger-weight {
+  0%, 100% { font-weight: 300; }
+  50%      { font-weight: 800; }
+}
+
+/* ============================================================
+   font-variation-settings (for custom axes)
+   ============================================================ */
+
+/* Generic transition for any variation axis */
+.vf-custom {
+  transition: font-variation-settings 300ms ease;
+}
+
+/* Example: animate a custom 'CASL' (casual) axis */
+.vf-casual-hover {
+  font-variation-settings: 'CASL' 0;
+  transition: font-variation-settings 300ms ease;
+}
+.vf-casual-hover:hover {
+  font-variation-settings: 'CASL' 1;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .vf-weight-breathe,
+  .vf-weight-pulse,
+  .vf-width-breathe,
+  .vf-morph,
+  .vf-stagger span {
+    animation: none !important;
+  }
+}

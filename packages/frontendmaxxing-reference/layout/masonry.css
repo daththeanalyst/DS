@@ -1,0 +1,106 @@
+/*
+ * masonry.css — CSS-only masonry layout using columns
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="masonry.css">
+ *
+ *   <div class="masonry">
+ *     <div class="masonry-item">Short content</div>
+ *     <div class="masonry-item">Tall content with more text...</div>
+ *     <div class="masonry-item">Medium content</div>
+ *   </div>
+ *
+ * Note: CSS columns masonry flows top-to-bottom per column.
+ * For left-to-right order, use JS (or wait for CSS masonry spec).
+ */
+
+/* ============================================================
+   CSS COLUMNS MASONRY
+   ============================================================ */
+
+.masonry {
+  columns: 3;
+  column-gap: 1.5rem;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+/* Column count variants */
+.masonry-2 { columns: 2; column-gap: 1.5rem; }
+.masonry-3 { columns: 3; column-gap: 1.5rem; }
+.masonry-4 { columns: 4; column-gap: 1.5rem; }
+.masonry-5 { columns: 5; column-gap: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .masonry, .masonry-2, .masonry-3, .masonry-4, .masonry-5 {
+    columns: 1;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .masonry, .masonry-3, .masonry-4, .masonry-5 {
+    columns: 2;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .masonry-4, .masonry-5 {
+    columns: 3;
+  }
+}
+
+/* ============================================================
+   AUTO-WIDTH MASONRY (column width based)
+   ============================================================ */
+
+.masonry-auto {
+  columns: 280px;
+  column-gap: 1.5rem;
+}
+
+.masonry-auto > * {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+.masonry-auto-sm {
+  columns: 200px;
+  column-gap: 1rem;
+}
+
+.masonry-auto-sm > * {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+.masonry-auto-lg {
+  columns: 360px;
+  column-gap: 2rem;
+}
+
+.masonry-auto-lg > * {
+  break-inside: avoid;
+  margin-bottom: 2rem;
+}
+
+/* ============================================================
+   GAP VARIANTS
+   ============================================================ */
+
+.masonry-tight {
+  column-gap: 0.5rem;
+}
+.masonry-tight > * {
+  margin-bottom: 0.5rem;
+}
+
+.masonry-loose {
+  column-gap: 2.5rem;
+}
+.masonry-loose > * {
+  margin-bottom: 2.5rem;
+}

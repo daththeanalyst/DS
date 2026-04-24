@@ -1,0 +1,117 @@
+/* ============================================
+   FADE MASKS — CSS gradient masks for edges
+   Inspired by ssscript.app + trucknroll.com
+   ============================================
+   Usage:
+     <div class="fade-top-bottom">Scrollable content</div>
+     <div class="fade-left-right">Horizontal content</div>
+   ============================================ */
+
+/* ── Vertical: top & bottom ── */
+.fade-tb,
+.fade-top-bottom {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 15%,
+    #000 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 15%,
+    #000 85%,
+    transparent 100%
+  );
+}
+
+/* ── Horizontal: left & right ── */
+.fade-lr,
+.fade-left-right {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+/* ── Top only ── */
+.fade-top {
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 15%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 15%);
+}
+
+/* ── Bottom only ── */
+.fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent 100%);
+}
+
+/* ── Left only ── */
+.fade-left {
+  mask-image: linear-gradient(to right, transparent 0%, #000 10%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%);
+}
+
+/* ── Right only ── */
+.fade-right {
+  mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, #000 90%, transparent 100%);
+}
+
+/* ── All edges (vignette) ── */
+.fade-edges {
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+}
+
+/* ── Narrow / subtle ── */
+.fade-narrow {
+  --fade-size: 5%;
+}
+
+.fade-narrow.fade-tb,
+.fade-narrow.fade-top-bottom {
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 5%, #000 95%, transparent 100%);
+}
+
+.fade-narrow.fade-lr,
+.fade-narrow.fade-left-right {
+  mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+}
+
+/* ── Wide / dramatic ── */
+.fade-wide.fade-tb,
+.fade-wide.fade-top-bottom {
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 75%, transparent 100%);
+}
+
+.fade-wide.fade-lr,
+.fade-wide.fade-left-right {
+  mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 20%, #000 80%, transparent 100%);
+}
+
+/* ── Radial fade (circular vignette) ── */
+.fade-radial {
+  mask-image: radial-gradient(ellipse at center, #000 50%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 50%, transparent 80%);
+}

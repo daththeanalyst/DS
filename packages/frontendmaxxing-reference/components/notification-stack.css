@@ -1,0 +1,199 @@
+/* ============================================
+   NOTIFICATION STACK — Cards that fan out
+   Inspired by ssscript.app
+   ============================================
+   Usage:
+     <div class="notif-stack">
+       <div class="notif-card">Notification 1</div>
+       <div class="notif-card">Notification 2</div>
+       <div class="notif-card">Notification 3</div>
+     </div>
+
+   Variants:
+     .notif-stack-right    — Slide from right
+     .notif-stack-left     — Slide from left
+     .notif-stack-fan      — Fan out on hover
+     .notif-stack-spread   — Spread vertically on hover
+   ============================================ */
+
+.notif-stack {
+  --notif-offset: 98%;
+  --notif-scale-step: 0.04;
+  --notif-translate-step: 8px;
+  position: relative;
+  width: 20rem;
+  cursor: pointer;
+}
+
+/* ── Notification card ── */
+.notif-card {
+  border-radius: 1rem;
+  backdrop-filter: blur(5px);
+  background: var(--surface, #1e1e2e);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.9rem 1.2rem;
+  font-size: 0.9rem;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.notif-card + .notif-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+/* ── Stack behind (default) ── */
+.notif-card:nth-child(2) {
+  transform: translateY(calc(-1 * var(--notif-offset)))
+             scale(calc(1 - var(--notif-scale-step)));
+  z-index: -1;
+  opacity: 0.7;
+}
+
+.notif-card:nth-child(3) {
+  transform: translateY(calc(-2 * var(--notif-offset)))
+             scale(calc(1 - var(--notif-scale-step) * 2));
+  z-index: -2;
+  opacity: 0.4;
+}
+
+.notif-card:nth-child(4) {
+  transform: translateY(calc(-3 * var(--notif-offset)))
+             scale(calc(1 - var(--notif-scale-step) * 3));
+  z-index: -3;
+  opacity: 0.2;
+}
+
+/* ── Fan out on hover ── */
+.notif-stack-fan:hover .notif-card:nth-child(2) {
+  transform: translateY(0) translateX(15px) rotate(3deg) scale(1);
+  opacity: 1;
+}
+
+.notif-stack-fan:hover .notif-card:nth-child(3) {
+  transform: translateY(0) translateX(30px) rotate(6deg) scale(1);
+  opacity: 1;
+}
+
+.notif-stack-fan:hover .notif-card:nth-child(4) {
+  transform: translateY(0) translateX(45px) rotate(9deg) scale(1);
+  opacity: 0.8;
+}
+
+/* ── Spread vertically on hover ── */
+.notif-stack-spread:hover .notif-card:nth-child(1) {
+  transform: translateY(0);
+}
+
+.notif-stack-spread:hover .notif-card:nth-child(2) {
+  transform: translateY(calc(100% + 0.75rem)) scale(1);
+  opacity: 1;
+  z-index: 0;
+}
+
+.notif-stack-spread:hover .notif-card:nth-child(3) {
+  transform: translateY(calc(200% + 1.5rem)) scale(1);
+  opacity: 1;
+  z-index: 0;
+}
+
+.notif-stack-spread:hover .notif-card:nth-child(4) {
+  transform: translateY(calc(300% + 2.25rem)) scale(1);
+  opacity: 1;
+  z-index: 0;
+}
+
+/* ── Slide from right ── */
+.notif-stack-right .notif-card + .notif-card {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.notif-stack-right:hover .notif-card + .notif-card {
+  opacity: 1;
+}
+
+.notif-stack-right:hover .notif-card:nth-child(2) {
+  transform: translateY(calc(100% + 0.75rem)) translateX(0);
+}
+
+.notif-stack-right:hover .notif-card:nth-child(3) {
+  transform: translateY(calc(200% + 1.5rem)) translateX(0);
+  transition-delay: 0.05s;
+}
+
+/* ── Slide from left ── */
+.notif-stack-left .notif-card + .notif-card {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.notif-stack-left:hover .notif-card + .notif-card {
+  opacity: 1;
+}
+
+.notif-stack-left:hover .notif-card:nth-child(2) {
+  transform: translateY(calc(100% + 0.75rem)) translateX(0);
+}
+
+.notif-stack-left:hover .notif-card:nth-child(3) {
+  transform: translateY(calc(200% + 1.5rem)) translateX(0);
+  transition-delay: 0.05s;
+}
+
+/* ── Notification content helpers ── */
+.notif-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.notif-card-title {
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+.notif-card-time {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.notif-card-body {
+  font-size: 0.8125rem;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.notif-card-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.notif-card-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ── Glass variant ── */
+.notif-card-glass {
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .notif-card {
+    transition-duration: 0.01ms !important;
+  }
+}

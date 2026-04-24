@@ -1,0 +1,139 @@
+/* ============================================
+   SPOTLIGHT REVEAL — Dot pattern with mouse spotlight
+   Inspired by trucknroll.com
+   ============================================
+   Usage:
+     <div class="spotlight-reveal" data-spotlight>
+       <h2 class="spotlight-reveal-text">Your heading</h2>
+     </div>
+
+   Variants:
+     .spotlight-dots          — Halftone dot grid overlay
+     .spotlight-dots-dense    — Denser dot grid
+     .spotlight-lines         — Horizontal line overlay
+     .spotlight-reveal-text   — Text revealed by spotlight
+   ============================================ */
+
+.spotlight-reveal {
+  --spotlight-radius: 400px;
+  --spotlight-core: 10px;
+  --dot-size: 2px;
+  --dot-color: currentColor;
+  --dot-opacity: 0.6;
+  --bg-color: var(--bg, #0a0a0a);
+  position: relative;
+  overflow: hidden;
+  cursor: none;
+}
+
+/* ── Dot grid overlay ── */
+.spotlight-dots {
+  --dot-gap-y: calc(var(--dot-size) + var(--dot-size) * 2.5);
+  --dot-gap-x: calc(var(--dot-gap-y) * 0.75);
+}
+
+.spotlight-dots::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 2;
+  opacity: var(--dot-opacity);
+  background:
+    linear-gradient(90deg,
+      var(--bg-color) calc(var(--dot-gap-x) - var(--dot-size)),
+      transparent 1%
+    ) center / var(--dot-gap-x) var(--dot-gap-y),
+    linear-gradient(
+      var(--bg-color) calc(var(--dot-gap-y) - var(--dot-size)),
+      transparent 1%
+    ) center / var(--dot-gap-x) var(--dot-gap-y),
+    var(--dot-color);
+  pointer-events: none;
+}
+
+/* Offset layer for denser pattern */
+.spotlight-dots::after {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 2;
+  opacity: var(--dot-opacity);
+  top: calc(var(--dot-gap-y, 9px) / 2 - 10%);
+  left: calc(var(--dot-gap-x, 6.75px) / 2 - 10%);
+  background:
+    linear-gradient(90deg,
+      var(--bg-color) calc(var(--dot-gap-x) - var(--dot-size)),
+      transparent 1%
+    ) center / var(--dot-gap-x) var(--dot-gap-y),
+    linear-gradient(
+      var(--bg-color) calc(var(--dot-gap-y) - var(--dot-size)),
+      transparent 1%
+    ) center / var(--dot-gap-x) var(--dot-gap-y),
+    var(--dot-color);
+  pointer-events: none;
+}
+
+.spotlight-dots-dense {
+  --dot-size: 1.5px;
+  --dot-gap-y: calc(var(--dot-size) + var(--dot-size) * 1.8);
+  --dot-gap-x: calc(var(--dot-gap-y) * 0.7);
+}
+
+/* ── Line overlay variant ── */
+.spotlight-lines::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  z-index: 2;
+  opacity: var(--dot-opacity);
+  background: repeating-linear-gradient(
+    0deg,
+    var(--bg-color) 0px,
+    var(--bg-color) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+}
+
+/* ── Text that gets revealed by spotlight ── */
+.spotlight-reveal-text {
+  position: relative;
+  z-index: 1;
+  color: transparent;
+  /* Default: hidden. JS sets the radial gradient background */
+  background: var(--bg-color);
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: none;
+}
+
+/* When JS is active, text uses a radial gradient clipped to text */
+.spotlight-reveal-text[data-spotlight-active] {
+  background: radial-gradient(
+    circle var(--spotlight-radius) at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    var(--text, #fefefe) var(--spotlight-core),
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Spotlight glow (follows mouse) ── */
+.spotlight-reveal[data-spotlight-active]::before {
+  mix-blend-mode: overlay;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-reveal-text {
+    color: var(--text, #fefefe);
+    background: none;
+  }
+}
+
+/* ── Size modifiers ── */
+.spotlight-sm { --spotlight-radius: 200px; --spotlight-core: 5px; }
+.spotlight-lg { --spotlight-radius: 600px; --spotlight-core: 20px; }
+.spotlight-xl { --spotlight-radius: 800px; --spotlight-core: 40px; }

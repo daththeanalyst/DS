@@ -1,0 +1,197 @@
+/**
+ * animated-borders.css — Rotating gradient, neon pulse, animated dashes, glow trail
+ *
+ * Usage:
+ *   <div class="border-gradient-rotate">Content</div>
+ *   <div class="border-neon-pulse">Content</div>
+ *   <div class="border-dash-animate">Content</div>
+ *   <div class="border-shimmer">Content</div>
+ */
+
+/* ── Rotating Gradient Border ────────────────── */
+.border-gradient-rotate {
+  position: relative;
+  border-radius: 16px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.border-gradient-rotate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--border-angle, 0deg), #667eea, #764ba2, #f093fb, #667eea);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 3s linear infinite;
+}
+
+@keyframes border-rotate {
+  to { --border-angle: 360deg; }
+}
+
+/* Use @property for smooth rotation (Chrome/Edge) */
+@supports (background: conic-gradient(from 0deg, red, blue)) {
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+}
+
+/* ── Neon Pulse Border ───────────────────────── */
+.border-neon-pulse {
+  border: 1px solid var(--primary, #818cf8);
+  border-radius: 16px;
+  box-shadow:
+    0 0 5px rgba(129,140,248,0.3),
+    inset 0 0 5px rgba(129,140,248,0.1);
+  animation: border-neon-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes border-neon-glow {
+  0% {
+    box-shadow:
+      0 0 5px rgba(129,140,248,0.3),
+      inset 0 0 5px rgba(129,140,248,0.1);
+  }
+  100% {
+    box-shadow:
+      0 0 15px rgba(129,140,248,0.5),
+      0 0 30px rgba(129,140,248,0.2),
+      inset 0 0 10px rgba(129,140,248,0.15);
+  }
+}
+
+/* Color variants */
+.border-neon-green {
+  border-color: #10b981;
+  animation-name: border-neon-green-glow;
+}
+@keyframes border-neon-green-glow {
+  0% { box-shadow: 0 0 5px rgba(16,185,129,0.3), inset 0 0 5px rgba(16,185,129,0.1); }
+  100% { box-shadow: 0 0 15px rgba(16,185,129,0.5), 0 0 30px rgba(16,185,129,0.2), inset 0 0 10px rgba(16,185,129,0.15); }
+}
+
+.border-neon-pink {
+  border-color: #ec4899;
+  animation-name: border-neon-pink-glow;
+}
+@keyframes border-neon-pink-glow {
+  0% { box-shadow: 0 0 5px rgba(236,72,153,0.3), inset 0 0 5px rgba(236,72,153,0.1); }
+  100% { box-shadow: 0 0 15px rgba(236,72,153,0.5), 0 0 30px rgba(236,72,153,0.2), inset 0 0 10px rgba(236,72,153,0.15); }
+}
+
+/* ── Animated Dashed Border ──────────────────── */
+.border-dash-animate {
+  --dash-color: var(--primary, #818cf8);
+  --dash-size: 8px;
+  --dash-gap: 8px;
+
+  border: none;
+  border-radius: 16px;
+  background-image:
+    repeating-linear-gradient(0deg, var(--dash-color), var(--dash-color) var(--dash-size), transparent var(--dash-size), transparent calc(var(--dash-size) + var(--dash-gap))),
+    repeating-linear-gradient(90deg, var(--dash-color), var(--dash-color) var(--dash-size), transparent var(--dash-size), transparent calc(var(--dash-size) + var(--dash-gap))),
+    repeating-linear-gradient(180deg, var(--dash-color), var(--dash-color) var(--dash-size), transparent var(--dash-size), transparent calc(var(--dash-size) + var(--dash-gap))),
+    repeating-linear-gradient(270deg, var(--dash-color), var(--dash-color) var(--dash-size), transparent var(--dash-size), transparent calc(var(--dash-size) + var(--dash-gap)));
+  background-size: 2px 100%, 100% 2px, 2px 100%, 100% 2px;
+  background-position: 0 0, 0 0, 100% 0, 0 100%;
+  background-repeat: no-repeat;
+  animation: border-dash-march 1s linear infinite;
+}
+
+@keyframes border-dash-march {
+  to {
+    background-position:
+      0 calc(var(--dash-size) + var(--dash-gap)),
+      calc(var(--dash-size) + var(--dash-gap)) 0,
+      100% calc(-1 * (var(--dash-size) + var(--dash-gap))),
+      calc(-1 * (var(--dash-size) + var(--dash-gap))) 100%;
+  }
+}
+
+/* ── Glow Trail Border ───────────────────────── */
+.border-glow-trail {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid var(--border, #2d2d3f);
+  overflow: hidden;
+}
+
+.border-glow-trail::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--trail-angle, 0deg), transparent 75%, var(--primary, #818cf8));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 2px;
+  animation: border-trail 2.5s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes border-trail {
+  to { --trail-angle: 360deg; }
+}
+
+@supports (background: conic-gradient(from 0deg, red, blue)) {
+  @property --trail-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+}
+
+/* ── Shimmer Border ──────────────────────────── */
+.border-shimmer {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid var(--border, #2d2d3f);
+  overflow: hidden;
+}
+
+.border-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(129,140,248,0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  animation: border-shimmer-sweep 3s ease-in-out infinite;
+}
+
+@keyframes border-shimmer-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .border-gradient-rotate::before,
+  .border-neon-pulse,
+  .border-neon-green,
+  .border-neon-pink,
+  .border-dash-animate,
+  .border-glow-trail::before,
+  .border-shimmer::before {
+    animation: none;
+  }
+}

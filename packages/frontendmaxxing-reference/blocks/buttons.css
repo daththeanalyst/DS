@@ -1,0 +1,301 @@
+/**
+ * buttons.css — 12+ button styles with hover animations
+ *
+ * Usage:
+ *   <button class="btn btn-primary">Primary</button>
+ *   <button class="btn btn-gradient">Gradient</button>
+ *   <button class="btn btn-neon">Neon</button>
+ *   <button class="btn btn-3d">3D Push</button>
+ *   <button class="btn btn-outline btn-pill">Pill Outline</button>
+ *   <button class="btn btn-glass">Glass</button>
+ *
+ * Combine with size: .btn-sm, .btn-lg
+ * Combine with shape: .btn-pill, .btn-square
+ * Loading state: .btn-loading
+ */
+
+/* ── Base Reset ─────────────────────────────── */
+.btn {
+  --btn-bg: var(--primary, #818cf8);
+  --btn-text: #fff;
+  --btn-radius: 10px;
+  --btn-padding-x: 1.5rem;
+  --btn-padding-y: 0.75rem;
+  --btn-font-size: 0.9375rem;
+  --btn-shadow: 0 2px 8px rgba(0,0,0,0.12);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  font-size: var(--btn-font-size);
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1.4;
+  color: var(--btn-text);
+  background: var(--btn-bg);
+  border: 2px solid transparent;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--btn-shadow);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--btn-bg);
+  outline-offset: 3px;
+}
+
+/* ── Variants ────────────────────────────────── */
+
+/* Primary (default) */
+.btn-primary {
+  --btn-bg: var(--primary, #818cf8);
+  --btn-text: #fff;
+}
+.btn-primary:hover { --btn-bg: #6366f1; }
+
+/* Secondary */
+.btn-secondary {
+  --btn-bg: var(--surface, #1e1e2e);
+  --btn-text: var(--text, #e2e8f0);
+  border-color: var(--border, #2d2d3f);
+}
+.btn-secondary:hover {
+  --btn-bg: var(--border, #2d2d3f);
+}
+
+/* Ghost */
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-text: var(--text, #e2e8f0);
+  --btn-shadow: none;
+}
+.btn-ghost:hover {
+  --btn-bg: rgba(255,255,255,0.06);
+}
+
+/* Outline */
+.btn-outline {
+  --btn-bg: transparent;
+  --btn-text: var(--primary, #818cf8);
+  --btn-shadow: none;
+  border-color: var(--primary, #818cf8);
+}
+.btn-outline:hover {
+  --btn-bg: var(--primary, #818cf8);
+  --btn-text: #fff;
+}
+
+/* Gradient */
+.btn-gradient {
+  --btn-shadow: 0 4px 15px rgba(129,140,248,0.3);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-size: 200% 200%;
+  border: none;
+}
+.btn-gradient:hover {
+  background-position: 100% 100%;
+  box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+}
+
+/* Glass */
+.btn-glass {
+  --btn-bg: rgba(255,255,255,0.08);
+  --btn-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255,255,255,0.12);
+}
+.btn-glass:hover {
+  --btn-bg: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Neon */
+.btn-neon {
+  --btn-bg: transparent;
+  --btn-text: #818cf8;
+  --btn-shadow: 0 0 8px rgba(129,140,248,0.4), inset 0 0 8px rgba(129,140,248,0.1);
+  border-color: #818cf8;
+}
+.btn-neon:hover {
+  --btn-bg: rgba(129,140,248,0.1);
+  --btn-shadow: 0 0 20px rgba(129,140,248,0.6), 0 0 40px rgba(129,140,248,0.2), inset 0 0 15px rgba(129,140,248,0.15);
+  text-shadow: 0 0 10px rgba(129,140,248,0.5);
+}
+
+/* 3D Push */
+.btn-3d {
+  --btn-bg: var(--primary, #818cf8);
+  --btn-shadow: 0 6px 0 #4f46e5, 0 8px 16px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+}
+.btn-3d:hover {
+  transform: translateY(-4px);
+  --btn-shadow: 0 8px 0 #4f46e5, 0 12px 24px rgba(0,0,0,0.25);
+}
+.btn-3d:active {
+  transform: translateY(2px);
+  --btn-shadow: 0 2px 0 #4f46e5, 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Underline (text-style button) */
+.btn-underline {
+  --btn-bg: transparent;
+  --btn-text: var(--primary, #818cf8);
+  --btn-shadow: none;
+  --btn-padding-x: 0.25rem;
+  border: none;
+  border-radius: 0;
+  position: relative;
+}
+.btn-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+.btn-underline:hover { transform: none; }
+.btn-underline:hover::after { width: 100%; }
+
+/* Arrow */
+.btn-arrow {
+  --btn-bg: var(--primary, #818cf8);
+}
+.btn-arrow::after {
+  content: '→';
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.btn-arrow:hover::after {
+  transform: translateX(4px);
+}
+
+/* Icon button */
+.btn-icon {
+  --btn-padding-x: 0.75rem;
+  --btn-padding-y: 0.75rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+/* ── Sizes ───────────────────────────────────── */
+.btn-sm {
+  --btn-padding-x: 1rem;
+  --btn-padding-y: 0.5rem;
+  --btn-font-size: 0.8125rem;
+}
+
+.btn-lg {
+  --btn-padding-x: 2rem;
+  --btn-padding-y: 1rem;
+  --btn-font-size: 1.0625rem;
+}
+
+.btn-xl {
+  --btn-padding-x: 2.5rem;
+  --btn-padding-y: 1.25rem;
+  --btn-font-size: 1.125rem;
+}
+
+/* ── Shapes ──────────────────────────────────── */
+.btn-pill { --btn-radius: 999px; }
+.btn-square { --btn-radius: 0; }
+.btn-rounded { --btn-radius: 16px; }
+
+/* ── States ──────────────────────────────────── */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading */
+.btn-loading {
+  color: transparent !important;
+  pointer-events: none;
+}
+.btn-loading::before {
+  content: '';
+  position: absolute;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Ripple container ────────────────────────── */
+.btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  animation: btn-ripple 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes btn-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ── Button Group ────────────────────────────── */
+.btn-group {
+  display: inline-flex;
+}
+.btn-group .btn {
+  border-radius: 0;
+}
+.btn-group .btn:first-child {
+  border-radius: var(--btn-radius) 0 0 var(--btn-radius);
+}
+.btn-group .btn:last-child {
+  border-radius: 0 var(--btn-radius) var(--btn-radius) 0;
+}
+.btn-group .btn + .btn {
+  margin-left: -2px;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+  .btn-loading::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,179 @@
+/**
+ * dividers.css — SVG wave, blob, diagonal, zigzag, curved section separators
+ *
+ * Usage:
+ *   <!-- Place between sections -->
+ *   <div class="divider-wave"></div>
+ *   <div class="divider-wave-bottom"></div>
+ *   <div class="divider-diagonal"></div>
+ *   <div class="divider-blob"></div>
+ *
+ * Customize:
+ *   --divider-color: #1e1e2e;
+ *   --divider-height: 80px;
+ *   --divider-bg: transparent;  (behind the divider)
+ */
+
+/* ── Base ────────────────────────────────────── */
+[class*="divider-"] {
+  --divider-color: var(--surface, #1e1e2e);
+  --divider-bg: transparent;
+  --divider-height: 80px;
+
+  width: 100%;
+  height: var(--divider-height);
+  position: relative;
+  overflow: hidden;
+  background: var(--divider-bg);
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+[class*="divider-"] svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* ── Wave (top → bottom) ─────────────────────── */
+.divider-wave {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C360,100 1080,0 1440,60 L1440,120 L0,120Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.divider-wave-bottom {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,80 C360,20 1080,120 1440,60 L1440,0 L0,0Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Multi-layer wave */
+.divider-wave-multi {
+  --divider-height: 120px;
+  position: relative;
+}
+.divider-wave-multi::before,
+.divider-wave-multi::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.divider-wave-multi::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C480,120 960,0 1440,80 L1440,120 L0,120Z' fill='%231e1e2e' opacity='0.5'/%3E%3C/svg%3E");
+}
+.divider-wave-multi::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,80 C360,20 1080,100 1440,40 L1440,120 L0,120Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+}
+
+/* ── Blob ────────────────────────────────────── */
+.divider-blob {
+  --divider-height: 100px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C160,120 320,0 480,60 C640,120 800,20 960,60 C1120,100 1280,20 1440,60 L1440,120 L0,120Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── Diagonal ────────────────────────────────── */
+.divider-diagonal {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpolygon points='0,120 1440,0 1440,120' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.divider-diagonal-reverse {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 1440,120 0,120' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── Zigzag ──────────────────────────────────── */
+.divider-zigzag {
+  --divider-height: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpolygon points='0,40 60,0 120,40 180,0 240,40 300,0 360,40 420,0 480,40 540,0 600,40 660,0 720,40 780,0 840,40 900,0 960,40 1020,0 1080,40 1140,0 1200,40 1260,0 1320,40 1380,0 1440,40' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── Curved ──────────────────────────────────── */
+.divider-curved {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,120 Q720,0 1440,120 Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.divider-curved-reverse {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 Q720,120 1440,0 L1440,120 L0,120 Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── Arrow / Chevron ─────────────────────────── */
+.divider-arrow {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 720,120 1440,0 1440,120 0,120' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ── Fade ────────────────────────────────────── */
+.divider-fade {
+  --divider-height: 100px;
+  background: linear-gradient(to bottom, transparent, var(--divider-color));
+}
+.divider-fade-up {
+  --divider-height: 100px;
+  background: linear-gradient(to top, transparent, var(--divider-color));
+}
+
+/* ── Line Dividers ───────────────────────────── */
+.divider-line {
+  --divider-height: 1px;
+  background: var(--border, #2d2d3f);
+}
+
+.divider-line-gradient {
+  --divider-height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border, #2d2d3f) 20%, var(--border, #2d2d3f) 80%, transparent);
+}
+
+.divider-line-glow {
+  --divider-height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary, #818cf8), transparent);
+  box-shadow: 0 0 10px var(--primary, #818cf8);
+}
+
+/* ── Dot separator ───────────────────────────── */
+.divider-dots {
+  --divider-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: none;
+}
+.divider-dots::before,
+.divider-dots::after {
+  content: '·  ·  ·';
+  font-size: 1.5rem;
+  color: var(--text-secondary, #94a3b8);
+  letter-spacing: 0.5em;
+}
+.divider-dots::after { display: none; }
+
+/* ── Size modifiers ──────────────────────────── */
+.divider-sm { --divider-height: 40px; }
+.divider-lg { --divider-height: 120px; }
+.divider-xl { --divider-height: 160px; }
+
+/* ── Flip (bottom-of-section use) ────────────── */
+.divider-flip {
+  transform: scaleY(-1);
+}

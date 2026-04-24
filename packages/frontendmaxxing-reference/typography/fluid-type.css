@@ -1,0 +1,105 @@
+/*
+ * fluid-type.css — clamp()-based fluid typography scale
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="fluid-type.css">
+ *   <h1 class="text-5xl">Hero Heading</h1>
+ *   <p class="text-base">Body text</p>
+ *
+ * Font sizes scale smoothly between 320px and 1200px viewport.
+ * No media queries needed — clamp() handles it.
+ */
+
+:root {
+  /* Base scale: 16px at 320px viewport → 20px at 1200px viewport */
+  --fluid-min-vw: 320;
+  --fluid-max-vw: 1200;
+}
+
+/* ============================================================
+   FLUID TYPE SCALE
+   Each step is roughly 1.25x (major third) the previous.
+   min-size → max-size across the viewport range.
+   ============================================================ */
+
+.text-xs   { font-size: clamp(0.694rem, 0.66rem + 0.17vw, 0.8rem); }
+.text-sm   { font-size: clamp(0.833rem, 0.79rem + 0.22vw, 1rem); }
+.text-base { font-size: clamp(1rem, 0.93rem + 0.34vw, 1.25rem); }
+.text-lg   { font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.563rem); }
+.text-xl   { font-size: clamp(1.44rem, 1.28rem + 0.8vw, 1.953rem); }
+.text-2xl  { font-size: clamp(1.728rem, 1.48rem + 1.24vw, 2.441rem); }
+.text-3xl  { font-size: clamp(2.074rem, 1.7rem + 1.87vw, 3.052rem); }
+.text-4xl  { font-size: clamp(2.488rem, 1.94rem + 2.74vw, 3.815rem); }
+.text-5xl  { font-size: clamp(2.986rem, 2.19rem + 3.98vw, 4.768rem); }
+.text-6xl  { font-size: clamp(3.583rem, 2.45rem + 5.67vw, 5.96rem); }
+
+/* ============================================================
+   FLUID DISPLAY HEADINGS (for hero sections)
+   ============================================================ */
+
+.display-1 { font-size: clamp(3rem, 1.5rem + 7.5vw, 8rem); line-height: 0.95; }
+.display-2 { font-size: clamp(2.5rem, 1.5rem + 5vw, 6rem); line-height: 0.95; }
+.display-3 { font-size: clamp(2rem, 1.25rem + 3.75vw, 4.5rem); line-height: 1; }
+
+/* ============================================================
+   LINE HEIGHT UTILITIES
+   ============================================================ */
+
+.leading-none    { line-height: 1; }
+.leading-tight   { line-height: 1.15; }
+.leading-snug    { line-height: 1.3; }
+.leading-normal  { line-height: 1.5; }
+.leading-relaxed { line-height: 1.65; }
+.leading-loose   { line-height: 2; }
+
+/* ============================================================
+   FONT WEIGHT UTILITIES
+   ============================================================ */
+
+.font-thin       { font-weight: 100; }
+.font-extralight { font-weight: 200; }
+.font-light      { font-weight: 300; }
+.font-normal     { font-weight: 400; }
+.font-medium     { font-weight: 500; }
+.font-semibold   { font-weight: 600; }
+.font-bold       { font-weight: 700; }
+.font-extrabold  { font-weight: 800; }
+.font-black      { font-weight: 900; }
+
+/* ============================================================
+   LETTER SPACING
+   ============================================================ */
+
+.tracking-tighter { letter-spacing: -0.05em; }
+.tracking-tight   { letter-spacing: -0.025em; }
+.tracking-normal  { letter-spacing: 0; }
+.tracking-wide    { letter-spacing: 0.025em; }
+.tracking-wider   { letter-spacing: 0.05em; }
+.tracking-widest  { letter-spacing: 0.1em; }
+
+/* ============================================================
+   TEXT UTILITIES
+   ============================================================ */
+
+.text-balance { text-wrap: balance; }
+.text-pretty  { text-wrap: pretty; }
+.text-nowrap  { white-space: nowrap; }
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,0 +1,336 @@
+/**
+ * loaders.css — Skeleton shimmer, spinners, progress bars, dot pulse
+ *
+ * Usage:
+ *   <div class="skeleton skeleton-text"></div>
+ *   <div class="skeleton skeleton-circle"></div>
+ *   <div class="spinner"></div>
+ *   <div class="dots-pulse"></div>
+ *   <div class="progress-bar" style="--progress: 75%"></div>
+ *   <div class="loader-bar"></div>
+ */
+
+/* ── Skeleton Shimmer ────────────────────────── */
+.skeleton {
+  --skeleton-bg: var(--surface, #1e1e2e);
+  --skeleton-shine: rgba(255,255,255,0.04);
+  --skeleton-radius: 8px;
+
+  background: var(--skeleton-bg);
+  border-radius: var(--skeleton-radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--skeleton-shine) 20%,
+    rgba(255,255,255,0.08) 50%,
+    var(--skeleton-shine) 80%,
+    transparent 100%
+  );
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  transform: translateX(-100%);
+}
+
+@keyframes skeleton-shimmer {
+  to { transform: translateX(100%); }
+}
+
+/* Skeleton shapes */
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.75rem;
+}
+.skeleton-text:last-child {
+  width: 60%;
+}
+
+.skeleton-title {
+  height: 1.5em;
+  width: 50%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--skeleton-radius);
+}
+
+.skeleton-card {
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+}
+
+.skeleton-button {
+  height: 2.5rem;
+  width: 120px;
+  border-radius: 10px;
+}
+
+/* ── Spinner ─────────────────────────────────── */
+.spinner {
+  --spinner-size: 2rem;
+  --spinner-width: 3px;
+  --spinner-color: var(--primary, #818cf8);
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border: var(--spinner-width) solid rgba(255,255,255,0.1);
+  border-top-color: var(--spinner-color);
+  border-radius: 50%;
+  animation: spinner-rotate 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Spinner sizes */
+.spinner-sm { --spinner-size: 1.25rem; --spinner-width: 2px; }
+.spinner-lg { --spinner-size: 3rem; --spinner-width: 4px; }
+.spinner-xl { --spinner-size: 4rem; --spinner-width: 5px; }
+
+/* Dual-ring spinner */
+.spinner-dual {
+  --spinner-size: 2.5rem;
+  --spinner-color: var(--primary, #818cf8);
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border: 3px solid transparent;
+  border-top-color: var(--spinner-color);
+  border-bottom-color: var(--spinner-color);
+  border-radius: 50%;
+  animation: spinner-rotate 0.8s linear infinite;
+  display: inline-block;
+}
+
+/* Dot spinner */
+.spinner-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.spinner-dots::before,
+.spinner-dots::after,
+.spinner-dots span {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary, #818cf8);
+  animation: spinner-dot-bounce 1.4s ease-in-out infinite;
+}
+.spinner-dots::after { animation-delay: 0.16s; }
+.spinner-dots span { animation-delay: 0.32s; }
+
+@keyframes spinner-dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Dots Pulse ──────────────────────────────── */
+.dots-pulse {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.dots-pulse::before,
+.dots-pulse::after {
+  content: '';
+}
+.dots-pulse::before,
+.dots-pulse::after,
+.dots-pulse span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary, #818cf8);
+  animation: dot-pulse 1.4s ease-in-out infinite;
+}
+.dots-pulse::after { animation-delay: 0.2s; }
+.dots-pulse span { animation-delay: 0.4s; }
+
+@keyframes dot-pulse {
+  0%, 100% { transform: scale(0.5); opacity: 0.3; }
+  50% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Progress Bar ────────────────────────────── */
+.progress-bar {
+  --progress: 0%;
+  --progress-color: var(--primary, #818cf8);
+  --progress-bg: var(--surface, #1e1e2e);
+  --progress-height: 8px;
+  --progress-radius: 999px;
+
+  width: 100%;
+  height: var(--progress-height);
+  background: var(--progress-bg);
+  border-radius: var(--progress-radius);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress);
+  background: var(--progress-color);
+  border-radius: inherit;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient progress */
+.progress-bar-gradient::after {
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  background-size: 200% 100%;
+  animation: progress-gradient-flow 2s linear infinite;
+}
+
+@keyframes progress-gradient-flow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Striped progress */
+.progress-bar-striped::after {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255,255,255,0.1) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.1) 75%,
+    transparent 75%
+  );
+  background-size: 1rem 1rem;
+  animation: progress-stripe-move 1s linear infinite;
+}
+
+@keyframes progress-stripe-move {
+  to { background-position: 1rem 0; }
+}
+
+/* Progress sizes */
+.progress-bar-sm { --progress-height: 4px; }
+.progress-bar-lg { --progress-height: 12px; }
+
+/* ── Top-of-page Loader Bar ──────────────────── */
+.loader-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.loader-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--primary, #818cf8), transparent);
+  animation: loader-bar-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes loader-bar-slide {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* ── Bounce loader ───────────────────────────── */
+.loader-bounce {
+  display: inline-flex;
+  gap: 4px;
+  align-items: flex-end;
+  height: 2rem;
+}
+.loader-bounce span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary, #818cf8);
+  animation: loader-bounce 0.6s ease-in-out infinite alternate;
+}
+.loader-bounce span:nth-child(2) { animation-delay: 0.15s; }
+.loader-bounce span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes loader-bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-16px); }
+}
+
+/* ── Pulse ring ──────────────────────────────── */
+.loader-pulse {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--primary, #818cf8);
+  position: relative;
+  display: inline-block;
+}
+.loader-pulse::before,
+.loader-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--primary, #818cf8);
+  animation: loader-pulse-ring 1.5s ease-out infinite;
+}
+.loader-pulse::after { animation-delay: 0.5s; }
+
+@keyframes loader-pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after,
+  .spinner,
+  .spinner-dual,
+  .spinner-dots::before,
+  .spinner-dots::after,
+  .spinner-dots span,
+  .dots-pulse::before,
+  .dots-pulse::after,
+  .dots-pulse span,
+  .loader-bar::after,
+  .loader-bounce span,
+  .loader-pulse::before,
+  .loader-pulse::after,
+  .progress-bar-striped::after,
+  .progress-bar-gradient::after {
+    animation: none;
+  }
+}

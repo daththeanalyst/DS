@@ -1,0 +1,90 @@
+/**
+ * stats.css — Stats/counter section layouts
+ *
+ * Usage:
+ *   <div class="stats-row">
+ *     <div class="stats-card">
+ *       <div class="stats-number" data-count-to="500">0</div>
+ *       <div class="stats-label">Happy Clients</div>
+ *     </div>
+ *   </div>
+ */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.stats-card {
+  padding: 2rem 1.5rem;
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stats-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.stats-number {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  color: var(--text, #e2e8f0);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 500;
+}
+
+.stats-sublabel {
+  font-size: 0.75rem;
+  color: var(--text-tertiary, #64748b);
+}
+
+/* ── Minimal variant ─────────────────────────── */
+.stats-minimal .stats-card {
+  background: transparent;
+  border: none;
+  padding: 1rem;
+}
+
+/* ── Bordered variant ────────────────────────── */
+.stats-bordered .stats-card {
+  border-left: 3px solid var(--primary, #818cf8);
+  text-align: left;
+  align-items: flex-start;
+  border-radius: 0 12px 12px 0;
+}
+
+/* ── Gradient number ─────────────────────────── */
+.stats-gradient .stats-number {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Inline stats ────────────────────────────── */
+.stats-inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.stats-inline .stats-card {
+  background: none;
+  border: none;
+  padding: 0;
+}

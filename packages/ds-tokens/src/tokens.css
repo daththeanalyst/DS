@@ -1,0 +1,28 @@
+/*
+ * DS design tokens as CSS variables. Import once at app root.
+ * Kept in sync with src/index.ts.
+ */
+
+:root {
+  --ds-ink-950: #0a0a0a;
+  --ds-ink-900: #111111;
+  --ds-ink-800: #1c1c1c;
+  --ds-ink-700: #2a2a2a;
+  --ds-ink-500: #6b6b6b;
+  --ds-ink-300: #c8c8c8;
+  --ds-ink-100: #f5f5f5;
+  --ds-ink-50: #fafafa;
+
+  --ds-accent: #0f62fe;
+  --ds-accent-soft: #4d8dff;
+  --ds-accent-muted: #1a3a7a;
+
+  --ds-danger: #ef4444;
+  --ds-warn: #f59e0b;
+  --ds-ok: #22c55e;
+
+  --ds-duration-fast: 120ms;
+  --ds-duration-base: 200ms;
+  --ds-duration-slow: 400ms;
+  --ds-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}

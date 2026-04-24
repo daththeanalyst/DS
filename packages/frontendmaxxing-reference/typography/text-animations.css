@@ -1,0 +1,222 @@
+/*
+ * text-animations.css — Typewriter, wave, bounce letters, text scramble (CSS-only)
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="text-animations.css">
+ *
+ *   <!-- Typewriter (set --chars to character count) -->
+ *   <p class="typewriter" style="--chars: 20">This is a typewriter</p>
+ *
+ *   <!-- Bouncing text (wrap each letter in a span) -->
+ *   <div class="bounce-text">
+ *     <span style="--i:0">H</span>
+ *     <span style="--i:1">e</span>
+ *     <span style="--i:2">l</span>
+ *     <span style="--i:3">l</span>
+ *     <span style="--i:4">o</span>
+ *   </div>
+ *
+ * For JS-powered text animations (no manual span wrapping), see text-reveal.js.
+ */
+
+/* ============================================================
+   TYPEWRITER
+   CSS-only typewriter with cursor.
+   Set --chars to the number of characters in your text.
+   ============================================================ */
+
+.typewriter {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid currentColor;
+  width: 0;
+  animation:
+    typewriter-type calc(var(--chars, 20) * 0.08s) steps(var(--chars, 20)) 1s forwards,
+    typewriter-blink 0.75s step-end infinite;
+}
+
+@keyframes typewriter-type {
+  to { width: 100%; }
+}
+
+@keyframes typewriter-blink {
+  50% { border-color: transparent; }
+}
+
+/* Typewriter that also deletes */
+.typewriter-loop {
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid currentColor;
+  animation:
+    typewriter-type calc(var(--chars, 20) * 0.08s) steps(var(--chars, 20)) 1s forwards,
+    typewriter-delete calc(var(--chars, 20) * 0.04s) steps(var(--chars, 20)) calc(var(--chars, 20) * 0.08s + 3s) forwards,
+    typewriter-blink 0.75s step-end infinite;
+}
+
+@keyframes typewriter-delete {
+  to { width: 0; }
+}
+
+/* ============================================================
+   BOUNCING TEXT
+   Each letter bounces in with staggered delay.
+   Wrap each letter in <span style="--i:N">.
+   ============================================================ */
+
+.bounce-text span {
+  display: inline-block;
+  animation: bounce-letter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--i, 0) * 0.05s);
+}
+
+@keyframes bounce-letter {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   WAVE TEXT
+   Letters wave up and down continuously.
+   ============================================================ */
+
+.wave-text span {
+  display: inline-block;
+  animation: wave-letter 2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+@keyframes wave-letter {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-15px); }
+}
+
+/* ============================================================
+   FADE-IN TEXT (per letter)
+   ============================================================ */
+
+.fade-text span {
+  display: inline-block;
+  opacity: 0;
+  animation: fade-letter 0.3s ease forwards;
+  animation-delay: calc(var(--i, 0) * 0.04s);
+}
+
+@keyframes fade-letter {
+  to { opacity: 1; }
+}
+
+/* ============================================================
+   ROTATE-IN TEXT (per letter)
+   ============================================================ */
+
+.rotate-text span {
+  display: inline-block;
+  opacity: 0;
+  transform: rotateX(90deg);
+  animation: rotate-letter 0.5s ease forwards;
+  animation-delay: calc(var(--i, 0) * 0.06s);
+}
+
+@keyframes rotate-letter {
+  to {
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+}
+
+/* ============================================================
+   BLUR-IN TEXT
+   ============================================================ */
+
+.blur-text span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+  animation: blur-letter 0.6s ease forwards;
+  animation-delay: calc(var(--i, 0) * 0.05s);
+}
+
+@keyframes blur-letter {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ============================================================
+   SLIDE-UP TEXT
+   Each word slides up from below.
+   ============================================================ */
+
+.slide-up-text {
+  overflow: hidden;
+}
+
+.slide-up-text span {
+  display: inline-block;
+  transform: translateY(100%);
+  animation: slide-up-word 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+@keyframes slide-up-word {
+  to { transform: translateY(0); }
+}
+
+/* ============================================================
+   HOVER EFFECTS ON TEXT
+   ============================================================ */
+
+/* Letter lifts on hover */
+.hover-lift-text span {
+  display: inline-block;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift-text span:hover {
+  transform: translateY(-5px);
+}
+
+/* Letter scales on hover */
+.hover-scale-text span {
+  display: inline-block;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-scale-text span:hover {
+  transform: scale(1.3);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter,
+  .typewriter-loop {
+    width: 100%;
+    animation: none;
+    border-right: none;
+  }
+
+  .bounce-text span,
+  .wave-text span,
+  .fade-text span,
+  .rotate-text span,
+  .blur-text span,
+  .slide-up-text span {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

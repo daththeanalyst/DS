@@ -1,0 +1,495 @@
+/**
+ * forms.css — Floating labels, custom inputs, validation states, toggle switches
+ *
+ * Usage:
+ *   <div class="form-group">
+ *     <div class="input-float">
+ *       <input type="text" id="name" placeholder=" " required>
+ *       <label for="name">Full Name</label>
+ *     </div>
+ *   </div>
+ *
+ *   <label class="toggle-switch">
+ *     <input type="checkbox">
+ *     <span class="toggle-slider"></span>
+ *   </label>
+ */
+
+/* ── Form Group ──────────────────────────────── */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text, #e2e8f0);
+  margin-bottom: 0.5rem;
+}
+
+.form-hint {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary, #64748b);
+  margin-top: 0.375rem;
+}
+
+/* ── Base Input Styles ───────────────────────── */
+.input,
+.input-float input,
+.input-float textarea,
+.input-float select,
+.input-underline input,
+.input-pill input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--text, #e2e8f0);
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  -webkit-appearance: none;
+}
+
+.input:focus,
+.input-float input:focus,
+.input-float textarea:focus,
+.input-float select:focus,
+.input-underline input:focus,
+.input-pill input:focus {
+  border-color: var(--primary, #818cf8);
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.15);
+}
+
+.input::placeholder {
+  color: var(--text-tertiary, #64748b);
+}
+
+/* ── Floating Label ──────────────────────────── */
+.input-float {
+  position: relative;
+}
+
+.input-float label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9375rem;
+  color: var(--text-tertiary, #64748b);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+  padding: 0 4px;
+}
+
+.input-float input:focus ~ label,
+.input-float input:not(:placeholder-shown) ~ label,
+.input-float textarea:focus ~ label,
+.input-float textarea:not(:placeholder-shown) ~ label,
+.input-float select:focus ~ label,
+.input-float.has-value label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary, #818cf8);
+  background: var(--surface, #1e1e2e);
+}
+
+.input-float textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.input-float textarea ~ label {
+  top: 1rem;
+  transform: none;
+}
+
+.input-float textarea:focus ~ label,
+.input-float textarea:not(:placeholder-shown) ~ label {
+  top: 0;
+  transform: translateY(-50%);
+}
+
+/* ── Underline Input ─────────────────────────── */
+.input-underline {
+  position: relative;
+}
+
+.input-underline input {
+  border: none;
+  border-bottom: 2px solid var(--border, #2d2d3f);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.75rem 0;
+}
+
+.input-underline input:focus {
+  box-shadow: none;
+}
+
+.input-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary, #818cf8);
+  transition: width 0.3s ease;
+}
+
+.input-underline:focus-within::after {
+  width: 100%;
+}
+
+/* ── Pill Input ──────────────────────────────── */
+.input-pill input {
+  border-radius: 999px;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+/* ── Textarea ────────────────────────────────── */
+.textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--text, #e2e8f0);
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 10px;
+  outline: none;
+  min-height: 100px;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.textarea:focus {
+  border-color: var(--primary, #818cf8);
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.15);
+}
+
+/* ── Custom Checkbox ─────────────────────────── */
+.checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  user-select: none;
+}
+
+.checkbox-custom input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-custom .checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border, #2d2d3f);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkbox-custom input:checked + .checkmark {
+  background: var(--primary, #818cf8);
+  border-color: var(--primary, #818cf8);
+}
+
+.checkbox-custom input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-custom input:focus-visible + .checkmark {
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.3);
+}
+
+/* ── Custom Radio ────────────────────────────── */
+.radio-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  user-select: none;
+}
+
+.radio-custom input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-custom .radio-dot {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border, #2d2d3f);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.radio-custom input:checked + .radio-dot {
+  border-color: var(--primary, #818cf8);
+}
+
+.radio-custom input:checked + .radio-dot::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary, #818cf8);
+}
+
+/* ── Toggle Switch ───────────────────────────── */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  width: 48px;
+  height: 28px;
+  background: var(--border, #2d2d3f);
+  border-radius: 14px;
+  position: relative;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary, #818cf8);
+}
+
+.toggle-switch input:checked + .toggle-slider::after {
+  transform: translateX(20px);
+}
+
+.toggle-switch input:focus-visible + .toggle-slider {
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.3);
+}
+
+/* ── Select Custom ───────────────────────────── */
+.select-custom {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-custom select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  color: var(--text, #e2e8f0);
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 10px;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.select-custom::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--text-secondary, #94a3b8);
+  border-top: none;
+  border-left: none;
+  pointer-events: none;
+}
+
+.select-custom select:focus {
+  border-color: var(--primary, #818cf8);
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.15);
+}
+
+/* ── Validation States ───────────────────────── */
+.input-error,
+.form-group.error input,
+.form-group.error textarea,
+.form-group.error select {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important;
+}
+
+.input-success,
+.form-group.success input,
+.form-group.success textarea,
+.form-group.success select {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.1) !important;
+}
+
+.form-error-text {
+  color: #ef4444;
+  font-size: 0.8125rem;
+  margin-top: 0.375rem;
+}
+
+.form-success-text {
+  color: #10b981;
+  font-size: 0.8125rem;
+  margin-top: 0.375rem;
+}
+
+/* ── Input Group (with icon/addon) ───────────── */
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.input-group .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-tertiary, #64748b);
+  pointer-events: none;
+  font-size: 1rem;
+}
+
+.input-group .input-icon ~ input {
+  padding-left: 2.75rem;
+}
+
+.input-group .input-addon {
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border, #2d2d3f);
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.input-group .input-addon:first-child {
+  border-radius: 10px 0 0 10px;
+  border-right: none;
+}
+
+.input-group .input-addon:last-child {
+  border-radius: 0 10px 10px 0;
+  border-left: none;
+}
+
+.input-group input {
+  border-radius: 0;
+}
+.input-group input:first-child { border-radius: 10px 0 0 10px; }
+.input-group input:last-child { border-radius: 0 10px 10px 0; }
+
+/* ── Step Wizard ─────────────────────────────── */
+.step-wizard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  counter-reset: step;
+}
+
+.step-wizard .step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.step-wizard .step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border, #2d2d3f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-secondary, #94a3b8);
+  background: var(--surface, #1e1e2e);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.step-wizard .step-line {
+  width: 60px;
+  height: 2px;
+  background: var(--border, #2d2d3f);
+  transition: background 0.3s ease;
+}
+
+.step-wizard .step.active .step-circle {
+  background: var(--primary, #818cf8);
+  border-color: var(--primary, #818cf8);
+  color: #fff;
+}
+
+.step-wizard .step.completed .step-circle {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+
+.step-wizard .step.completed .step-line {
+  background: #10b981;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .input-float label,
+  .toggle-slider,
+  .toggle-slider::after,
+  .input-underline::after {
+    transition: none;
+  }
+}

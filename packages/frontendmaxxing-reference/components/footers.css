@@ -1,0 +1,271 @@
+/**
+ * footers.css — 5 footer patterns
+ *
+ * Usage:
+ *   <footer class="footer-columns">
+ *     <div class="footer-inner">
+ *       <div class="footer-brand">
+ *         <h3>Brand</h3>
+ *         <p>Short description</p>
+ *       </div>
+ *       <div class="footer-group">
+ *         <h4>Product</h4>
+ *         <ul>
+ *           <li><a href="#">Features</a></li>
+ *           <li><a href="#">Pricing</a></li>
+ *         </ul>
+ *       </div>
+ *     </div>
+ *     <div class="footer-bottom">
+ *       <p>&copy; 2024 Brand. All rights reserved.</p>
+ *     </div>
+ *   </footer>
+ */
+
+/* ── Shared Base ─────────────────────────────── */
+[class*="footer-"]:not([class*="footer-inner"]):not([class*="footer-brand"]):not([class*="footer-group"]):not([class*="footer-bottom"]):not([class*="footer-social"]):not([class*="footer-newsletter"]):not([class*="footer-cta"]) {
+  background: var(--surface, #1e1e2e);
+  border-top: 1px solid var(--border, #2d2d3f);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 4vw, 3rem);
+}
+
+.footer-brand h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text, #e2e8f0);
+  margin-bottom: 0.75rem;
+}
+
+.footer-brand p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-group h4 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text, #e2e8f0);
+  margin-bottom: 1rem;
+}
+
+.footer-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.footer-group a {
+  color: var(--text-secondary, #94a3b8);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.2s ease;
+}
+
+.footer-group a:hover {
+  color: var(--text, #e2e8f0);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border, #2d2d3f);
+  padding: 1.5rem clamp(1rem, 4vw, 3rem);
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.footer-social a {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 1.25rem;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.footer-social a:hover {
+  color: var(--primary, #818cf8);
+}
+
+/* ── 1. Multi-column Footer ──────────────────── */
+.footer-columns .footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (max-width: 768px) {
+  .footer-columns .footer-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-columns .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-columns .footer-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 2. Mega Footer ──────────────────────────── */
+.footer-mega .footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(4, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.footer-newsletter {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border, #2d2d3f);
+  margin-bottom: 1rem;
+}
+
+.footer-newsletter h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text, #e2e8f0);
+  margin-bottom: 0.25rem;
+}
+
+.footer-newsletter p {
+  font-size: 0.875rem;
+}
+
+.footer-newsletter form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.footer-newsletter input {
+  padding: 0.625rem 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 8px;
+  color: var(--text, #e2e8f0);
+  font-size: 0.875rem;
+  min-width: 240px;
+}
+
+@media (max-width: 1024px) {
+  .footer-mega .footer-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-mega .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── 3. Minimal Footer ───────────────────────── */
+.footer-minimal {
+  text-align: center;
+}
+
+.footer-minimal .footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.footer-minimal .footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-minimal .footer-links a {
+  color: var(--text-secondary, #94a3b8);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.footer-minimal .footer-links a:hover {
+  color: var(--text, #e2e8f0);
+}
+
+/* ── 4. Sticky CTA Footer ────────────────────── */
+.footer-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background: var(--surface, #1e1e2e);
+  border-top: 1px solid var(--border, #2d2d3f);
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+}
+
+.footer-cta-bar p {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text, #e2e8f0);
+}
+
+/* ── 5. Wave Top Footer ──────────────────────── */
+.footer-wave {
+  position: relative;
+  margin-top: 80px;
+}
+
+.footer-wave::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80Z' fill='%231e1e2e'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+.footer-wave .footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+@media (max-width: 768px) {
+  .footer-wave .footer-inner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-wave .footer-brand {
+    grid-column: 1 / -1;
+  }
+}

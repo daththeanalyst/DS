@@ -1,0 +1,222 @@
+/**
+ * timeline.css — Vertical and horizontal timeline components
+ *
+ * Usage:
+ *   <div class="timeline-vertical">
+ *     <div class="timeline-item">
+ *       <div class="timeline-dot"></div>
+ *       <div class="timeline-content">
+ *         <div class="timeline-date">Jan 2024</div>
+ *         <h4>Event Title</h4>
+ *         <p>Description text</p>
+ *       </div>
+ *     </div>
+ *   </div>
+ */
+
+/* ── Vertical Timeline ───────────────────────── */
+.timeline-vertical {
+  position: relative;
+  padding: 1rem 0;
+}
+
+/* Main line */
+.timeline-vertical::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border, #2d2d3f);
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 56px;
+  padding-bottom: 2.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 12px;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface, #1e1e2e);
+  border: 3px solid var(--primary, #818cf8);
+  z-index: 1;
+}
+
+.timeline-dot.active {
+  background: var(--primary, #818cf8);
+  box-shadow: 0 0 0 4px rgba(129,140,248,0.2);
+}
+
+.timeline-content {
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.timeline-content h4 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text, #e2e8f0);
+  margin-bottom: 0.375rem;
+}
+
+.timeline-content p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.6;
+}
+
+.timeline-date {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--primary, #818cf8);
+  margin-bottom: 0.375rem;
+}
+
+/* ── Centered Vertical Timeline ──────────────── */
+.timeline-centered {
+  position: relative;
+  padding: 1rem 0;
+}
+
+.timeline-centered::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border, #2d2d3f);
+  transform: translateX(-50%);
+}
+
+.timeline-centered .timeline-item {
+  padding-left: 0;
+  padding-bottom: 3rem;
+  width: 50%;
+  padding-right: 2.5rem;
+}
+
+.timeline-centered .timeline-item:nth-child(even) {
+  margin-left: 50%;
+  padding-right: 0;
+  padding-left: 2.5rem;
+}
+
+.timeline-centered .timeline-dot {
+  left: auto;
+  right: -9px;
+}
+
+.timeline-centered .timeline-item:nth-child(even) .timeline-dot {
+  right: auto;
+  left: -9px;
+}
+
+@media (max-width: 768px) {
+  .timeline-centered::before {
+    left: 20px;
+  }
+  .timeline-centered .timeline-item,
+  .timeline-centered .timeline-item:nth-child(even) {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 56px;
+    padding-right: 0;
+  }
+  .timeline-centered .timeline-dot,
+  .timeline-centered .timeline-item:nth-child(even) .timeline-dot {
+    left: 12px;
+    right: auto;
+  }
+}
+
+/* ── Horizontal Timeline ─────────────────────── */
+.timeline-horizontal {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  padding: 2rem 0;
+  position: relative;
+  scrollbar-width: none;
+}
+.timeline-horizontal::-webkit-scrollbar { display: none; }
+
+.timeline-horizontal::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border, #2d2d3f);
+  transform: translateY(-50%);
+}
+
+.timeline-horizontal .timeline-item {
+  flex: 0 0 250px;
+  padding: 0 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.timeline-horizontal .timeline-dot {
+  position: relative;
+  left: auto;
+  top: auto;
+  margin-bottom: 1rem;
+}
+
+.timeline-horizontal .timeline-content {
+  width: 100%;
+}
+
+/* ── Minimal Timeline ────────────────────────── */
+.timeline-minimal {
+  position: relative;
+  padding: 0;
+}
+
+.timeline-minimal .timeline-item {
+  padding-left: 1.5rem;
+  padding-bottom: 2rem;
+  border-left: 2px solid var(--border, #2d2d3f);
+}
+
+.timeline-minimal .timeline-item:last-child {
+  border-left-color: transparent;
+}
+
+.timeline-minimal .timeline-dot {
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-width: 2px;
+}
+
+.timeline-minimal .timeline-content {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .timeline-dot { transition: none; }
+}

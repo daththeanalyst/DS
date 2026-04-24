@@ -1,0 +1,144 @@
+/*
+ * noise-grain.css — Film grain / noise overlays using SVG filters & CSS
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="noise-grain.css">
+ *   <div class="grain">Content with film grain overlay</div>
+ *   <div class="grain-heavy">Heavy grain</div>
+ *   <div class="noise-bg">Noise texture background</div>
+ */
+
+/* ============================================================
+   INLINE SVG FILTER (required — paste once in your HTML <body>)
+
+   <svg style="display:none">
+     <filter id="grain-filter">
+       <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+       <feColorMatrix type="saturate" values="0"/>
+     </filter>
+   </svg>
+
+   Or just use the CSS-only versions below (no SVG needed).
+   ============================================================ */
+
+/* ============================================================
+   CSS-ONLY GRAIN (uses background-image noise pattern)
+   No SVG filter needed — pure CSS.
+   ============================================================ */
+
+.grain {
+  position: relative;
+  overflow: hidden;
+}
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.06;
+  pointer-events: none;
+  animation: grain-shift 0.5s steps(4) infinite;
+  z-index: 1;
+}
+
+.grain-heavy::after {
+  opacity: 0.12;
+}
+
+.grain-light::after {
+  opacity: 0.03;
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-5%, -5%); }
+  50%  { transform: translate(5%, 5%); }
+  75%  { transform: translate(-5%, 5%); }
+  100% { transform: translate(5%, -5%); }
+}
+
+/* ============================================================
+   NOISE BACKGROUND TEXTURE (static, no animation)
+   ============================================================ */
+
+.noise-bg {
+  position: relative;
+}
+
+.noise-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 512px 512px;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   HALFTONE OVERLAY
+   ============================================================ */
+
+.halftone {
+  position: relative;
+}
+
+.halftone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.halftone-lg::after {
+  background-size: 8px 8px;
+}
+
+/* ============================================================
+   CROSSHATCH OVERLAY
+   ============================================================ */
+
+.crosshatch {
+  position: relative;
+}
+
+.crosshatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after {
+    animation: none !important;
+  }
+}

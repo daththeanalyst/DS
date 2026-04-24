@@ -1,0 +1,227 @@
+/**
+ * tabs.css — Tab component styles with sliding indicator
+ *
+ * Usage:
+ *   <div class="tabs-underline">
+ *     <div class="tab-list" role="tablist">
+ *       <button class="tab active" role="tab">Tab 1</button>
+ *       <button class="tab" role="tab">Tab 2</button>
+ *       <button class="tab" role="tab">Tab 3</button>
+ *       <div class="tab-indicator"></div>
+ *     </div>
+ *     <div class="tab-panels">
+ *       <div class="tab-panel active" role="tabpanel">Content 1</div>
+ *       <div class="tab-panel" role="tabpanel">Content 2</div>
+ *       <div class="tab-panel" role="tabpanel">Content 3</div>
+ *     </div>
+ *   </div>
+ */
+
+/* ── Shared Base ─────────────────────────────── */
+.tab-list {
+  display: flex;
+  position: relative;
+  gap: 0;
+}
+
+.tab {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-secondary, #94a3b8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tab:hover {
+  color: var(--text, #e2e8f0);
+}
+
+.tab.active {
+  color: var(--primary, #818cf8);
+  font-weight: 600;
+}
+
+.tab-panels {
+  margin-top: 1.5rem;
+}
+
+.tab-panel {
+  display: none;
+  animation: tab-fade-in 0.25s ease;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes tab-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 1. Underline Tabs ───────────────────────── */
+.tabs-underline .tab-list {
+  border-bottom: 1px solid var(--border, #2d2d3f);
+}
+
+.tabs-underline .tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  height: 2px;
+  background: var(--primary, #818cf8);
+  border-radius: 1px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fallback if not using JS indicator */
+.tabs-underline .tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary, #818cf8);
+  border-radius: 1px;
+}
+
+/* Hide fallback when JS indicator is active */
+.tabs-underline .tab-indicator ~ .tab::after {
+  display: none;
+}
+
+/* ── 2. Pill Tabs ────────────────────────────── */
+.tabs-pill .tab-list {
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.tabs-pill .tab {
+  border-radius: 8px;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.tabs-pill .tab.active {
+  background: var(--primary, #818cf8);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(129,140,248,0.3);
+}
+
+.tabs-pill .tab:hover:not(.active) {
+  background: rgba(255,255,255,0.04);
+}
+
+/* ── 3. Vertical Tabs ────────────────────────── */
+.tabs-vertical {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+}
+
+.tabs-vertical .tab-list {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 1px solid var(--border, #2d2d3f);
+  padding-right: 0;
+}
+
+.tabs-vertical .tab {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: 8px 0 0 8px;
+}
+
+.tabs-vertical .tab.active {
+  background: rgba(129,140,248,0.08);
+}
+
+.tabs-vertical .tab-indicator {
+  right: -1px;
+  left: auto !important;
+  width: 2px !important;
+  height: auto;
+  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tabs-vertical .tab-panels {
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  .tabs-vertical {
+    grid-template-columns: 1fr;
+  }
+  .tabs-vertical .tab-list {
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid var(--border, #2d2d3f);
+    overflow-x: auto;
+  }
+  .tabs-vertical .tab {
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+/* ── 4. Boxed Tabs ───────────────────────────── */
+.tabs-boxed .tab-list {
+  gap: 0;
+}
+
+.tabs-boxed .tab {
+  border: 1px solid var(--border, #2d2d3f);
+  border-right: none;
+  background: var(--surface, #1e1e2e);
+  padding: 0.75rem 1.5rem;
+}
+
+.tabs-boxed .tab:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+.tabs-boxed .tab:last-child {
+  border-radius: 0 10px 10px 0;
+  border-right: 1px solid var(--border, #2d2d3f);
+}
+
+.tabs-boxed .tab.active {
+  background: var(--primary, #818cf8);
+  border-color: var(--primary, #818cf8);
+  color: #fff;
+}
+
+/* ── Tab Count Badge ─────────────────────────── */
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: rgba(255,255,255,0.08);
+  margin-left: 0.5rem;
+}
+
+.tab.active .tab-count {
+  background: rgba(255,255,255,0.2);
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel { animation: none; }
+  .tab-indicator { transition: none; }
+  .tab { transition: none; }
+}

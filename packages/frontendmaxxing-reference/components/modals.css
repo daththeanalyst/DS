@@ -1,0 +1,275 @@
+/**
+ * modals.css — 6 modal/dialog styles
+ *
+ * Usage:
+ *   <div class="modal-backdrop" id="my-modal">
+ *     <div class="modal-center">
+ *       <div class="modal-header">
+ *         <h3>Title</h3>
+ *         <button class="modal-close">&times;</button>
+ *       </div>
+ *       <div class="modal-body">Content here</div>
+ *       <div class="modal-footer">
+ *         <button class="btn btn-ghost">Cancel</button>
+ *         <button class="btn btn-primary">Confirm</button>
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * Open: add .modal-open to .modal-backdrop
+ * Or use modals.js for programmatic control.
+ */
+
+/* ── Backdrop ────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 1rem;
+}
+
+.modal-backdrop.modal-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Shared Modal Parts ──────────────────────── */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border, #2d2d3f);
+}
+
+.modal-header h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.modal-close:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text, #e2e8f0);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: 60vh;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.6;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border, #2d2d3f);
+}
+
+/* ── 1. Center (default) ─────────────────────── */
+.modal-center {
+  --modal-width: 480px;
+
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 20px;
+  width: min(var(--modal-width), calc(100% - 2rem));
+  max-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-open .modal-center {
+  transform: scale(1) translateY(0);
+}
+
+/* ── 2. Slide-in Panel (right drawer) ────────── */
+.modal-backdrop:has(.modal-slide) {
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.modal-slide {
+  --modal-width: 420px;
+
+  background: var(--surface, #1e1e2e);
+  border-left: 1px solid var(--border, #2d2d3f);
+  width: min(var(--modal-width), 100%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -16px 0 48px rgba(0,0,0,0.3);
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-open .modal-slide {
+  transform: translateX(0);
+}
+
+.modal-slide .modal-body {
+  max-height: none;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── 3. Fullscreen ───────────────────────────── */
+.modal-fullscreen {
+  background: var(--bg, #0f0f1a);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.98);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-open .modal-fullscreen {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.modal-fullscreen .modal-body {
+  max-height: none;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── 4. Glass ────────────────────────────────── */
+.modal-glass {
+  --modal-width: 480px;
+
+  background: rgba(30, 30, 46, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 24px;
+  width: min(var(--modal-width), calc(100% - 2rem));
+  max-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-open .modal-glass {
+  transform: scale(1) translateY(0);
+}
+
+.modal-glass .modal-header,
+.modal-glass .modal-footer {
+  border-color: rgba(255,255,255,0.06);
+}
+
+/* ── 5. Bottom Sheet ─────────────────────────── */
+.modal-backdrop:has(.modal-bottom-sheet) {
+  align-items: flex-end;
+  padding: 0;
+}
+
+.modal-bottom-sheet {
+  background: var(--surface, #1e1e2e);
+  border-radius: 20px 20px 0 0;
+  border: 1px solid var(--border, #2d2d3f);
+  border-bottom: none;
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -16px 48px rgba(0,0,0,0.3);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-open .modal-bottom-sheet {
+  transform: translateY(0);
+}
+
+.modal-bottom-sheet .modal-body {
+  overflow-y: auto;
+}
+
+/* Drag handle */
+.modal-bottom-sheet .modal-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.15);
+  margin: 0.75rem auto;
+  flex-shrink: 0;
+}
+
+/* ── 6. Morph (placeholder — use JS for FLIP) ── */
+.modal-morph {
+  --modal-width: 480px;
+
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 20px;
+  width: min(var(--modal-width), calc(100% - 2rem));
+  max-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-open .modal-morph {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* ── Size variants ───────────────────────────── */
+.modal-sm { --modal-width: 360px; }
+.modal-lg { --modal-width: 640px; }
+.modal-xl { --modal-width: 860px; }
+
+/* ── Scroll lock (apply to body) ─────────────── */
+.body-modal-open {
+  overflow: hidden;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal-center,
+  .modal-slide,
+  .modal-fullscreen,
+  .modal-glass,
+  .modal-bottom-sheet,
+  .modal-morph {
+    transition: none;
+  }
+}

@@ -1,0 +1,155 @@
+/**
+ * avatars.css — Avatar circles, groups, status indicators, initials
+ *
+ * Usage:
+ *   <img class="avatar" src="photo.jpg" alt="Name">
+ *   <img class="avatar avatar-lg" src="photo.jpg" alt="Name">
+ *   <div class="avatar avatar-initials">JD</div>
+ *
+ *   <div class="avatar-group">
+ *     <img class="avatar" src="1.jpg" alt="">
+ *     <img class="avatar" src="2.jpg" alt="">
+ *     <div class="avatar avatar-initials avatar-more">+3</div>
+ *   </div>
+ *
+ *   <div class="avatar-status">
+ *     <img class="avatar" src="photo.jpg" alt="">
+ *     <span class="badge-dot badge-dot-online"></span>
+ *   </div>
+ */
+
+/* ── Avatar ──────────────────────────────────── */
+.avatar {
+  --avatar-size: 40px;
+
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--border, #2d2d3f);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface, #1e1e2e);
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 700;
+  font-size: calc(var(--avatar-size) * 0.4);
+  vertical-align: middle;
+}
+
+/* Sizes */
+.avatar-xs { --avatar-size: 24px; }
+.avatar-sm { --avatar-size: 32px; }
+.avatar-md { --avatar-size: 40px; }
+.avatar-lg { --avatar-size: 56px; }
+.avatar-xl { --avatar-size: 72px; }
+.avatar-2xl { --avatar-size: 96px; }
+
+/* Shapes */
+.avatar-square { border-radius: 12px; }
+.avatar-rounded { border-radius: 25%; }
+
+/* ── Initials Avatar ─────────────────────────── */
+.avatar-initials {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-size: calc(var(--avatar-size) * 0.38);
+  letter-spacing: 0.02em;
+  border: none;
+}
+
+/* Color variants for initials */
+.avatar-initials.avatar-blue   { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.avatar-initials.avatar-green  { background: linear-gradient(135deg, #10b981, #059669); }
+.avatar-initials.avatar-red    { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.avatar-initials.avatar-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.avatar-initials.avatar-pink   { background: linear-gradient(135deg, #ec4899, #db2777); }
+.avatar-initials.avatar-teal   { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+
+/* ── Avatar Group (overlapping stack) ────────── */
+.avatar-group {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.avatar-group .avatar {
+  margin-left: -12px;
+  border: 2px solid var(--bg, #0f0f1a);
+  transition: transform 0.2s ease;
+}
+
+.avatar-group .avatar:last-child {
+  margin-left: 0;
+}
+
+.avatar-group .avatar:hover {
+  transform: translateY(-4px);
+  z-index: 1;
+}
+
+/* "+N more" circle */
+.avatar-more {
+  background: var(--surface, #1e1e2e);
+  color: var(--text-secondary, #94a3b8);
+  font-size: calc(var(--avatar-size) * 0.35);
+  border: 2px solid var(--bg, #0f0f1a);
+}
+
+/* ── Avatar with Status ──────────────────────── */
+.avatar-status {
+  position: relative;
+  display: inline-flex;
+}
+
+.avatar-status .badge-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bg, #0f0f1a);
+  border-radius: 50%;
+}
+
+/* Large avatar larger dot */
+.avatar-status:has(.avatar-lg) .badge-dot,
+.avatar-status:has(.avatar-xl) .badge-dot {
+  width: 14px;
+  height: 14px;
+  bottom: 2px;
+  right: 2px;
+}
+
+/* ── Avatar with Ring ────────────────────────── */
+.avatar-ring {
+  box-shadow: 0 0 0 3px var(--bg, #0f0f1a), 0 0 0 5px var(--primary, #818cf8);
+}
+
+/* ── Avatar Placeholder (loading) ────────────── */
+.avatar-placeholder {
+  background: var(--border, #2d2d3f);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation: avatar-shimmer 1.5s ease-in-out infinite;
+  transform: translateX(-100%);
+}
+
+@keyframes avatar-shimmer {
+  to { transform: translateX(100%); }
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-placeholder::after { animation: none; }
+  .avatar-group .avatar { transition: none; }
+}

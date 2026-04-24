@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds / caches
+dist/
+build/
+.next/
+.turbo/
+out/
+coverage/
+.cache/
+*.tsbuildinfo
+
+# Env + secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Client-specific + ephemeral assets (CDN'd, not committed)
+assets/motion-sequences/generated/
+apps/*/public/research/*/scrape-cache/
+
+# Claude Code ephemeral
+.claude/logs/

@@ -1,0 +1,169 @@
+/*
+ * mobile-patterns.css — Touch-friendly targets, safe areas, viewport units
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="mobile-patterns.css">
+ *   <button class="touch-target">Tap me</button>
+ *   <div class="safe-area-padding">Avoids notches</div>
+ *   <div class="dvh-full">Full screen height (dynamic)</div>
+ */
+
+/* ============================================================
+   TOUCH-FRIENDLY TARGETS
+   Minimum 44x44px touch area (WCAG / Apple HIG guideline).
+   ============================================================ */
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 12px 16px;
+}
+
+/* Invisible expanded tap area */
+.touch-expand {
+  position: relative;
+}
+.touch-expand::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+}
+
+/* ============================================================
+   SAFE AREAS (notch / home indicator)
+   ============================================================ */
+
+.safe-area-padding {
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-padding-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.safe-area-padding-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Fixed bottom bar with safe area */
+.fixed-bottom-safe {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ============================================================
+   VIEWPORT HEIGHT (dynamic — respects mobile browser chrome)
+   ============================================================ */
+
+.dvh-full  { height: 100dvh; }
+.svh-full  { height: 100svh; }
+.lvh-full  { height: 100lvh; }
+.dvh-screen { min-height: 100dvh; }
+
+/* Fallback for browsers without dvh */
+@supports not (height: 100dvh) {
+  .dvh-full  { height: 100vh; }
+  .dvh-screen { min-height: 100vh; }
+}
+
+/* ============================================================
+   MOBILE-FIRST INTERACTIVE PATTERNS
+   ============================================================ */
+
+/* Prevent text selection on interactive elements */
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent double-tap zoom on buttons */
+.no-zoom {
+  touch-action: manipulation;
+}
+
+/* Smooth momentum scrolling */
+.momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* Hide scrollbar on mobile but keep scrolling */
+.scroll-hidden {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   MOBILE SWIPE HINT
+   Shows a subtle animation hinting horizontal scrollability.
+   ============================================================ */
+
+.swipe-hint {
+  position: relative;
+  overflow-x: auto;
+}
+
+.swipe-hint::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to left, var(--bg, #fff), transparent);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+
+/* Hide hint when scrolled */
+.swipe-hint.scrolled::after {
+  opacity: 0;
+}
+
+/* ============================================================
+   RESPONSIVE FONT SIZING (prevent zoom on iOS inputs)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px; /* prevents auto-zoom on iOS */
+  }
+}
+
+/* ============================================================
+   HOVER ONLY ON CAPABLE DEVICES
+   Prevents sticky hover states on touch devices.
+   ============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  .hover-only:hover {
+    /* Only apply hover styles on non-touch devices */
+    opacity: 0.8;
+  }
+}
+
+/* ============================================================
+   PULL-TO-REFRESH PREVENTION
+   (when you have custom scroll behavior)
+   ============================================================ */
+
+.no-pull-refresh {
+  overscroll-behavior-y: contain;
+}
+
+.no-overscroll {
+  overscroll-behavior: none;
+}

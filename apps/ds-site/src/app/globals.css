@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "@ds/tokens/css";
+
+@theme {
+  --color-ink-950: var(--ds-ink-950);
+  --color-ink-900: var(--ds-ink-900);
+  --color-ink-800: var(--ds-ink-800);
+  --color-ink-700: var(--ds-ink-700);
+  --color-ink-500: var(--ds-ink-500);
+  --color-ink-300: var(--ds-ink-300);
+  --color-ink-100: var(--ds-ink-100);
+  --color-ink-50: var(--ds-ink-50);
+  --color-accent: var(--ds-accent);
+  --color-accent-soft: var(--ds-accent-soft);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: var(--ds-ink-950);
+  color: var(--ds-ink-100);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--ds-accent);
+  color: var(--ds-ink-950);
+}

@@ -1,0 +1,176 @@
+/**
+ * tooltips.css — Tooltip styles with arrow positioning
+ *
+ * Usage:
+ *   <span class="tooltip" data-tooltip="Helpful text" data-tooltip-pos="top">
+ *     Hover me
+ *   </span>
+ *
+ * Or use tooltips.js for programmatic control.
+ */
+
+/* ── CSS-only Tooltip ────────────────────────── */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip::before,
+.tooltip::after {
+  position: absolute;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+
+/* Content */
+.tooltip::after {
+  content: attr(data-tooltip);
+  background: var(--surface, #1e1e2e);
+  color: var(--text, #e2e8f0);
+  border: 1px solid var(--border, #2d2d3f);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  max-width: 250px;
+  white-space: normal;
+}
+
+/* Arrow */
+.tooltip::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  transform: rotate(45deg);
+}
+
+/* Show on hover/focus */
+.tooltip:hover::before,
+.tooltip:hover::after,
+.tooltip:focus-visible::before,
+.tooltip:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Top (default) ───────────────────────────── */
+.tooltip::after,
+.tooltip[data-tooltip-pos="top"]::after {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+.tooltip:hover::after,
+.tooltip[data-tooltip-pos="top"]:hover::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip::before,
+.tooltip[data-tooltip-pos="top"]::before {
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-top: none;
+  border-left: none;
+}
+
+/* ── Bottom ──────────────────────────────────── */
+.tooltip[data-tooltip-pos="bottom"]::after {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+.tooltip[data-tooltip-pos="bottom"]:hover::after {
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip[data-tooltip-pos="bottom"]::before {
+  top: calc(100% + 4px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border-bottom: none;
+  border-right: none;
+}
+
+/* ── Left ────────────────────────────────────── */
+.tooltip[data-tooltip-pos="left"]::after {
+  right: calc(100% + 8px);
+  bottom: auto;
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%) translateX(4px);
+}
+.tooltip[data-tooltip-pos="left"]:hover::after {
+  transform: translateY(-50%) translateX(0);
+}
+
+.tooltip[data-tooltip-pos="left"]::before {
+  right: calc(100% + 4px);
+  bottom: auto;
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-bottom: none;
+  border-left: none;
+}
+
+/* ── Right ───────────────────────────────────── */
+.tooltip[data-tooltip-pos="right"]::after {
+  left: calc(100% + 8px);
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+}
+.tooltip[data-tooltip-pos="right"]:hover::after {
+  transform: translateY(-50%) translateX(0);
+}
+
+.tooltip[data-tooltip-pos="right"]::before {
+  left: calc(100% + 4px);
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: none;
+  border-right: none;
+}
+
+/* ── JS-controlled tooltip (appended to body) ── */
+.tooltip-popup {
+  position: fixed;
+  z-index: 99999;
+  background: var(--surface, #1e1e2e);
+  color: var(--text, #e2e8f0);
+  border: 1px solid var(--border, #2d2d3f);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  max-width: 250px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.tooltip-popup.visible {
+  opacity: 1;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .tooltip::before,
+  .tooltip::after {
+    transition: none;
+  }
+}

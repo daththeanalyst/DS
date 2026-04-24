@@ -1,0 +1,139 @@
+/*
+ * sticky-patterns.css — Sticky header, sidebar, and table header patterns
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="sticky-patterns.css">
+ *   <header class="sticky-header">Navigation</header>
+ *   <aside class="sticky-sidebar">Sidebar</aside>
+ */
+
+/* ============================================================
+   STICKY HEADER
+   ============================================================ */
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Header that shrinks on scroll (pair with JS to add .scrolled class) */
+.sticky-header-shrink {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1.5rem 2rem;
+  transition: padding 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+}
+
+.sticky-header-shrink.scrolled {
+  padding: 0.75rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header that hides on scroll down, shows on scroll up
+   (use JS to toggle .header-hidden class) */
+.sticky-header-auto {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: transform 300ms ease;
+}
+
+.sticky-header-auto.header-hidden {
+  transform: translateY(-100%);
+}
+
+/* ============================================================
+   STICKY SIDEBAR
+   ============================================================ */
+
+.sticky-sidebar {
+  position: sticky;
+  top: 2rem; /* offset from top */
+  align-self: flex-start; /* required when sidebar is in a flex container */
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+/* Sidebar with header offset */
+.sticky-sidebar-offset {
+  position: sticky;
+  top: 80px; /* adjust to match your header height */
+  align-self: flex-start;
+  max-height: calc(100vh - 80px - 2rem);
+  overflow-y: auto;
+}
+
+/* ============================================================
+   STICKY TABLE HEADERS
+   ============================================================ */
+
+.sticky-table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.sticky-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sticky-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Both header and first column sticky */
+.sticky-table-both-wrapper {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.sticky-table-both th:first-child,
+.sticky-table-both td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: #fff;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sticky-table-both thead th:first-child {
+  z-index: 15; /* above both sticky header and column */
+}
+
+/* ============================================================
+   STICKY FOOTER BAR (bottom-fixed actions)
+   ============================================================ */
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
+/* ============================================================
+   STICKY SECTION HEADERS
+   (section titles stick while scrolling through that section)
+   ============================================================ */
+
+.sticky-section-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: inherit;
+}
+
+/* With blur effect */
+.sticky-section-header-blur {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8);
+}

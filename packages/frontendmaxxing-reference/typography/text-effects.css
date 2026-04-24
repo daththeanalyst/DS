@@ -1,0 +1,207 @@
+/*
+ * text-effects.css — Gradient text, stroke, knockout, long shadow, and more
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="text-effects.css">
+ *   <h1 class="text-gradient-purple">Gradient Text</h1>
+ *   <h1 class="text-stroke">Outlined Text</h1>
+ *   <h1 class="text-knockout">Text reveals background</h1>
+ */
+
+/* ============================================================
+   GRADIENT TEXT
+   ============================================================ */
+
+.text-gradient-purple {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-sunset {
+  background: linear-gradient(135deg, #fa709a, #fee140);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-ocean {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-fire {
+  background: linear-gradient(135deg, #f12711, #f5af19);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-silver {
+  background: linear-gradient(135deg, #bdc3c7, #ecf0f1, #bdc3c7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f7971e, #ffd200, #f7971e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animated gradient text */
+.text-gradient-animated {
+  background: linear-gradient(270deg, #667eea, #764ba2, #f093fb, #667eea);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-flow 4s ease infinite;
+}
+
+@keyframes text-gradient-flow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   STROKE / OUTLINE TEXT
+   ============================================================ */
+
+.text-stroke {
+  -webkit-text-stroke: 1px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-stroke-2 {
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-stroke-thick {
+  -webkit-text-stroke: 3px currentColor;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Stroke with fill on hover */
+.text-stroke-fill {
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-text-fill-color: transparent;
+  transition: -webkit-text-fill-color 300ms ease;
+}
+
+.text-stroke-fill:hover {
+  -webkit-text-fill-color: currentColor;
+}
+
+/* ============================================================
+   KNOCKOUT TEXT (text reveals background image)
+   Apply a background to the element and the text becomes a window.
+   ============================================================ */
+
+.text-knockout {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Set a background-image on this element for the knockout effect */
+}
+
+/* ============================================================
+   TEXT SHADOW EFFECTS
+   ============================================================ */
+
+/* Subtle depth */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Neon glow */
+.text-neon {
+  text-shadow:
+    0 0 7px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+}
+
+.text-neon-subtle {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 15px currentColor;
+}
+
+/* Retro / 3D effect */
+.text-retro {
+  text-shadow:
+    3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Engraved / inset */
+.text-engraved {
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Emboss / raised */
+.text-emboss {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Long shadow */
+.text-long-shadow {
+  text-shadow:
+    1px 1px 0 rgba(0,0,0,0.15),
+    2px 2px 0 rgba(0,0,0,0.13),
+    3px 3px 0 rgba(0,0,0,0.11),
+    4px 4px 0 rgba(0,0,0,0.09),
+    5px 5px 0 rgba(0,0,0,0.07),
+    6px 6px 0 rgba(0,0,0,0.05),
+    7px 7px 0 rgba(0,0,0,0.03);
+}
+
+/* ============================================================
+   SELECTION STYLING
+   ============================================================ */
+
+.text-select-purple ::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #fff;
+}
+
+.text-select-blue ::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #fff;
+}
+
+/* ============================================================
+   MISC TEXT EFFECTS
+   ============================================================ */
+
+/* Highlighted text (marker effect) */
+.text-highlight {
+  background: linear-gradient(120deg, rgba(255, 235, 59, 0.3) 0%, rgba(255, 235, 59, 0.3) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+  background-position: 0 90%;
+}
+
+/* Animated highlight reveal */
+.text-highlight-reveal {
+  background: linear-gradient(120deg, rgba(255, 235, 59, 0.3) 0%, rgba(255, 235, 59, 0.3) 100%);
+  background-repeat: no-repeat;
+  background-size: 0% 40%;
+  background-position: 0 90%;
+  transition: background-size 600ms ease;
+}
+
+.text-highlight-reveal:hover {
+  background-size: 100% 40%;
+}

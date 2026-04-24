@@ -1,0 +1,146 @@
+/* ============================================
+   MARQUEE — Infinite scrolling rail
+   Inspired by trucknroll.com
+   ============================================
+   Usage:
+     <div class="marquee">
+       <div class="marquee-track">
+         <span class="marquee-item">Your content</span>
+         <span class="marquee-item">More content</span>
+       </div>
+     </div>
+
+   Variants:
+     .marquee-reverse     — Scroll right-to-left (reversed)
+     .marquee-slow        — Slower speed
+     .marquee-fast        — Faster speed
+     .marquee-pause-hover — Pause on hover
+     .marquee-bordered    — Top/bottom borders
+     .marquee-accent      — Accent background
+   ============================================ */
+
+.marquee {
+  --marquee-gap: 2rem;
+  --marquee-speed: 30s;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.marquee-track {
+  display: flex;
+  gap: var(--marquee-gap);
+  width: max-content;
+  animation: marquee-scroll var(--marquee-speed) linear infinite;
+  will-change: transform;
+}
+
+.marquee-item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+  white-space: nowrap;
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Duplicate content for seamless loop — JS handles cloning,
+   but CSS-only fallback uses the animation on doubled content */
+
+/* ── Reverse direction ── */
+.marquee-reverse .marquee-track {
+  animation-direction: reverse;
+}
+
+/* ── Speed modifiers ── */
+.marquee-slow { --marquee-speed: 50s; }
+.marquee-fast { --marquee-speed: 15s; }
+
+/* ── Pause on hover ── */
+.marquee-pause-hover:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ── Bordered variant ── */
+.marquee-bordered {
+  border-top: 1px solid var(--border, #2d2d3f);
+  border-bottom: 1px solid var(--border, #2d2d3f);
+  padding-block: 1.5rem;
+}
+
+/* ── Accent background ── */
+.marquee-accent {
+  background: var(--primary, #818cf8);
+  color: #fff;
+  padding-block: 1.5rem;
+}
+
+/* ── Separator dot between items ── */
+.marquee-item::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.marquee-item:last-child::after {
+  display: none;
+}
+
+/* ── Fade edges ── */
+.marquee-fade {
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+/* ── Typography sizing ── */
+.marquee-sm { font-size: 0.875rem; --marquee-gap: 1.5rem; }
+.marquee-lg { font-size: 1.5rem; --marquee-gap: 3rem; }
+.marquee-xl {
+  font-size: clamp(2rem, 5vw, 4rem);
+  --marquee-gap: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── Vertical marquee ── */
+.marquee-vertical {
+  height: 300px;
+  overflow: hidden;
+}
+
+.marquee-vertical .marquee-track {
+  flex-direction: column;
+  animation-name: marquee-scroll-vertical;
+}
+
+@keyframes marquee-scroll-vertical {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(0, -50%, 0); }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation-play-state: paused;
+  }
+}

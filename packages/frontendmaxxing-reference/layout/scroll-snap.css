@@ -1,0 +1,187 @@
+/*
+ * scroll-snap.css — Full-page sections, horizontal carousels, scroll snapping
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="scroll-snap.css">
+ *
+ *   <!-- Full-page vertical sections -->
+ *   <div class="snap-y">
+ *     <section class="snap-section">Page 1</section>
+ *     <section class="snap-section">Page 2</section>
+ *   </div>
+ *
+ *   <!-- Horizontal carousel -->
+ *   <div class="snap-x">
+ *     <div class="snap-item">Slide 1</div>
+ *     <div class="snap-item">Slide 2</div>
+ *   </div>
+ */
+
+/* ============================================================
+   VERTICAL FULL-PAGE SNAP
+   ============================================================ */
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+  scroll-behavior: smooth;
+}
+
+.snap-y-proximity {
+  scroll-snap-type: y proximity;
+  overflow-y: scroll;
+  height: 100vh;
+  scroll-behavior: smooth;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sections that are at least viewport height but can grow */
+.snap-section-auto {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   HORIZONTAL CAROUSEL / SLIDER
+   ============================================================ */
+
+.snap-x {
+  scroll-snap-type: x mandatory;
+  overflow-x: scroll;
+  display: flex;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-x-proximity {
+  scroll-snap-type: x proximity;
+  overflow-x: scroll;
+  display: flex;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Full-width slides */
+.snap-item {
+  scroll-snap-align: start;
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* Multi-peek slides (show partial next slide) */
+.snap-item-peek {
+  scroll-snap-align: start;
+  flex: 0 0 85%;
+  min-width: 0;
+}
+
+/* Fixed-width slides */
+.snap-item-fixed {
+  scroll-snap-align: start;
+  flex: 0 0 300px;
+  min-width: 0;
+}
+
+/* Center-aligned slides */
+.snap-item-center {
+  scroll-snap-align: center;
+  flex: 0 0 80%;
+  min-width: 0;
+}
+
+/* ============================================================
+   HIDE SCROLLBAR (but keep scroll functionality)
+   ============================================================ */
+
+.snap-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.snap-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   CARD CAROUSEL
+   Horizontal scrolling cards with gap and peek.
+   ============================================================ */
+
+.card-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.card-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.card-carousel > * {
+  scroll-snap-align: start;
+  flex: 0 0 280px;
+}
+
+/* Responsive card size */
+@media (max-width: 480px) {
+  .card-carousel > * {
+    flex: 0 0 85%;
+  }
+}
+
+/* ============================================================
+   IMAGE GALLERY (horizontal scroll)
+   ============================================================ */
+
+.gallery-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.gallery-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-scroll > * {
+  scroll-snap-align: center;
+  flex: 0 0 auto;
+}
+
+.gallery-scroll img {
+  height: 300px;
+  width: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ============================================================
+   SCROLL PADDING (for sticky headers)
+   ============================================================ */
+
+.snap-pad-top {
+  scroll-padding-top: 80px; /* adjust for your header height */
+}
+
+.snap-pad-inline {
+  scroll-padding-inline: 1rem;
+}

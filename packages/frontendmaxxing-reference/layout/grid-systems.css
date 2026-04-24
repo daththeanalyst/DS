@@ -1,0 +1,192 @@
+/*
+ * grid-systems.css — Responsive CSS Grid layouts
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="grid-systems.css">
+ *   <div class="grid-auto">
+ *     <div>Card 1</div>
+ *     <div>Card 2</div>
+ *     <div>Card 3</div>
+ *   </div>
+ */
+
+/* ============================================================
+   AUTO-FIT RESPONSIVE GRID
+   Cards automatically fill available space, wrapping as needed.
+   ============================================================ */
+
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 1.5rem;
+}
+
+.grid-auto-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: 1rem;
+}
+
+.grid-auto-lg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+  gap: 2rem;
+}
+
+/* Auto-fill: similar but creates empty tracks if space allows */
+.grid-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: 1.5rem;
+}
+
+/* ============================================================
+   FIXED COLUMN GRIDS
+   ============================================================ */
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+.grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; }
+.grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.5rem; }
+
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4, .grid-5, .grid-6 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-4, .grid-5, .grid-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================================================
+   SIDEBAR + MAIN LAYOUT
+   ============================================================ */
+
+/* Fixed sidebar, fluid main */
+.grid-sidebar-left {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+.grid-sidebar-right {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 2rem;
+}
+
+/* Sidebar that collapses on mobile */
+@media (max-width: 768px) {
+  .grid-sidebar-left,
+  .grid-sidebar-right {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   DASHBOARD LAYOUT
+   Named grid areas for complex layouts.
+   ============================================================ */
+
+.grid-dashboard {
+  display: grid;
+  grid-template-columns: 240px 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "sidebar header header"
+    "sidebar main   main"
+    "sidebar footer footer";
+  gap: 1rem;
+  min-height: 100vh;
+}
+
+.grid-dashboard > [data-area="header"]  { grid-area: header; }
+.grid-dashboard > [data-area="sidebar"] { grid-area: sidebar; }
+.grid-dashboard > [data-area="main"]    { grid-area: main; }
+.grid-dashboard > [data-area="footer"]  { grid-area: footer; }
+
+@media (max-width: 768px) {
+  .grid-dashboard {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "footer";
+  }
+  .grid-dashboard > [data-area="sidebar"] {
+    display: none;
+  }
+}
+
+/* ============================================================
+   BENTO GRID
+   Mixed-size cards in an asymmetric layout.
+   ============================================================ */
+
+.grid-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(120px, auto);
+  gap: 1rem;
+}
+
+.grid-bento > .span-2     { grid-column: span 2; }
+.grid-bento > .span-3     { grid-column: span 3; }
+.grid-bento > .span-4     { grid-column: span 4; }
+.grid-bento > .row-span-2 { grid-row: span 2; }
+.grid-bento > .row-span-3 { grid-row: span 3; }
+
+@media (max-width: 768px) {
+  .grid-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-bento > .span-3,
+  .grid-bento > .span-4 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-bento {
+    grid-template-columns: 1fr;
+  }
+  .grid-bento > .span-2,
+  .grid-bento > .span-3,
+  .grid-bento > .span-4 {
+    grid-column: span 1;
+  }
+}
+
+/* ============================================================
+   SUBGRID (for aligned child content)
+   ============================================================ */
+
+.grid-subgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 1.5rem;
+}
+
+.grid-subgrid > * {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3; /* header, body, footer */
+}
+
+/* ============================================================
+   GAP UTILITIES
+   ============================================================ */
+
+.gap-0    { gap: 0; }
+.gap-xs   { gap: 0.25rem; }
+.gap-sm   { gap: 0.5rem; }
+.gap-md   { gap: 1rem; }
+.gap-lg   { gap: 1.5rem; }
+.gap-xl   { gap: 2rem; }
+.gap-2xl  { gap: 3rem; }
+.gap-3xl  { gap: 4rem; }

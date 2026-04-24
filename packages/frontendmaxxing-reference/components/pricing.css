@@ -1,0 +1,203 @@
+/**
+ * pricing.css — Pricing table/card layouts with toggle
+ *
+ * Usage:
+ *   <div class="pricing-grid">
+ *     <div class="pricing-card">
+ *       <div class="pricing-header">
+ *         <h3 class="pricing-plan">Basic</h3>
+ *         <div class="pricing-price">$9<span>/mo</span></div>
+ *       </div>
+ *       <ul class="pricing-features">
+ *         <li class="included">Feature 1</li>
+ *         <li class="included">Feature 2</li>
+ *         <li class="excluded">Feature 3</li>
+ *       </ul>
+ *       <div class="pricing-footer">
+ *         <a href="#" class="btn btn-outline">Get Started</a>
+ *       </div>
+ *     </div>
+ *     <div class="pricing-card pricing-popular">...</div>
+ *   </div>
+ */
+
+/* ── Grid ────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 1.5rem;
+  align-items: start;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ── Card ────────────────────────────────────── */
+.pricing-card {
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #2d2d3f);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* ── Popular/Highlighted Card ────────────────── */
+.pricing-popular {
+  border-color: var(--primary, #818cf8);
+  position: relative;
+  box-shadow: 0 0 0 1px var(--primary, #818cf8), 0 8px 32px rgba(129,140,248,0.15);
+  transform: scale(1.02);
+}
+
+.pricing-popular:hover {
+  transform: scale(1.02) translateY(-4px);
+}
+
+.pricing-popular::before {
+  content: 'Most Popular';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary, #818cf8);
+  color: #fff;
+  padding: 0.25rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Header ──────────────────────────────────── */
+.pricing-header {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border, #2d2d3f);
+  margin-bottom: 1.5rem;
+}
+
+.pricing-plan {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+  margin-bottom: 0.75rem;
+}
+
+.pricing-price {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--text, #e2e8f0);
+  line-height: 1;
+}
+
+.pricing-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.pricing-description {
+  font-size: 0.875rem;
+  color: var(--text-tertiary, #64748b);
+  margin-top: 0.5rem;
+}
+
+/* ── Features ────────────────────────────────── */
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pricing-features li {
+  font-size: 0.9375rem;
+  color: var(--text-secondary, #94a3b8);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pricing-features li::before {
+  content: '\2713';
+  font-weight: 700;
+  font-size: 0.875rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pricing-features li.included::before {
+  color: #10b981;
+  background: rgba(16,185,129,0.1);
+}
+
+.pricing-features li.excluded {
+  color: var(--text-tertiary, #64748b);
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.pricing-features li.excluded::before {
+  content: '\2717';
+  color: #ef4444;
+  background: rgba(239,68,68,0.1);
+}
+
+/* ── Footer ──────────────────────────────────── */
+.pricing-footer {
+  text-align: center;
+}
+
+.pricing-footer .btn {
+  width: 100%;
+}
+
+/* ── Toggle (Monthly/Yearly) ─────────────────── */
+.pricing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.pricing-toggle .toggle-label {
+  color: var(--text-secondary, #94a3b8);
+  transition: color 0.2s ease;
+}
+
+.pricing-toggle .toggle-label.active {
+  color: var(--text, #e2e8f0);
+  font-weight: 600;
+}
+
+.pricing-toggle .pricing-badge {
+  background: rgba(16,185,129,0.1);
+  color: #10b981;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ── Reduced motion ──────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .pricing-card { transition: none; }
+}
