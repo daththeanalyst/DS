@@ -41,7 +41,10 @@ export function useScrollProgress() {
             setProgress(timer.current);
             raf = requestAnimationFrame(tick);
         };
-        raf = requestAnimationFrame(performance.now());
+        // Kick off the loop. RAF passes its own timestamp into `tick`, so we
+        // pass the function itself (NOT a timestamp — that's what was crashing
+        // every variant: "parameter 1 is not of type 'Function'").
+        raf = requestAnimationFrame(tick);
         return () => cancelAnimationFrame(raf);
     }, []);
 
