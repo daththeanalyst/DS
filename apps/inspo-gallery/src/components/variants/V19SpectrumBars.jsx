@@ -177,15 +177,7 @@ const Scene = ({ progress, active }) => {
                     ctx.fillRect(x - barW / 2, barTop, barW, 2 * dpr);
                 }
 
-                // Reflection at the bottom — subtle mirrored gradient
-                ctx.save();
-                ctx.globalCompositeOperation = 'screen';
-                ctx.globalAlpha = 0.18;
-                ctx.translate(0, oy + fitH * 1.95);
-                ctx.scale(1, -0.4);
-                ctx.translate(0, -(oy + fitH));
-                ctx.drawImage(canvas, 0, 0);
-                ctx.restore();
+                // Removed reflection effect to fix performance glitching in canvas
 
                 // Cursor beam (vertical line)
                 if (cursorOn) {

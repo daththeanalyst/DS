@@ -96,6 +96,7 @@ const Scene = ({ active }) => {
                         float n1 = snoise(uv * 10.0 - uTime * 0.5);
                         float burnEdge = smoothstep(p1 - 0.1, p1, n1 * 0.5 + 0.5);
                         vec4 colO = texture2D(uTexO, uv);
+                        colO.rgb = vec3(1.0);
                         vec4 finalCol = colO * (1.0 - burnEdge);
                         // Add orange burn glow
                         if(burnEdge > 0.0 && burnEdge < 0.1) finalCol += vec4(1.0, 0.4, 0.0, 1.0) * colO.a;
@@ -104,12 +105,14 @@ const Scene = ({ active }) => {
                         float n2 = snoise(uv * 20.0 + uTime);
                         vec2 distortUv = uv + vec2(n2) * 0.1 * (1.0 - p2);
                         vec4 colB = texture2D(uTexB, distortUv);
+                        colB.rgb = vec3(1.0);
                         finalCol = mix(finalCol, colB, p2 * colB.a);
 
                         // 3. White 2 Metal Fill (Drops from top with liquid trail)
                         float drop = 1.0 - uv.y;
                         float fillMask = smoothstep(p3 - 0.2, p3, drop + snoise(uv*30.0)*0.1);
                         vec4 colW = texture2D(uTexW, uv);
+                        colW.rgb = vec3(1.0);
                         finalCol = mix(finalCol, colW, (1.0 - fillMask) * colW.a);
 
                         // Add massive white flash when p3 hits 1.0

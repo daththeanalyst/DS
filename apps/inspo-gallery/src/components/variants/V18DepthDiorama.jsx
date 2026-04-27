@@ -8,13 +8,13 @@ import logoImg from '@/assets/logo-outline.png';
 const LOGO = logoImg;
 
 // Each layer sits at a different Z and shows a different "slice" of the logo
-// via clip-path or color treatment. We layer them with depth-based blur + opacity.
+// via opacity and blur. We layer them with depth-based blur.
 const LAYERS = [
-    { z: 80, scale: 1.18, blur: 0, opacity: 1.0, hue: 0, saturate: 1.05, brightness: 1.15, parallax: 1.6, color: 'hsl(36, 30%, 96%)' },
-    { z: 40, scale: 1.08, blur: 1, opacity: 0.95, hue: -10, saturate: 1.0, brightness: 1.0, parallax: 1.0, color: 'hsl(28, 95%, 70%)' },
-    { z: 0, scale: 1.0, blur: 3, opacity: 0.85, hue: 20, saturate: 0.85, brightness: 0.85, parallax: 0.5, color: 'hsl(195, 80%, 70%)' },
-    { z: -50, scale: 0.96, blur: 9, opacity: 0.55, hue: 50, saturate: 0.6, brightness: 0.55, parallax: 0.0, color: 'hsl(225, 30%, 30%)' },
-    { z: -110, scale: 0.92, blur: 22, opacity: 0.3, hue: 80, saturate: 0.4, brightness: 0.35, parallax: -0.3, color: 'hsl(225, 50%, 14%)' },
+    { z: 80, scale: 1.18, blur: 0, opacity: 1.0, parallax: 1.6 },
+    { z: 40, scale: 1.08, blur: 2, opacity: 0.8, parallax: 1.0 },
+    { z: 0, scale: 1.0, blur: 4, opacity: 0.6, parallax: 0.5 },
+    { z: -50, scale: 0.96, blur: 8, opacity: 0.4, parallax: 0.0 },
+    { z: -110, scale: 0.92, blur: 16, opacity: 0.2, parallax: -0.3 },
 ];
 
 const DioramaLayer = ({ layer, sx, sy, idx }) => {
@@ -32,11 +32,11 @@ const DioramaLayer = ({ layer, sx, sy, idx }) => {
             <img
                 src={LOGO}
                 alt={`DS2 layer ${idx}`}
-                className="w-full h-auto select-none mix-blend-screen"
+                className="w-full h-auto select-none"
                 draggable={false}
                 style={{
                     opacity: layer.opacity,
-                    filter: `blur(${layer.blur}px) hue-rotate(${layer.hue}deg) saturate(${layer.saturate}) brightness(${layer.brightness}) drop-shadow(0 ${idx * 3}px ${idx * 6}px hsla(225, 50%, 0%, ${idx * 0.12}))`,
+                    filter: `blur(${layer.blur}px)`,
                 }}
             />
         </motion.div>
