@@ -61,7 +61,12 @@ import V18DepthDiorama from "@/components/variants/V18DepthDiorama.jsx";
 import V19SpectrumBars from "@/components/variants/V19SpectrumBars.jsx";
 // @ts-expect-error JSX import
 import V20NeonRain from "@/components/variants/V20NeonRain.jsx";
-
+// @ts-expect-error JSX import
+import V21QuantumMorph from "@/components/variants/V21QuantumMorph.jsx";
+// @ts-expect-error JSX import
+import V22LaserForge from "@/components/variants/V22LaserForge.jsx";
+// @ts-expect-error JSX import
+import V23DepthStack from "@/components/variants/V23DepthStack.jsx";
 const SECTIONS = [
   Section01, Section02, Section03, Section04, Section05,
   Section06, Section07, Section08, Section09, Section10,
@@ -73,6 +78,7 @@ const SECTIONS = [
   V06Smoke, V07FisheyeDots, V08EchoTrail, V09RGBGlitch, V10ASCII,
   V11FluidSmear, V12MarqueeMask, V13MagneticField, V14HoloCard, V15VerletMesh,
   V16LiquidGlass, V17GravityOrbits, V18DepthDiorama, V19SpectrumBars, V20NeonRain,
+  V21QuantumMorph, V22LaserForge, V23DepthStack,
 ];
 
 const SECTION_TITLES = [
@@ -104,6 +110,9 @@ const SECTION_TITLES = [
   "DEPTH DIORAMA",         // V18
   "SPECTRUM BARS",         // V19
   "NEON RAIN",             // V20
+  "QUANTUM MORPH",         // V21
+  "LASER FORGE",           // V22
+  "DEPTH STACK",           // V23
 ] as const;
 
 // Render only the active section ± this many neighbours. Anything else is
@@ -141,7 +150,7 @@ const Index = () => {
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-background">
-      <h1 className="sr-only">DS — Inspo Gallery · 50 candidate hero animations</h1>
+      <h1 className="sr-only">DS — Inspo Gallery · {SECTIONS.length} candidate hero animations</h1>
       <Cursor />
       <SectionIndicator current={current} total={SECTIONS.length} onJump={jump} sectionNames={SECTION_TITLES} />
 

@@ -27,15 +27,15 @@ export const SectionIndicator = ({ current, total, onJump, sectionNames }: Props
       </div>
 
       {/* Side ticks */}
-      <div className="pointer-events-auto fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-1 md:flex">
+      <div className="pointer-events-auto fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-0.5 md:flex">
         {Array.from({ length: total }).map((_, i) => (
           <button
             key={i}
             onClick={() => onJump(i)}
             aria-label={`Section ${i + 1}`}
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-2"
           >
-            <span className={`font-mono text-[9px] tracking-widest transition-all ${i === current ? "text-foreground opacity-100" : "text-foreground opacity-0 group-hover:opacity-60"}`}>
+            <span className={`font-mono text-[8px] tracking-widest transition-all ${i === current ? "text-foreground opacity-100" : "text-foreground opacity-0 group-hover:opacity-60"}`}>
               {String(i + 1).padStart(2, "0")}
             </span>
             <span className={`block h-px transition-all ${i === current ? "w-8 bg-foreground" : "w-4 bg-foreground/30 group-hover:bg-foreground/70"}`} />
