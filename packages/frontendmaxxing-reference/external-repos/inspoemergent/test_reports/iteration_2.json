@@ -1,0 +1,26 @@
+{
+  "summary": "Frontend-only regression + new-variant testing for DS2 logo lab after adding V11-V15 (Fluid Smear, Marquee Mask, Iron-Filings, Holo Tilt Card, Verlet Mesh). Full 15-section flow works end-to-end. Verified: page compiles and loads at REACT_APP_BACKEND_URL; H1 reads 'Fifteen ways to / render a logo / in motion.'; all 15 variant-link chips visible; all 15 data-testid=variant-01..variant-15 sections exist in DOM; VariantNavRail has 15 dots (nav-rail-1..15) and clicking them scrolls to the correct section; VariantShell indicator shows 'VARIANT / NN OF 15' (confirmed on V11 = '11 OF 15'); V11 has a <canvas> and cursor movement throws no errors; V12 has mask+marquee and parallax mouse move throws no errors; V13 has a flow-field canvas and cursor swirl throws no errors; V14 has 4 logo <img> layers and rotates on mouse move (Framer Motion tilt); V15 has a verlet canvas and mouse-drag (mouse-down + move) fires without errors; LabFooter shows '11 / FLUID INK SMEAR', '14 / HOLOGRAPHIC TILT CARD', '15 / VERLET SPRING MESH' entries; scrolling top→bottom in 30 steps did not freeze (body scrollHeight ~17725px, stayed responsive); mobile 375px has no horizontal overflow before or after scroll, and all 15 sections scrollable. Zero console errors, zero pageerrors on both desktop (1920×1080) and mobile (375×812). Only warnings observed are the ignorable THREE.Clock deprecation and CRA WS hot-reload pings, per review note.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "VariantNavRail.jsx still polls via setInterval(120ms) calling getBoundingClientRect() on 15 sections — doubled work vs the 10-variant version. Still runs fine but switching to IntersectionObserver (or rAF-throttled scroll listener) would be cleaner and save battery on mobile. Same comment as iteration_1 — not yet addressed.",
+    "With 15 lazy-mounted variants, multiple WebGL contexts remain live once visited (V01/V04/V05/V06/V10/V11). Browsers cap active WebGL contexts (~8-16); long sessions revisiting all variants could hit the cap and silently drop contexts. Recommend unmounting variants that have left viewport by >2 screens (setHasMounted(false) with a hysteresis IntersectionObserver).",
+    "V11 FluidSmear uses WebGL ping-pong — confirm the framebuffer/texture pair is released via gl.deleteTexture/gl.deleteFramebuffer in the cleanup effect; otherwise revisiting V11 could leak GPU memory over time.",
+    "V14 HoloCard uses 4 stacked <img> layers loading /logos/ds2-a.png; consider adding loading='lazy' or decoding='async' to the 3 non-primary layers to reduce above-the-fold image decode work on mobile.",
+    "IntroHero H1 copy is split across 3 spans ('Fifteen ways to' / 'render a logo' / 'in motion.') — innerText returns a 3-line string. Test-expectations that match on the full single-line phrase must tolerate newlines (ours did via substring checks)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped)", "frontend": "100%"},
+  "test_credentials": "n/a",
+  "seed_data_creation": "none",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Single-route React app at /. 15 variants lazy-mount via IntersectionObserver in VariantShell.jsx. All selectors confirmed working: variant-01..variant-15, variant-link-1..15, nav-rail-1..15, variant-nav-rail, lab-footer, navbar-cta. V14 mounts 4 <img data-testid=... > logo layers. Body scrollHeight at desktop 1920 ≈ 17725px — use scroll in increments + waits when running end-to-end perf checks. Ignorable console noise: THREE.Clock deprecation, CRA ws://localhost:443/ws hot-reload warnings.",
+  "rca of the issue": "n/a — no bugs found; all 14 review checkpoints pass."
+}

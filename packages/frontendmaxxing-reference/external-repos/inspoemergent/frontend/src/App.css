@@ -1,0 +1,6 @@
+/* App-specific styles. Most styles live in index.css design tokens. */
+.App {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
