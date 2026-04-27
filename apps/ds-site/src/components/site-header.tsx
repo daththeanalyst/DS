@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnimatedLogo3D } from "./animated-logo-3d";
 
 const NAV_LINKS = [
   { href: "#services", label: "Services" },
@@ -10,8 +11,8 @@ export function SiteHeader() {
   return (
     <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-md bg-ink-950/70 border-b border-ink-800/60">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="font-semibold tracking-tight text-lg">
-          DS
+        <Link href="/">
+          <AnimatedLogo3D />
         </Link>
         <nav className="flex items-center gap-2 md:gap-6">
           <ul className="hidden md:flex items-center gap-6 text-sm text-ink-300">

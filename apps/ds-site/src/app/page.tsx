@@ -8,6 +8,7 @@ import { Proof } from "@/components/sections/proof";
 import { TrustSignals } from "@/components/sections/trust-signals";
 import { EngageUs } from "@/components/sections/engage-us";
 import { FinalCTA } from "@/components/sections/final-cta";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 export default function HomePage() {
   return (
@@ -15,13 +16,13 @@ export default function HomePage() {
       <SiteHeader />
       <main className="min-h-screen">
         <Hero />
-        <WhatWeDo />
-        <WhatMakesUsDifferent />
-        <ProcessPreview />
-        <Proof />
-        <TrustSignals />
-        <EngageUs />
-        <FinalCTA />
+        <ScrollReveal><WhatWeDo /></ScrollReveal>
+        <ScrollReveal><WhatMakesUsDifferent /></ScrollReveal>
+        <ScrollReveal><ProcessPreview /></ScrollReveal>
+        <ScrollReveal><Proof /></ScrollReveal>
+        <ScrollReveal><TrustSignals /></ScrollReveal>
+        <ScrollReveal><EngageUs /></ScrollReveal>
+        <ScrollReveal><FinalCTA /></ScrollReveal>
       </main>
       <SiteFooter />
     </>
