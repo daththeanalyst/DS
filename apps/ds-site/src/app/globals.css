@@ -30,3 +30,41 @@ html, body {
   background: var(--ds-accent);
   color: var(--ds-ink-950);
 }
+
+/*
+ * Restrained entrance animation for above-the-fold content.
+ * One orchestrated reveal — not scattered micro-interactions.
+ * Respects prefers-reduced-motion: no transform/opacity transitions applied.
+ */
+@keyframes ds-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-rise {
+  opacity: 0;
+  animation: ds-rise-in 700ms var(--ds-ease-standard) forwards;
+}
+
+.ds-delay-1 { animation-delay: 100ms; }
+.ds-delay-2 { animation-delay: 200ms; }
+.ds-delay-3 { animation-delay: 320ms; }
+.ds-delay-4 { animation-delay: 480ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-rise,
+  .ds-delay-1,
+  .ds-delay-2,
+  .ds-delay-3,
+  .ds-delay-4 {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
