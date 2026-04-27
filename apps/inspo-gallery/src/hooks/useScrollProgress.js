@@ -10,24 +10,38 @@ export function useScrollProgress() {
     const [progress, setProgress] = useState(0);
     const [active, setActive] = useState(false);
 
+    const timer = useRef(0);
+
     useEffect(() => {
         const el = ref.current;
         if (!el) return;
 
         let raf;
-        const tick = () => {
+        let lastTime = performance.now();
+
+        const tick = (now) => {
+            const dt = Math.min(0.05, (now - lastTime) / 1000);
+            lastTime = now;
+
             const rect = el.getBoundingClientRect();
             const vh = window.innerHeight;
-            // 0 when top of section is at bottom of viewport, 1 when bottom is at top
-            const total = rect.height + vh;
-            const travelled = vh - rect.top;
-            const p = Math.min(1, Math.max(0, travelled / total));
-            setProgress(p);
-            // Active when any part of the section is in the viewport
-            setActive(rect.bottom > -vh * 0.25 && rect.top < vh * 1.25);
+            
+            // Active when mostly in viewport
+            const isActive = rect.bottom > vh * 0.2 && rect.top < vh * 0.8;
+            setActive(isActive);
+
+            if (isActive) {
+                // Animate progress linearly from 0 to 1 over 2.5 seconds
+                timer.current = Math.min(1.0, timer.current + dt * 0.4);
+            } else {
+                // Reset progress when section leaves view so it can replay
+                timer.current = 0;
+            }
+            
+            setProgress(timer.current);
             raf = requestAnimationFrame(tick);
         };
-        raf = requestAnimationFrame(tick);
+        raf = requestAnimationFrame(performance.now());
         return () => cancelAnimationFrame(raf);
     }, []);
 
