@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Cursor } from "@/components/Cursor";
 import { SectionIndicator } from "@/components/SectionIndicator";
+import { SectionErrorBoundary } from "@/components/SectionErrorBoundary";
 
 // 30 sections from logo-showcase-supreme
 import {
@@ -166,12 +167,24 @@ const Index = () => {
       <div ref={containerRef} className="snap-container scrollbar-hidden">
         {SECTIONS.map((Section, i) => {
           const inRange = Math.abs(i - current) <= RENDER_RADIUS;
-          return inRange ? (
-            <Section key={i} />
-          ) : (
+          if (!inRange) {
             // Placeholder — keeps scroll length / snap targets intact, but no
             // canvas, no RAF, no WebGL context.
-            <section key={i} className="snap-section bg-background min-h-[100svh]" />
+            return (
+              <section
+                key={i}
+                className="snap-section bg-background min-h-[100svh]"
+              />
+            );
+          }
+          return (
+            <SectionErrorBoundary
+              key={i}
+              index={i + 1}
+              name={SECTION_TITLES[i]}
+            >
+              <Section />
+            </SectionErrorBoundary>
           );
         })}
       </div>

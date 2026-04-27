@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => ({
   // Project-pages base path. The DS repo serves at daththeanalyst.github.io/DS/,
   // so prod assets need this prefix. Dev keeps it at "/" for localhost.
   base: mode === "production" ? "/DS/" : "/",
+  build: {
+    // Source maps for production so any runtime errors that hit users (or us
+    // in deployed previews) can be debugged with real names instead of D0/Hz.
+    sourcemap: true,
+  },
   server: {
     host: "::",
     port: 3030,
