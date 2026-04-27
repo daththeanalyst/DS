@@ -48,7 +48,7 @@ export const VariantShell = ({
             ref={setRefs}
             data-testid={`variant-${String(index).padStart(2, '0')}`}
             id={`variant-${String(index).padStart(2, '0')}`}
-            className="relative min-h-[100svh] w-full overflow-hidden border-t border-border/30"
+            className="snap-section relative min-h-[100svh] w-full overflow-hidden border-t border-border/30"
         >
             {/* Canvas area — only mounted after first intersection */}
             <div className="absolute inset-0">
