@@ -360,24 +360,22 @@ export const Section24 = () => {
         ctx.fillRect(0, 0, w, h);
 
         const size = Math.min(w, h) * 0.5;
-        // RGB channel splits
+        // Motion blur glitch (same color)
         ctx.globalCompositeOperation = "screen";
         const off = hot ? 30 : 8;
         const sway = Math.sin(t * 0.002) * off;
-        ctx.filter = "brightness(1.5)";
-        (["#ff0040", "#00ff80", "#3060ff"] as const).forEach((col, i) => {
-          ctx.fillStyle = col;
-          const dx = (i - 1) * sway;
-          const dy = (i - 1) * sway * 0.3;
+        ctx.filter = "brightness(0) invert(1)"; // force white
+        [-1, 0, 1].forEach((i) => {
+          const dx = i * sway;
+          const dy = i * sway * 0.3;
+          ctx.globalAlpha = i === 0 ? 1 : 0.4;
           ctx.save();
           ctx.translate(w / 2 + dx, h / 2 + dy);
           ctx.drawImage(img, -size / 2, -size / 2, size, size);
-          ctx.globalCompositeOperation = "multiply";
-          ctx.fillRect(-size / 2, -size / 2, size, size);
           ctx.restore();
-          ctx.globalCompositeOperation = "screen";
         });
         ctx.filter = "none";
+        ctx.globalAlpha = 1.0;
         ctx.globalCompositeOperation = "source-over";
 
         // pixel sort bands
@@ -498,7 +496,8 @@ export const Section25 = () => {
               src={logoWhite}
               alt="DS2 tunnel"
               className="h-[30vmin] w-[30vmin] object-contain"
-              animate={{ scale: [1, 1.08, 1], filter: ["drop-shadow(0 0 30px #ff00aa)", "drop-shadow(0 0 60px #00aaff)", "drop-shadow(0 0 30px #ff00aa)"] }}
+              style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 30px #00aaff)" }}
+              animate={{ scale: [1, 1.08, 1] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
           </div>
