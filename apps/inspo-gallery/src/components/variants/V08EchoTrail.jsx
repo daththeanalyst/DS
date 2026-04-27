@@ -154,7 +154,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V08EchoTrail = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={8}
         title="Echo Trail Ink"
         technique="Canvas 2D · Persistence buffer · Gradient stroke"
@@ -167,4 +167,3 @@ export const V08EchoTrail = () => (
 
 export default V08EchoTrail;
 
-V08EchoTrail.isTall = true;

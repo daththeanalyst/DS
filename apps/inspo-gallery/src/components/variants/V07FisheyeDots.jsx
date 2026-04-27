@@ -139,7 +139,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V07FisheyeDots = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={7}
         title="Fisheye Dot Matrix"
         technique="Canvas 2D · Lens displacement field"
@@ -152,4 +152,3 @@ export const V07FisheyeDots = () => (
 
 export default V07FisheyeDots;
 
-V07FisheyeDots.isTall = true;

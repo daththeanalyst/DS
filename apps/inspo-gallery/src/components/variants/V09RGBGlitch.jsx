@@ -135,7 +135,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V09RGBGlitch = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={9}
         title="RGB Chromatic Glitch"
         technique="Canvas 2D · Channel split · Scanline overlay"
@@ -147,4 +147,3 @@ export const V09RGBGlitch = () => (
 
 export default V09RGBGlitch;
 
-V09RGBGlitch.isTall = true;

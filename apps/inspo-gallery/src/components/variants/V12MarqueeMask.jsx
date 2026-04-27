@@ -151,7 +151,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V12MarqueeMask = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={12}
         title="Typographic Marquee Mask"
         technique="CSS mask · 6-row scrolling type · Mouse parallax"
@@ -164,4 +164,3 @@ export const V12MarqueeMask = () => (
 
 export default V12MarqueeMask;
 
-V12MarqueeMask.isTall = true;

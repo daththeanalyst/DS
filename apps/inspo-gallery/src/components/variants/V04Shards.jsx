@@ -147,7 +147,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V04Shards = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={4}
         title="Polygon Shatter"
         technique="Canvas 2D · 26×14 shard lattice · Cursor repulsion"
@@ -159,4 +159,3 @@ export const V04Shards = () => (
 
 export default V04Shards;
 
-V04Shards.isTall = true;

@@ -213,7 +213,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V17GravityOrbits = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={17}
         title="Gravity Orbit Dance"
         technique="Canvas 2D · N-body forces · Logo as gravity wells · Persistence trails"
@@ -225,4 +225,3 @@ export const V17GravityOrbits = () => (
 
 export default V17GravityOrbits;
 
-V17GravityOrbits.isTall = true;

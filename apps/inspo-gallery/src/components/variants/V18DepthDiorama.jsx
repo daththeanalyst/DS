@@ -157,7 +157,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V18DepthDiorama = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={18}
         title="Tilt-Shift Depth Diorama"
         technique="Framer Motion · 5 Z-layers · Parallax + depth blur"
@@ -170,4 +170,3 @@ export const V18DepthDiorama = () => (
 
 export default V18DepthDiorama;
 
-V18DepthDiorama.isTall = true;

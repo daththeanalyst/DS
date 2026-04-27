@@ -134,7 +134,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V10ASCII = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={10}
         title="ASCII Character Rain"
         technique="Canvas 2D · Monospaced glyph sampling"
@@ -147,4 +147,3 @@ export const V10ASCII = () => (
 
 export default V10ASCII;
 
-V10ASCII.isTall = true;

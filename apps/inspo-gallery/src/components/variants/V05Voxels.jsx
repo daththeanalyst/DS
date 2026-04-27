@@ -166,7 +166,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V05Voxels = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={5}
         title="Voxel Height Field"
         technique="WebGL · InstancedMesh · Brightness-mapped extrusion"
@@ -178,4 +178,3 @@ export const V05Voxels = () => (
 
 export default V05Voxels;
 
-V05Voxels.isTall = true;

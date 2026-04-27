@@ -117,27 +117,10 @@ const Index = () => {
   useEffect(() => {
     const el = containerRef.current!;
     const onScroll = () => {
-      // Find which child takes up the most viewport space
-      const children = Array.from(el.children);
-      let bestIndex = 0;
-      let maxArea = 0;
-      const vh = window.innerHeight;
-      
-      children.forEach((child, idx) => {
-        const rect = child.getBoundingClientRect();
-        const top = Math.max(0, rect.top);
-        const bottom = Math.min(vh, rect.bottom);
-        const area = Math.max(0, bottom - top);
-        if (area > maxArea) {
-          maxArea = area;
-          bestIndex = idx;
-        }
-      });
-      setCurrent(Math.max(0, Math.min(SECTIONS.length - 1, bestIndex)));
+      const i = Math.round(el.scrollTop / window.innerHeight);
+      setCurrent(Math.max(0, Math.min(SECTIONS.length - 1, i)));
     };
     el.addEventListener("scroll", onScroll, { passive: true });
-    // Trigger once
-    onScroll();
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -177,8 +160,9 @@ const Index = () => {
           return inRange ? (
             <Section key={i} />
           ) : (
-            // Placeholder — keeps scroll length intact
-            <section key={i} className={`snap-section bg-background ${(Section as any).isTall ? 'min-h-[300vh]' : 'min-h-[100svh]'}`} />
+            // Placeholder — keeps scroll length / snap targets intact, but no
+            // canvas, no RAF, no WebGL context.
+            <section key={i} className="snap-section bg-background min-h-[100svh]" />
           );
         })}
       </div>

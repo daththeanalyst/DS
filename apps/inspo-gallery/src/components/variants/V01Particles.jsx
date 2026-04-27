@@ -185,7 +185,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V01Particles = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={1}
         title="Particle Assembly"
         technique="WebGL · Additive Points · Radial Repulsion"
@@ -198,4 +198,3 @@ export const V01Particles = () => (
 export default V01Particles;
 
 
-V01Particles.isTall = true;

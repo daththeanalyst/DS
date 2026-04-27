@@ -226,7 +226,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V15VerletMesh = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={15}
         title="Verlet Spring Mesh"
         technique="Canvas 2D · Verlet integration · Spring constraints"
@@ -239,4 +239,3 @@ export const V15VerletMesh = () => (
 
 export default V15VerletMesh;
 
-V15VerletMesh.isTall = true;

@@ -199,7 +199,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V16LiquidGlass = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={16}
         title="Liquid Glass Refraction"
         technique="WebGL · Animated water normals · Chromatic dispersion · Caustics"
@@ -212,4 +212,3 @@ export const V16LiquidGlass = () => (
 
 export default V16LiquidGlass;
 
-V16LiquidGlass.isTall = true;

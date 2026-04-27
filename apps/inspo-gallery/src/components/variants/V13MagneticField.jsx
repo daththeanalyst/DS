@@ -211,7 +211,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V13MagneticField = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={13}
         title="Iron-Filings Field"
         technique="Canvas 2D · Brightness gradient flow · Cursor swirl pole"
@@ -223,4 +223,3 @@ export const V13MagneticField = () => (
 
 export default V13MagneticField;
 
-V13MagneticField.isTall = true;

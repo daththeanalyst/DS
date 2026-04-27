@@ -182,7 +182,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V06Smoke = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={6}
         title="Smoke Trails"
         technique="WebGL · Per-particle smoke trajectories"
@@ -195,4 +195,3 @@ export const V06Smoke = () => (
 
 export default V06Smoke;
 
-V06Smoke.isTall = true;

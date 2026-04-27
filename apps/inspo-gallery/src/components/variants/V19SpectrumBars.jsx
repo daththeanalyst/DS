@@ -216,7 +216,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V19SpectrumBars = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={19}
         title="Spectrum Bars"
         technique="Canvas 2D · Per-column bar grid · Layered sine drive · Click bass drop"
@@ -228,4 +228,3 @@ export const V19SpectrumBars = () => (
 
 export default V19SpectrumBars;
 
-V19SpectrumBars.isTall = true;

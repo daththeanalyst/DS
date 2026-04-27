@@ -143,7 +143,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V03LiquidRipple = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={3}
         title="Liquid Ripple Distortion"
         technique="Canvas 2D · Slice-based radial displacement"
@@ -156,4 +156,3 @@ export const V03LiquidRipple = () => (
 
 export default V03LiquidRipple;
 
-V03LiquidRipple.isTall = true;

@@ -228,7 +228,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V20NeonRain = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={20}
         title="Neon Wire · Digital Rain"
         technique="Canvas 2D · Edge detection · Falling glyph streams · Pulse glow"
@@ -241,4 +241,3 @@ export const V20NeonRain = () => (
 
 export default V20NeonRain;
 
-V20NeonRain.isTall = true;

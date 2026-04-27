@@ -200,7 +200,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V11FluidSmear = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={11}
         title="Fluid Ink Smear"
         technique="WebGL · Ping-pong feedback · Cursor-driven advection"
@@ -213,4 +213,3 @@ export const V11FluidSmear = () => (
 
 export default V11FluidSmear;
 
-V11FluidSmear.isTall = true;

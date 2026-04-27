@@ -165,7 +165,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V02MagneticGrid = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={2}
         title="Magnetic Dot Grid"
         technique="WebGL · 200×80 lattice · Cursor pull field"
@@ -178,4 +178,3 @@ export const V02MagneticGrid = () => (
 
 export default V02MagneticGrid;
 
-V02MagneticGrid.isTall = true;

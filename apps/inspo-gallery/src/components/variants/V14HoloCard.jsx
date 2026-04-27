@@ -203,7 +203,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V14HoloCard = () => (
-    <VariantShell scrollable={true}
+    <VariantShell
         index={14}
         title="Holographic Tilt Card"
         technique="Framer Motion · 3D rotateX/Y · Chromatic split · Conic sheen"
@@ -216,4 +216,3 @@ export const V14HoloCard = () => (
 
 export default V14HoloCard;
 
-V14HoloCard.isTall = true;
