@@ -9,6 +9,7 @@ export const VariantShell = ({
     index,
     title,
     technique,
+    hint,
     children,
     accent = 'primary',
 }) => {
