@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -199,7 +200,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V11FluidSmear = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={11}
         title="Fluid Ink Smear"
         technique="WebGL · Ping-pong feedback · Cursor-driven advection"
@@ -211,3 +212,5 @@ export const V11FluidSmear = () => (
 );
 
 export default V11FluidSmear;
+
+V11FluidSmear.isTall = true;

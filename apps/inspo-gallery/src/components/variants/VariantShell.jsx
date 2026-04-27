@@ -12,6 +12,7 @@ export const VariantShell = ({
     hint,
     children,
     accent = 'primary',
+    scrollable = false,
 }) => {
     const { ref, progress, active } = useScrollProgress();
     const [hasMounted, setHasMounted] = useState(false);
@@ -48,10 +49,10 @@ export const VariantShell = ({
             ref={setRefs}
             data-testid={`variant-${String(index).padStart(2, '0')}`}
             id={`variant-${String(index).padStart(2, '0')}`}
-            className="relative min-h-[100svh] w-full overflow-hidden border-t border-border/30"
+            className={`relative w-full overflow-hidden border-t border-border/30 ${scrollable ? 'min-h-[300vh]' : 'min-h-[100svh]'}`}
         >
             {/* Canvas area — only mounted after first intersection */}
-            <div className="absolute inset-0">
+            <div className={scrollable ? "sticky top-0 h-[100vh] w-full" : "absolute inset-0"}>
                 {hasMounted && (typeof children === 'function'
                     ? children({ progress, active, inView })
                     : children)}
@@ -65,7 +66,7 @@ export const VariantShell = ({
             </div>
 
             {/* Top-left: index + technique */}
-            <div className="absolute top-6 left-5 sm:left-8 z-10 flex flex-col gap-2 pointer-events-none">
+            <div className={`z-10 flex flex-col gap-2 pointer-events-none ${scrollable ? 'sticky top-6 left-5 sm:left-8 w-max' : 'absolute top-6 left-5 sm:left-8'}`}>
                 <div className="flex items-center gap-3">
                     <span className={`font-mono text-[10px] uppercase tracking-[0.3em] ${accentClass}`}>
                         Variant / {String(index).padStart(2, '0')} of 20
@@ -82,13 +83,13 @@ export const VariantShell = ({
 
             {/* Bottom hint */}
             {hint && (
-                <div className="absolute bottom-6 left-5 sm:left-8 z-10 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground pointer-events-none">
+                <div className={`z-10 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground pointer-events-none ${scrollable ? 'sticky bottom-6 left-5 sm:left-8 mt-[calc(100vh-12rem)] w-max' : 'absolute bottom-6 left-5 sm:left-8'}`}>
                     ↳ {hint}
                 </div>
             )}
 
             {/* Scroll progress bar — right edge */}
-            <div className="absolute right-5 sm:right-8 top-1/2 -translate-y-1/2 z-10 hidden md:flex flex-col items-center gap-2 pointer-events-none">
+            <div className={`z-10 hidden md:flex flex-col items-center gap-2 pointer-events-none ${scrollable ? 'sticky top-1/2 -translate-y-1/2 ml-auto right-5 sm:right-8 w-max h-0 overflow-visible mt-[-50vh]' : 'absolute right-5 sm:right-8 top-1/2 -translate-y-1/2'}`}>
                 <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
                     {Math.round(progress * 100).toString().padStart(2, '0')}
                 </span>

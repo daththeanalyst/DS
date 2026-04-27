@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo, sampleBrightness } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -165,7 +166,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V05Voxels = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={5}
         title="Voxel Height Field"
         technique="WebGL · InstancedMesh · Brightness-mapped extrusion"
@@ -176,3 +177,5 @@ export const V05Voxels = () => (
 );
 
 export default V05Voxels;
+
+V05Voxels.isTall = true;

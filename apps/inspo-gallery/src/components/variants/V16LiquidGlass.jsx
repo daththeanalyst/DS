@@ -5,7 +5,8 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -198,7 +199,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V16LiquidGlass = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={16}
         title="Liquid Glass Refraction"
         technique="WebGL · Animated water normals · Chromatic dispersion · Caustics"
@@ -210,3 +211,5 @@ export const V16LiquidGlass = () => (
 );
 
 export default V16LiquidGlass;
+
+V16LiquidGlass.isTall = true;

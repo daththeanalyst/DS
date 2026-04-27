@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo, sampleBrightness } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -164,7 +165,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V02MagneticGrid = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={2}
         title="Magnetic Dot Grid"
         technique="WebGL · 200×80 lattice · Cursor pull field"
@@ -176,3 +177,5 @@ export const V02MagneticGrid = () => (
 );
 
 export default V02MagneticGrid;
+
+V02MagneticGrid.isTall = true;

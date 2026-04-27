@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const canvasRef = useRef(null);
@@ -212,7 +213,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V17GravityOrbits = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={17}
         title="Gravity Orbit Dance"
         technique="Canvas 2D · N-body forces · Logo as gravity wells · Persistence trails"
@@ -223,3 +224,5 @@ export const V17GravityOrbits = () => (
 );
 
 export default V17GravityOrbits;
+
+V17GravityOrbits.isTall = true;

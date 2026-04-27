@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 // Build a cached colored channel canvas once
 const buildChannel = (img, color) => {
@@ -134,7 +135,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V09RGBGlitch = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={9}
         title="RGB Chromatic Glitch"
         technique="Canvas 2D · Channel split · Scanline overlay"
@@ -145,3 +146,5 @@ export const V09RGBGlitch = () => (
 );
 
 export default V09RGBGlitch;
+
+V09RGBGlitch.isTall = true;

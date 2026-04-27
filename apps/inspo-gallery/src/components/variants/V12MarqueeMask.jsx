@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const ROWS = [
     { text: '· DESIGN STUDIO 2 · CINEMATIC IDENTITIES · IMMERSIVE WEB · MOTION FORWARD ', size: 132, weight: 700, speed: 32, italic: false, color: 'hsl(36, 30%, 96%)', font: 'Space Grotesk' },
@@ -150,7 +151,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V12MarqueeMask = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={12}
         title="Typographic Marquee Mask"
         technique="CSS mask · 6-row scrolling type · Mouse parallax"
@@ -162,3 +163,5 @@ export const V12MarqueeMask = () => (
 );
 
 export default V12MarqueeMask;
+
+V12MarqueeMask.isTall = true;

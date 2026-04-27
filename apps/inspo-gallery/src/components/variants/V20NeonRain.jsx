@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 const RAIN_CHARS = '01010101▌▎│┃║▒▓░Ξ※◤◣◢◥█';
 
 const Scene = ({ progress, active }) => {
@@ -227,7 +228,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V20NeonRain = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={20}
         title="Neon Wire · Digital Rain"
         technique="Canvas 2D · Edge detection · Falling glyph streams · Pulse glow"
@@ -239,3 +240,5 @@ export const V20NeonRain = () => (
 );
 
 export default V20NeonRain;
+
+V20NeonRain.isTall = true;

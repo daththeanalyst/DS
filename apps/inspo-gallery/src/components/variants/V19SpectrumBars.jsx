@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const canvasRef = useRef(null);
@@ -215,7 +216,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V19SpectrumBars = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={19}
         title="Spectrum Bars"
         technique="Canvas 2D · Per-column bar grid · Layered sine drive · Click bass drop"
@@ -226,3 +227,5 @@ export const V19SpectrumBars = () => (
 );
 
 export default V19SpectrumBars;
+
+V19SpectrumBars.isTall = true;

@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const canvasRef = useRef(null);
@@ -146,7 +147,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V04Shards = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={4}
         title="Polygon Shatter"
         technique="Canvas 2D · 26×14 shard lattice · Cursor repulsion"
@@ -157,3 +158,5 @@ export const V04Shards = () => (
 );
 
 export default V04Shards;
+
+V04Shards.isTall = true;

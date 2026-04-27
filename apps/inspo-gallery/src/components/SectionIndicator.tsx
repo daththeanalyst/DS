@@ -1,21 +1,13 @@
 import { motion } from "framer-motion";
 
-const SECTION_NAMES = [
-  "GENESIS", "VOID", "PRISM", "FLUX", "BRUTAL",
-  "AURORA", "PARTICLE", "KINETIC", "GLASS", "INFINITY",
-  "ASCII", "MAGNETIC", "FLUID", "DEPTH", "TYPO",
-  "VORTEX", "MORSE", "TOPO", "HOLO", "SHATTER",
-  "CONSTELLATION", "FERRO", "ORIGAMI", "DATAMOSH", "TUNNEL",
-  "RIBBONS", "TYPEWRITER", "RAIN", "CARDS", "FINALE",
-];
-
 interface Props {
   current: number;
   total: number;
   onJump: (i: number) => void;
+  sectionNames: readonly string[];
 }
 
-export const SectionIndicator = ({ current, total, onJump }: Props) => {
+export const SectionIndicator = ({ current, total, onJump, sectionNames }: Props) => {
   return (
     <>
       {/* Top bar */}
@@ -27,7 +19,7 @@ export const SectionIndicator = ({ current, total, onJump }: Props) => {
           animate={{ opacity: 1, y: 0 }}
           className="font-mono text-xs tracking-[0.3em] text-foreground"
         >
-          {SECTION_NAMES[current]}
+          {sectionNames[current]}
         </motion.div>
         <div className="font-mono text-xs tracking-[0.3em] text-foreground">
           {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -35,7 +27,7 @@ export const SectionIndicator = ({ current, total, onJump }: Props) => {
       </div>
 
       {/* Side ticks */}
-      <div className="pointer-events-auto fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-3 md:flex">
+      <div className="pointer-events-auto fixed right-6 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-1 md:flex">
         {Array.from({ length: total }).map((_, i) => (
           <button
             key={i}
@@ -43,10 +35,10 @@ export const SectionIndicator = ({ current, total, onJump }: Props) => {
             aria-label={`Section ${i + 1}`}
             className="group flex items-center gap-3"
           >
-            <span className={`font-mono text-[10px] tracking-widest transition-all ${i === current ? "text-foreground opacity-100" : "text-foreground opacity-0 group-hover:opacity-60"}`}>
+            <span className={`font-mono text-[9px] tracking-widest transition-all ${i === current ? "text-foreground opacity-100" : "text-foreground opacity-0 group-hover:opacity-60"}`}>
               {String(i + 1).padStart(2, "0")}
             </span>
-            <span className={`block h-px transition-all ${i === current ? "w-10 bg-foreground" : "w-5 bg-foreground/30 group-hover:bg-foreground/70"}`} />
+            <span className={`block h-px transition-all ${i === current ? "w-8 bg-foreground" : "w-4 bg-foreground/30 group-hover:bg-foreground/70"}`} />
           </button>
         ))}
       </div>

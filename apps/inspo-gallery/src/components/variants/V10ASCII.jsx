@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 const CHARS = [' ', '.', ':', '-', '=', '+', '*', '#', '%', '@', 'D', 'S', '2', 'X', 'O'];
 
 const Scene = ({ progress, active }) => {
@@ -133,7 +134,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V10ASCII = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={10}
         title="ASCII Character Rain"
         technique="Canvas 2D · Monospaced glyph sampling"
@@ -145,3 +146,5 @@ export const V10ASCII = () => (
 );
 
 export default V10ASCII;
+
+V10ASCII.isTall = true;

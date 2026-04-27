@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const canvasRef = useRef(null);
@@ -225,7 +226,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V15VerletMesh = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={15}
         title="Verlet Spring Mesh"
         technique="Canvas 2D · Verlet integration · Spring constraints"
@@ -237,3 +238,5 @@ export const V15VerletMesh = () => (
 );
 
 export default V15VerletMesh;
+
+V15VerletMesh.isTall = true;

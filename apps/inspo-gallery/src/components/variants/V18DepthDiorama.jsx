@@ -4,7 +4,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 // Each layer sits at a different Z and shows a different "slice" of the logo
 // via clip-path or color treatment. We layer them with depth-based blur + opacity.
@@ -156,7 +157,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V18DepthDiorama = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={18}
         title="Tilt-Shift Depth Diorama"
         technique="Framer Motion · 5 Z-layers · Parallax + depth blur"
@@ -168,3 +169,5 @@ export const V18DepthDiorama = () => (
 );
 
 export default V18DepthDiorama;
+
+V18DepthDiorama.isTall = true;

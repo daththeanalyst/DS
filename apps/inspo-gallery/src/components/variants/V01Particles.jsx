@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -184,7 +185,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V01Particles = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={1}
         title="Particle Assembly"
         technique="WebGL · Additive Points · Radial Repulsion"
@@ -196,3 +197,5 @@ export const V01Particles = () => (
 
 export default V01Particles;
 
+
+V01Particles.isTall = true;

@@ -4,7 +4,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const wrapRef = useRef(null);
@@ -202,7 +203,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V14HoloCard = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={14}
         title="Holographic Tilt Card"
         technique="Framer Motion · 3D rotateX/Y · Chromatic split · Conic sheen"
@@ -214,3 +215,5 @@ export const V14HoloCard = () => (
 );
 
 export default V14HoloCard;
+
+V14HoloCard.isTall = true;

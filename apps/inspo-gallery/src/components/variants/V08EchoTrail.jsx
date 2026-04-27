@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
-const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+import logoImg from '@/assets/logo-outline.png';
+const LOGO = logoImg;
 
 const Scene = ({ progress, active }) => {
     const canvasRef = useRef(null);
@@ -153,7 +154,7 @@ const Scene = ({ progress, active }) => {
 };
 
 export const V08EchoTrail = () => (
-    <VariantShell
+    <VariantShell scrollable={true}
         index={8}
         title="Echo Trail Ink"
         technique="Canvas 2D · Persistence buffer · Gradient stroke"
@@ -165,3 +166,5 @@ export const V08EchoTrail = () => (
 );
 
 export default V08EchoTrail;
+
+V08EchoTrail.isTall = true;
