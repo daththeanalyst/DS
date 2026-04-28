@@ -68,6 +68,28 @@ import V21QuantumMorph from "@/components/variants/V21QuantumMorph.jsx";
 import V22LaserForge from "@/components/variants/V22LaserForge.jsx";
 // @ts-expect-error JSX import
 import V23DepthStack from "@/components/variants/V23DepthStack.jsx";
+// 10 NEW research-pick variants (54-63)
+// @ts-expect-error JSX import
+import V24Glyphfield from "@/components/variants/V24Glyphfield.jsx";
+// @ts-expect-error JSX import
+import V25Isosurface from "@/components/variants/V25Isosurface.jsx";
+// @ts-expect-error JSX import
+import V26Protoplasm from "@/components/variants/V26Protoplasm.jsx";
+// @ts-expect-error JSX import
+import V27Lithograph from "@/components/variants/V27Lithograph.jsx";
+// @ts-expect-error JSX import
+import V28Recursion from "@/components/variants/V28Recursion.jsx";
+// @ts-expect-error JSX import
+import V29Attractor from "@/components/variants/V29Attractor.jsx";
+// @ts-expect-error JSX import
+import V30Volumetric from "@/components/variants/V30Volumetric.jsx";
+// @ts-expect-error JSX import
+import V31Raymarch from "@/components/variants/V31Raymarch.jsx";
+// @ts-expect-error JSX import
+import V32Slitscan from "@/components/variants/V32Slitscan.jsx";
+// @ts-expect-error JSX import
+import V33Strata from "@/components/variants/V33Strata.jsx";
+
 const SECTIONS = [
   Section01, Section02, Section03, Section04, Section05,
   Section06, Section07, Section08, Section09, Section10,
@@ -80,6 +102,8 @@ const SECTIONS = [
   V11FluidSmear, V12MarqueeMask, V13MagneticField, V14HoloCard, V15VerletMesh,
   V16LiquidGlass, V17GravityOrbits, V18DepthDiorama, V19SpectrumBars, V20NeonRain,
   V21QuantumMorph, V22LaserForge, V23DepthStack,
+  V24Glyphfield, V25Isosurface, V26Protoplasm, V27Lithograph, V28Recursion,
+  V29Attractor, V30Volumetric, V31Raymarch, V32Slitscan, V33Strata,
 ];
 
 const SECTION_TITLES = [
@@ -114,6 +138,17 @@ const SECTION_TITLES = [
   "QUANTUM MORPH",         // V21
   "LASER FORGE",           // V22
   "DEPTH STACK",           // V23
+  // Research-pick variants (54-63)
+  "GLYPHFIELD",            // V24 — ASCII shader on rotating logo
+  "ISOSURFACE",            // V25 — marching cubes mercury blobs
+  "PROTOPLASM",            // V26 — Gray-Scott reaction-diffusion
+  "LITHOGRAPH",            // V27 — Bayer 1-bit dither
+  "RECURSION",             // V28 — L-system fractal trees
+  "ATTRACTOR",             // V29 — Lorenz strange attractor particles
+  "VOLUMETRIC",            // V30 — Gaussian splat point cloud
+  "RAYMARCH",              // V31 — SDF raymarcher with refraction
+  "SLITSCAN",              // V32 — temporal column displacement
+  "STRATA",                // V33 — multi-layer parallax
 ] as const;
 
 // Render only the active section ± this many neighbours. Anything else is
