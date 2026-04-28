@@ -81,19 +81,13 @@ export const VariantShell = ({
                     </div>
                 </div>
             )}
-
-            {/* Scroll progress — slim, restrained */}
-            <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-10 hidden md:flex flex-col items-center gap-2 pointer-events-none">
-                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-white/35">
-                    {Math.round(progress * 100).toString().padStart(2, '0')}
-                </span>
-                <div className="relative h-32 w-px bg-white/10">
-                    <div
-                        className="absolute top-0 left-0 right-0 bg-[#5ac8fa]"
-                        style={{ height: `${progress * 100}%` }}
-                    />
-                </div>
-            </div>
+            {/*
+             * Right-edge scroll progress removed: it was reading useScrollProgress
+             * (a time-based auto-play timer, not real scroll position), so the
+             * 0-100 readout was misleading. Top-left glass card already shows
+             * variant number; SectionIndicator on the right edge already shows
+             * gallery-wide position. No need for a third progress UI.
+             */}
         </section>
     );
 };
