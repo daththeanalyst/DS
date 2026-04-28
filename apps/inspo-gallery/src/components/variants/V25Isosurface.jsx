@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { MarchingCubes } from 'three/examples/jsm/objects/MarchingCubes.js';
 import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
+import logoWhite from '@/assets/logo-white.png';
 
 const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
 const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
@@ -185,7 +186,17 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
+    return (
+        <>
+            <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />
+            {/* Guaranteed logo overlay — sits behind the chrome blobs visually
+                via low opacity. The metaballs are reflective and would otherwise
+                fully obscure the logo plane in the 3D scene. */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                <img src={logoWhite} alt="" aria-hidden className="w-[34vmin] opacity-25" />
+            </div>
+        </>
+    );
 };
 
 export const V25Isosurface = () => (

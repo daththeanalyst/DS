@@ -447,10 +447,11 @@ export const Section25 = () => {
 
   return (
     <section
-      className="snap-section relative overflow-hidden bg-black"
+      className="snap-section relative overflow-hidden bg-[#06070a]"
       onMouseMove={handleMove}
     >
-      <div className="absolute inset-0 [background:radial-gradient(circle_at_center,#1b0030_0%,#000_70%)]" />
+      {/* Cool dark backdrop — was rainbow #1b0030 purple */}
+      <div className="absolute inset-0 [background:radial-gradient(circle_at_center,#0a1422_0%,#020308_70%)]" />
 
       <div
         className="absolute inset-0 grid place-items-center"
@@ -464,50 +465,50 @@ export const Section25 = () => {
             rotateX: useTransform(sy, (v) => -v * 18),
           }}
         >
+          {/* Rings: single SF-blue tone, fade with distance. No rainbow. */}
           {rings.map((_, i) => {
             const z = -i * 220;
-            const hue = (i * 18) % 360;
+            const fade = 1 - i / ringCount;
             const size = 60 + i * 6;
             return (
               <motion.div
                 key={i}
-                className="absolute left-1/2 top-1/2 rounded-full border-2"
+                className="absolute left-1/2 top-1/2 rounded-full"
                 style={{
                   width: `${size}vmin`,
                   height: `${size}vmin`,
                   marginLeft: `-${size / 2}vmin`,
                   marginTop: `-${size / 2}vmin`,
                   transform: `translateZ(${z}px) rotate(${i * 7}deg)`,
-                  borderColor: `hsla(${hue}, 90%, 65%, ${0.9 - i * 0.035})`,
-                  boxShadow: `0 0 40px hsla(${hue}, 100%, 60%, 0.4)`,
+                  border: `1.5px solid rgba(150, 200, 245, ${0.55 * fade})`,
+                  boxShadow: `0 0 18px rgba(90, 200, 250, ${0.18 * fade})`,
                 }}
                 animate={{ rotate: [i * 7, i * 7 + 360] }}
                 transition={{ duration: 30 + i * 2, repeat: Infinity, ease: "linear" }}
               />
             );
           })}
-
-          {/* logo at the end of the tunnel */}
-          <div
-            className="absolute left-1/2 top-1/2 grid place-items-center"
-            style={{ transform: `translate(-50%, -50%) translateZ(${-ringCount * 220 - 100}px)` }}
-          >
-            <motion.img
-              src={logoWhite}
-              alt="DS2 tunnel"
-              className="h-[30vmin] w-[30vmin] object-contain"
-              style={{ filter: "brightness(0) invert(1) drop-shadow(0 0 30px #00aaff)" }}
-              animate={{ scale: [1, 1.08, 1] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            />
-          </div>
         </motion.div>
       </div>
 
-      {/* speed lines */}
-      <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-40 [background:repeating-radial-gradient(circle_at_center,transparent_0,transparent_20px,rgba(255,255,255,0.08)_21px,transparent_22px)]" />
+      {/* Speed lines — toned down from opacity 40 → 18 */}
+      <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-[0.18] [background:repeating-radial-gradient(circle_at_center,transparent_0,transparent_20px,rgba(255,255,255,0.06)_21px,transparent_22px)]" />
 
-      <div className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.4em] text-white/70">
+      {/* Always-visible foreground logo — DOM overlay, NOT a 3D-positioned plane
+          (was at translateZ(-4940px) so it was a 3-pixel dot at the end of the
+          tunnel). Now sits centred on top of the rings, full white, breathing. */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <motion.img
+          src={logoWhite}
+          alt="DS2 tunnel"
+          className="w-[26vmin] object-contain"
+          style={{ filter: "drop-shadow(0 0 14px rgba(0,0,0,0.6)) drop-shadow(0 0 28px rgba(90,200,250,0.35))" }}
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.4em] text-white/55">
         WORMHOLE — MOVE CURSOR TO STEER
       </div>
     </section>

@@ -13,9 +13,23 @@ export const Section26 = () => {
   const sx = useSpring(mx, { stiffness: 80, damping: 20 });
   const sy = useSpring(my, { stiffness: 80, damping: 20 });
 
+  // Cool palette only: SF blue → soft cool white → restrained peach.
+  // No rainbow HSL rotation.
+  const RIBBON_PALETTE = [
+    ["#5ac8fa", "#9bdcff"],
+    ["#7fb6ff", "#c8e0ff"],
+    ["#a0d8ff", "#e6f3ff"],
+    ["#5ac8fa", "#bfe7ff"],
+    ["#8ed0ff", "#dbecff"],
+    ["#aad6ff", "#f0f8ff"],
+    ["#7fb6ff", "#bfd9f5"],
+    ["#5ac8fa", "#a4ccea"],
+    ["#9bdcff", "#cfe6f5"],
+  ];
   const ribbons = useMemo(
     () => Array.from({ length: 9 }, (_, i) => ({
-      hue: (i * 40) % 360,
+      colorA: RIBBON_PALETTE[i][0],
+      colorB: RIBBON_PALETTE[i][1],
       offset: i * 0.11,
       amp: 80 + i * 14,
       width: 2 + (i % 3),
@@ -31,22 +45,23 @@ export const Section26 = () => {
 
   return (
     <section
-      className="snap-section relative overflow-hidden bg-[#07060d]"
+      className="snap-section relative overflow-hidden bg-[#06070a]"
       onMouseMove={handleMove}
     >
-      <div className="absolute inset-0 [background:radial-gradient(ellipse_at_top,#1a1130_0%,#000_70%)]" />
+      {/* Backdrop: deep neutral cool, no purple wash */}
+      <div className="absolute inset-0 [background:radial-gradient(ellipse_at_top,#0a1422_0%,#020308_70%)]" />
 
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
         <defs>
           {ribbons.map((r, i) => (
             <linearGradient key={i} id={`rib-${i}`} x1="0" x2="1">
-              <stop offset="0%" stopColor={`hsl(${r.hue}, 90%, 65%)`} stopOpacity="0" />
-              <stop offset="50%" stopColor={`hsl(${r.hue}, 90%, 65%)`} stopOpacity="1" />
-              <stop offset="100%" stopColor={`hsl(${(r.hue + 60) % 360}, 90%, 65%)`} stopOpacity="0" />
+              <stop offset="0%" stopColor={r.colorA} stopOpacity="0" />
+              <stop offset="50%" stopColor={r.colorA} stopOpacity="0.85" />
+              <stop offset="100%" stopColor={r.colorB} stopOpacity="0" />
             </linearGradient>
           ))}
           <filter id="rib-glow">
-            <feGaussianBlur stdDeviation="3" />
+            <feGaussianBlur stdDeviation="2" />
           </filter>
         </defs>
 
@@ -70,6 +85,9 @@ export const Section26 = () => {
         ))}
       </svg>
 
+      {/* Logo overlay — full white, restrained shadow (was a 30px white blur
+          halo + same colour as ribbons → got lost). Now sits firmly on top
+          with a small black shadow for legibility against the ribbon stream. */}
       <motion.div
         className="absolute inset-0 grid place-items-center"
         style={{
@@ -80,7 +98,8 @@ export const Section26 = () => {
         <img
           src={logoWhite}
           alt="DS2 ribbons"
-          className="h-[34vmin] w-[34vmin] object-contain [filter:drop-shadow(0_0_30px_rgba(255,255,255,0.4))]"
+          className="h-[34vmin] w-[34vmin] object-contain"
+          style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.55)) drop-shadow(0 0 24px rgba(120,180,230,0.30))" }}
         />
       </motion.div>
 

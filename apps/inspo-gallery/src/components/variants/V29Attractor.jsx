@@ -202,7 +202,17 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
+    return (
+        <>
+            <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />
+            {/* DOM overlay logo — guaranteed visible regardless of camera orbit
+                or particle density. The 3D plane I added earlier was hidden when
+                the camera orbited to the opposite side. */}
+            <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                <img src={logoWhite} alt="" aria-hidden className="w-[36vmin] opacity-30" style={{ filter: 'drop-shadow(0 0 18px rgba(0,0,0,0.6))' }} />
+            </div>
+        </>
+    );
 };
 
 export const V29Attractor = () => (

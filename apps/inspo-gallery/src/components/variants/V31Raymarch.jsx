@@ -101,11 +101,15 @@ const Scene = ({ progress, active }) => {
                 // Sample the logo texture using the slab-local x/y as UV (only
                 // returns logo where we hit the FRONT face — n.z dominantly +z)
                 float sampleLogoAt(vec3 p, vec3 n){
-                    // p.xy ranges roughly within slab dims (1.3, 0.55)
-                    vec2 uv = vec2(p.x / 2.6 + 0.5, p.y / 1.1 + 0.5);
+                    vec2 uv = vec2(p.x / 2.6 + 0.5, 1.0 - (p.y / 1.1 + 0.5));
                     if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) return 0.0;
-                    float frontFace = smoothstep(0.5, 0.95, n.z); // only front face etches
-                    return texture2D(uLogo, uv).a * frontFace;
+                    // Either-side etching (works for camera orbiting front + back)
+                    float face = smoothstep(0.4, 0.9, abs(n.z));
+                    vec4 t = texture2D(uLogo, uv);
+                    // Use brightness as logo presence — works whether the PNG has
+                    // alpha or not. Was using only .a; some PNGs are opaque-RGB.
+                    float lum = max(t.a, (t.r + t.g + t.b) / 3.0);
+                    return lum * face;
                 }
 
                 void main(){
@@ -136,7 +140,8 @@ const Scene = ({ progress, active }) => {
                         col = mix(colRefr, colRefl, fres);
                         // Etched logo: bright white where the texture says so
                         float logo = sampleLogoAt(p, n);
-                        col = mix(col, vec3(1.0, 1.0, 1.0), logo * 0.85);
+                        col = mix(col, vec3(1.0, 1.0, 1.0), logo * 0.95);
+                        col += logo * vec3(0.20, 0.30, 0.40); // soft cool bloom on the etch
                         // Subtle SF-blue edge glow
                         col += pow(fres, 1.6) * vec3(0.35, 0.78, 0.98) * 0.30;
                     }

@@ -202,7 +202,7 @@ const Scene = ({ progress, active }) => {
             wasActive = true;
             const dt = clock.getDelta();
             secondsSinceReseed += dt;
-            if (secondsSinceReseed > 25) { reseed(); secondsSinceReseed = 0; }
+            if (secondsSinceReseed > 8) { reseed(); secondsSinceReseed = 0; }
             const t = clock.getElapsedTime();
             stepMat.uniforms.uMouse.value.copy(state.current.mouse);
             stepMat.uniforms.uDown.value = 0.6 + state.current.down;
