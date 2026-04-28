@@ -153,24 +153,49 @@ const SECTION_TITLES = [
 
 // Render only the active section ± this many neighbours. Anything else is
 // an empty placeholder, freeing canvas/WebGL/RAF resources.
-const RENDER_RADIUS = 1;
+//   Desktop: 1 (smooth scroll between, slightly higher memory)
+//   Mobile:  0 (zero memory pile-up — iOS Safari kills tabs that hold too
+//              many WebGL contexts, even when they're "lazy mounted")
+const IS_MOBILE = typeof window !== "undefined" && (window.matchMedia("(max-width: 768px)").matches || window.matchMedia("(pointer: coarse)").matches);
+const RENDER_RADIUS = IS_MOBILE ? 0 : 1;
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [current, setCurrent] = useState(0);
 
+  // IntersectionObserver-based current-section detection. Replaces the older
+  // `Math.round(scrollTop / window.innerHeight)` calculation, which drifts
+  // on mobile when the address bar shows/hides mid-scroll (window.innerHeight
+  // changes but section min-h:100svh does not — math snaps to wrong section
+  // after ~10 sections, leaving the page on a placeholder).
   useEffect(() => {
-    const el = containerRef.current!;
-    const onScroll = () => {
-      const i = Math.round(el.scrollTop / window.innerHeight);
-      setCurrent(Math.max(0, Math.min(SECTIONS.length - 1, i)));
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+    const root = containerRef.current!;
+    if (!root) return;
+
+    const ratios = new Map<number, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const idx = Number((e.target as HTMLElement).dataset.idx);
+          ratios.set(idx, e.intersectionRatio);
+        }
+        // Pick whichever section currently shows the most pixels
+        let bestIdx = 0;
+        let bestRatio = -1;
+        ratios.forEach((r, idx) => {
+          if (r > bestRatio) { bestRatio = r; bestIdx = idx; }
+        });
+        setCurrent(bestIdx);
+      },
+      { root, threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    sectionRefs.current.forEach((node) => { if (node) observer.observe(node); });
+    return () => observer.disconnect();
   }, []);
 
   const jump = (i: number) => {
-    containerRef.current?.scrollTo({ top: i * window.innerHeight, behavior: "smooth" });
+    sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // SEO
@@ -202,24 +227,27 @@ const Index = () => {
       <div ref={containerRef} className="snap-container scrollbar-hidden">
         {SECTIONS.map((Section, i) => {
           const inRange = Math.abs(i - current) <= RENDER_RADIUS;
+          // Wrapper div carries the IntersectionObserver target + the snap-section
+          // styling so the section element underneath can be conditionally rendered
+          // without losing its place in the scroll container.
+          const setRef = (node: HTMLDivElement | null) => { sectionRefs.current[i] = node; };
           if (!inRange) {
-            // Placeholder — keeps scroll length / snap targets intact, but no
-            // canvas, no RAF, no WebGL context.
             return (
               <section
                 key={i}
-                className="snap-section bg-background min-h-[100svh]"
+                ref={setRef}
+                data-idx={i}
+                className="snap-section bg-background min-h-[100svh] w-screen"
               />
             );
           }
+          // For active sections, mount the variant inside the observed wrapper
           return (
-            <SectionErrorBoundary
-              key={i}
-              index={i + 1}
-              name={SECTION_TITLES[i]}
-            >
-              <Section />
-            </SectionErrorBoundary>
+            <div key={i} ref={setRef} data-idx={i} className="snap-section min-h-[100svh] w-screen">
+              <SectionErrorBoundary index={i + 1} name={SECTION_TITLES[i]}>
+                <Section />
+              </SectionErrorBoundary>
+            </div>
           );
         })}
       </div>
