@@ -218,7 +218,17 @@ const Scene = ({ active }) => {
         if (active) state.current.time = 0; // Trigger sequence!
     }, [active]);
 
-    return <div ref={mount} className="absolute inset-0" />;
+    return (
+        <>
+            <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />
+            {/* Guaranteed-visibility logo overlay — particles take 5s to fully
+                assemble; this sits behind them at low opacity so the DS is
+                visible while they morph. */}
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <img src={logoWhite} alt="" aria-hidden className="w-[34vmin] opacity-20" style={{ filter: 'drop-shadow(0 0 14px rgba(0,0,0,0.5))' }} />
+            </div>
+        </>
+    );
 };
 
 export const V21QuantumMorph = () => (

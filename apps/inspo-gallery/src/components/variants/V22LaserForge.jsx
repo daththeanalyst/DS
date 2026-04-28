@@ -23,12 +23,14 @@ const Scene = ({ active }) => {
         el.appendChild(renderer.domElement);
 
         let material;
+        let disposed = false;
         const loader = new THREE.TextureLoader();
         Promise.all([
             loader.loadAsync(logoOutline),
             loader.loadAsync(logoBlack),
             loader.loadAsync(logoWhite)
         ]).then(([texO, texB, texW]) => {
+            if (disposed) return; // section unmounted before textures loaded
             const aspect = el.clientWidth / el.clientHeight;
             const geo = new THREE.PlaneGeometry(2, 2);
             material = new THREE.ShaderMaterial({
@@ -160,6 +162,7 @@ const Scene = ({ active }) => {
         window.addEventListener('resize', onResize);
 
         return () => {
+            disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
             renderer.dispose();
@@ -172,7 +175,17 @@ const Scene = ({ active }) => {
         if (active) state.current.time = 0;
     }, [active]);
 
-    return <div ref={mount} className="absolute inset-0" />;
+    return (
+        <>
+            <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />
+            {/* Guaranteed-visibility logo overlay — sits over the laser-forge
+                shader at low opacity so the DS reads even if the timeline is
+                between phases or the textures haven't fully loaded. */}
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <img src={logoWhite} alt="" aria-hidden className="w-[34vmin] opacity-25" style={{ filter: 'drop-shadow(0 0 14px rgba(0,0,0,0.5))' }} />
+            </div>
+        </>
+    );
 };
 
 export const V22LaserForge = () => (

@@ -26,13 +26,15 @@ const Scene = ({ active }) => {
         el.appendChild(renderer.domElement);
 
         let meshO, meshB, meshW;
-        
+        let disposed = false;
+
         const loader = new THREE.TextureLoader();
         Promise.all([
             loader.loadAsync(logoOutline),
             loader.loadAsync(logoBlack),
             loader.loadAsync(logoWhite)
         ]).then(([texO, texB, texW]) => {
+            if (disposed) return;
             const aspect = texO.image.width / texO.image.height;
             const geo = new THREE.PlaneGeometry(8 * aspect, 8);
             
@@ -119,6 +121,7 @@ const Scene = ({ active }) => {
         window.addEventListener('resize', onResize);
 
         return () => {
+            disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
             renderer.dispose();
@@ -131,7 +134,14 @@ const Scene = ({ active }) => {
         if (active) state.current.time = 0;
     }, [active]);
 
-    return <div ref={mount} className="absolute inset-0" />;
+    return (
+        <>
+            <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <img src={logoWhite} alt="" aria-hidden className="w-[34vmin] opacity-25" style={{ filter: 'drop-shadow(0 0 14px rgba(0,0,0,0.5))' }} />
+            </div>
+        </>
+    );
 };
 
 // Utils
