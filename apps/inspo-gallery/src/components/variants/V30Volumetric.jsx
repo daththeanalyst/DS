@@ -8,6 +8,7 @@ import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
 const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -46,7 +47,7 @@ const Scene = ({ progress, active }) => {
         scene.add(bg);
 
         let points;
-        sampleLogo(LOGO, { step: 1, threshold: 90, targetWidth: 600 }).then((sample) => {
+        sampleLogo(LOGO, { step: IS_MOBILE ? 2 : 1, threshold: 90, targetWidth: IS_MOBILE ? 280 : 600 }).then((sample) => {
             const COUNT = sample.count;
             const target = new Float32Array(COUNT * 3);
             const start = new Float32Array(COUNT * 3);
@@ -145,7 +146,7 @@ const Scene = ({ progress, active }) => {
             const r = el.getBoundingClientRect();
             state.current.mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -176,7 +177,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             if (tickContext.points) {
                 tickContext.points.geometry.dispose();
                 tickContext.points.material.dispose();
@@ -189,7 +190,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V30Volumetric = () => (

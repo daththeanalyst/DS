@@ -115,7 +115,7 @@ const Scene = ({ progress, active }) => {
             const r = el.getBoundingClientRect();
             state.current.mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -158,7 +158,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             logoTex.dispose();
             layers.forEach(({ mesh, mat }) => { mesh.geometry.dispose(); mat.dispose(); });
             bg.geometry.dispose(); bg.material.dispose();
@@ -170,7 +170,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V33Strata = () => (

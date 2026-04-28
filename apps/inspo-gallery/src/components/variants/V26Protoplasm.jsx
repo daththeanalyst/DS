@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 
 const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -21,9 +22,11 @@ const Scene = ({ progress, active }) => {
         renderer.setClearColor(0x000000, 0);
         el.appendChild(renderer.domElement);
 
-        // Simulation runs at half-resolution for perf
-        const SIM_W = Math.max(256, Math.floor(el.clientWidth / 2));
-        const SIM_H = Math.max(160, Math.floor(el.clientHeight / 2));
+        // Simulation runs at reduced resolution for perf — mobile gets aggressive downscale
+        const SIM_DIV = IS_MOBILE ? 4 : 2;
+        const SIM_W = Math.max(160, Math.floor(el.clientWidth / SIM_DIV));
+        const SIM_H = Math.max(100, Math.floor(el.clientHeight / SIM_DIV));
+        const SUBSTEPS = IS_MOBILE ? 3 : 6;
 
         const rtOpts = {
             type: THREE.HalfFloatType,
@@ -162,10 +165,10 @@ const Scene = ({ progress, active }) => {
         const onDown = () => { state.current.down = 1; };
         const onUp = () => { state.current.down = 0; };
         const onLeave = () => { state.current.down = 0; state.current.mouse.set(-9, -9); };
-        el.addEventListener('mousemove', onMove);
-        el.addEventListener('mousedown', onDown);
-        window.addEventListener('mouseup', onUp);
-        el.addEventListener('mouseleave', onLeave);
+        el.addEventListener('pointermove', onMove);
+        el.addEventListener('pointerdown', onDown);
+        window.addEventListener('pointerup', onUp);
+        el.addEventListener('pointerleave', onLeave);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -180,8 +183,8 @@ const Scene = ({ progress, active }) => {
             const t = clock.getElapsedTime();
             stepMat.uniforms.uMouse.value.copy(state.current.mouse);
             stepMat.uniforms.uDown.value = 0.6 + state.current.down;
-            // 6 sub-steps per visible frame
-            for (let i = 0; i < 6; i++) {
+            // SUBSTEPS sub-steps per visible frame (mobile = 3, desktop = 6)
+            for (let i = 0; i < SUBSTEPS; i++) {
                 stepMat.uniforms.uPrev.value = rtA.texture;
                 renderer.setRenderTarget(rtB);
                 renderer.render(stepScene, orthoCam);
@@ -197,10 +200,10 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            window.removeEventListener('mouseup', onUp);
-            el.removeEventListener('mousemove', onMove);
-            el.removeEventListener('mousedown', onDown);
-            el.removeEventListener('mouseleave', onLeave);
+            window.removeEventListener('pointerup', onUp);
+            el.removeEventListener('pointermove', onMove);
+            el.removeEventListener('pointerdown', onDown);
+            el.removeEventListener('pointerleave', onLeave);
             rtA.dispose(); rtB.dispose();
             stepMat.dispose(); showMat.dispose();
             stepQuad.geometry.dispose(); showQuad.geometry.dispose();
@@ -211,7 +214,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V26Protoplasm = () => (

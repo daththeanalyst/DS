@@ -6,6 +6,9 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
+const RAY_STEPS = IS_MOBILE ? 48 : 96;
+
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
     const state = useRef({ mouse: new THREE.Vector2(0, 0), progress: 0, active: false });
@@ -15,7 +18,8 @@ const Scene = ({ progress, active }) => {
         if (!el) return;
 
         const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // Mobile: lower DPR to avoid quartic raymarch cost
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, IS_MOBILE ? 1 : 2));
         renderer.setSize(el.clientWidth, el.clientHeight);
         renderer.setClearColor(0x000000, 0);
         el.appendChild(renderer.domElement);
@@ -32,6 +36,7 @@ const Scene = ({ progress, active }) => {
             },
             vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
             fragmentShader: /* glsl */`
+                #define RAY_STEPS ${RAY_STEPS}
                 precision highp float;
                 varying vec2 vUv;
                 uniform float uTime;
@@ -95,7 +100,7 @@ const Scene = ({ progress, active }) => {
 
                 float raymarch(vec3 ro, vec3 rd){
                     float t = 0.;
-                    for (int i = 0; i < 96; i++){
+                    for (int i = 0; i < RAY_STEPS; i++){
                         vec3 p = ro + rd * t;
                         float d = map(p);
                         if (d < 0.0008) return t;
@@ -157,7 +162,7 @@ const Scene = ({ progress, active }) => {
             state.current.mouse.set((e.clientX - r.left) / r.width, 1.0 - (e.clientY - r.top) / r.height);
             mat.uniforms.uMouse.value.copy(state.current.mouse);
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -180,7 +185,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             mat.dispose();
             quad.geometry.dispose();
             renderer.dispose();
@@ -190,7 +195,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V31Raymarch = () => (

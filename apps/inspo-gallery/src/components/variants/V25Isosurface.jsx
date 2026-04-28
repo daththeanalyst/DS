@@ -7,6 +7,7 @@ import VariantShell from '@/components/variants/VariantShell';
 import { sampleLogo } from '@/lib/logoSampler';
 
 const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -38,8 +39,8 @@ const Scene = ({ progress, active }) => {
             emissive: 0x002233,
         });
 
-        const resolution = 56;
-        const cubes = new MarchingCubes(resolution, mat, true, true, 80000);
+        const resolution = IS_MOBILE ? 32 : 56;
+        const cubes = new MarchingCubes(resolution, mat, true, true, IS_MOBILE ? 30000 : 80000);
         cubes.position.set(0, 0, 0);
         cubes.scale.set(2.6, 2.6, 2.6);
         cubes.isolation = 80;
@@ -101,7 +102,7 @@ const Scene = ({ progress, active }) => {
             state.current.mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
             state.current.mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -150,7 +151,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             mat.dispose();
             bg.geometry.dispose(); bg.material.dispose();
             cubes.material.dispose();
@@ -161,7 +162,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V25Isosurface = () => (

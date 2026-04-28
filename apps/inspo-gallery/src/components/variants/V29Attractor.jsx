@@ -5,6 +5,8 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
 
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
+
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
     const state = useRef({ mouse: new THREE.Vector2(0, 0), kick: 0, progress: 0, active: false });
@@ -24,8 +26,8 @@ const Scene = ({ progress, active }) => {
         camera.position.set(28, 20, 36);
         camera.lookAt(0, 14, 0);
 
-        // CPU integration (still fast at 6k particles, more cinematic than GPGPU here)
-        const COUNT = 6000;
+        // CPU integration — mobile gets 2k particles for 60fps headroom
+        const COUNT = IS_MOBILE ? 2000 : 6000;
         const positions = new Float32Array(COUNT * 3);
         const colors = new Float32Array(COUNT * 3);
         const sizes = new Float32Array(COUNT);
@@ -102,8 +104,8 @@ const Scene = ({ progress, active }) => {
             state.current.mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
         };
         const onDown = () => { state.current.kick = 1; };
-        el.addEventListener('mousemove', onMove);
-        el.addEventListener('mousedown', onDown);
+        el.addEventListener('pointermove', onMove);
+        el.addEventListener('pointerdown', onDown);
 
         const onResize = () => {
             renderer.setSize(el.clientWidth, el.clientHeight);
@@ -159,8 +161,8 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
-            el.removeEventListener('mousedown', onDown);
+            el.removeEventListener('pointermove', onMove);
+            el.removeEventListener('pointerdown', onDown);
             geo.dispose();
             mat.dispose();
             bg.geometry.dispose(); bg.material.dispose();
@@ -171,7 +173,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V29Attractor = () => (

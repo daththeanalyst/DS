@@ -34,7 +34,7 @@ const Scene = ({ progress, active }) => {
             const x = (e.clientX - r.left) / r.width;
             state.current.wind = (x - 0.5) * 0.6; // -0.3 to +0.3 rad
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         let raf;
         const start = performance.now();
@@ -111,14 +111,14 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
         };
     }, []);
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V28Recursion = () => (

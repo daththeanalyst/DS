@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import VariantShell from '@/components/variants/VariantShell';
 
 const LOGO = import.meta.env.BASE_URL + 'logos/ds2-a.png';
+const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
 const Scene = ({ progress, active }) => {
     const mount = useRef(null);
@@ -27,11 +28,11 @@ const Scene = ({ progress, active }) => {
         const live = document.createElement('canvas');
         const liveCtx = live.getContext('2d');
 
-        // Rolling history of past frames (we keep N frames as separate canvases)
-        const HISTORY_LEN = 90;
+        // Rolling history of past frames — mobile keeps a shorter trail
+        const HISTORY_LEN = IS_MOBILE ? 40 : 90;
         const history = [];
 
-        const dpr = Math.min(window.devicePixelRatio, 2);
+        const dpr = Math.min(window.devicePixelRatio, IS_MOBILE ? 1.25 : 2);
         const sizeAll = () => {
             const w = el.clientWidth, h = el.clientHeight;
             display.width = w * dpr;
@@ -50,7 +51,7 @@ const Scene = ({ progress, active }) => {
             state.current.mouse.x = (e.clientX - r.left) / r.width;
             state.current.mouse.y = (e.clientY - r.top) / r.height;
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         let img = null;
         const im = new Image();
@@ -133,7 +134,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             history.length = 0;
             if (display.parentNode) display.parentNode.removeChild(display);
         };
@@ -141,7 +142,7 @@ const Scene = ({ progress, active }) => {
 
     state.current.progress = progress;
     state.current.active = active;
-    return <div ref={mount} className="absolute inset-0" />;
+    return <div ref={mount} className="absolute inset-0" style={{ touchAction: 'pan-y' }} />;
 };
 
 export const V32Slitscan = () => (
