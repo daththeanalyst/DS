@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import VariantShell from '@/components/variants/VariantShell';
+import logoWhite from '@/assets/logo-white.png';
 
 const IS_MOBILE = typeof window !== 'undefined' && (window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(pointer: coarse)').matches);
 
@@ -26,8 +27,9 @@ const Scene = ({ progress, active }) => {
         camera.position.set(28, 20, 36);
         camera.lookAt(0, 14, 0);
 
-        // CPU integration — mobile gets 2k particles for 60fps headroom
-        const COUNT = IS_MOBILE ? 2000 : 6000;
+        // CPU integration — fewer, bigger particles. The point of the attractor
+        // is to RECOGNISE the butterfly pattern; 6k of dim dust hid it.
+        const COUNT = IS_MOBILE ? 1200 : 2800;
         const positions = new Float32Array(COUNT * 3);
         const colors = new Float32Array(COUNT * 3);
         const sizes = new Float32Array(COUNT);
@@ -51,7 +53,7 @@ const Scene = ({ progress, active }) => {
             colors[i * 3] = c.r;
             colors[i * 3 + 1] = c.g;
             colors[i * 3 + 2] = c.b;
-            sizes[i] = 0.04 + Math.random() * 0.06;
+            sizes[i] = 0.07 + Math.random() * 0.10;
         }
 
         const geo = new THREE.BufferGeometry();
@@ -86,6 +88,27 @@ const Scene = ({ progress, active }) => {
         });
         const points = new THREE.Points(geo, mat);
         scene.add(points);
+
+        // Logo plane behind the attractor — ensures the DS reads even when
+        // the chaos is dense in front of it.
+        const logoTex = new THREE.TextureLoader().load(logoWhite);
+        logoTex.colorSpace = THREE.SRGBColorSpace;
+        const logoPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(20, 20 * 0.4),
+            new THREE.ShaderMaterial({
+                uniforms: { uMap: { value: logoTex } },
+                transparent: true,
+                depthWrite: false,
+                vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+                fragmentShader: `varying vec2 vUv; uniform sampler2D uMap;
+                    void main(){
+                        vec4 t = texture2D(uMap, vUv);
+                        gl_FragColor = vec4(0.85, 0.92, 0.98, t.a * 0.42);
+                    }`,
+            })
+        );
+        logoPlane.position.set(0, 24, -25);
+        scene.add(logoPlane);
 
         // Backdrop
         const bg = new THREE.Mesh(
@@ -169,6 +192,8 @@ const Scene = ({ progress, active }) => {
             el.removeEventListener('pointerdown', onDown);
             geo.dispose();
             mat.dispose();
+            logoTex.dispose();
+            logoPlane.geometry.dispose(); logoPlane.material.dispose();
             bg.geometry.dispose(); bg.material.dispose();
             renderer.dispose();
             if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);

@@ -436,12 +436,13 @@ export const Section30 = () => {
                   src={logoWhite}
                   alt="DS2 finale"
                   className="h-[40vmin] w-[40vmin] object-contain"
+                  // Restrained matte glow: white drop-shadow only, breathes gently.
+                  // Was rainbow rotating between hot pink / cyan / orange — too loud.
                   animate={{
                     filter: [
-                      "drop-shadow(0 0 30px #fff) drop-shadow(0 0 60px #ff00aa)",
-                      "drop-shadow(0 0 30px #fff) drop-shadow(0 0 60px #00ddff)",
-                      "drop-shadow(0 0 30px #fff) drop-shadow(0 0 60px #ffaa00)",
-                      "drop-shadow(0 0 30px #fff) drop-shadow(0 0 60px #ff00aa)",
+                      "drop-shadow(0 0 18px rgba(255,255,255,0.45)) drop-shadow(0 0 40px rgba(120,170,210,0.20))",
+                      "drop-shadow(0 0 24px rgba(255,255,255,0.55)) drop-shadow(0 0 50px rgba(120,170,210,0.25))",
+                      "drop-shadow(0 0 18px rgba(255,255,255,0.45)) drop-shadow(0 0 40px rgba(120,170,210,0.20))",
                     ],
                   }}
                   transition={{ duration: 6, repeat: Infinity }}

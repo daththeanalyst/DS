@@ -118,12 +118,12 @@ const Scene = ({ progress, active }) => {
                     float B2 = texture2D(uTex, uv + vec2(0.002, 0.0)).g;
                     float B3 = texture2D(uTex, uv - vec2(0.002, 0.0)).g;
                     float edge = abs(B2 - B3) * 4.5;
-                    // Apple Silicon palette: SF blue body → warm cream edge
-                    vec3 ink = mix(vec3(0.18, 0.55, 0.95), vec3(0.95, 0.95, 0.96), B);
-                    vec3 col = ink * smoothstep(0.18, 0.55, B);
-                    col += edge * vec3(0.88, 0.95, 1.0) * 0.45;
-                    // Removed scanline (was 0.04) — was too noisy
-                    gl_FragColor = vec4(col, 1.);
+                    // Cool dark backdrop (deep navy → midnight) + pure white logo body.
+                    // Strong contrast — the white pops against a saturated dark base.
+                    vec3 deepBg = mix(vec3(0.022, 0.030, 0.058), vec3(0.040, 0.050, 0.085), uv.y);
+                    vec3 ink = mix(deepBg, vec3(1.0, 1.0, 1.0), smoothstep(0.18, 0.55, B));
+                    ink += edge * vec3(0.55, 0.78, 1.0) * 0.35;
+                    gl_FragColor = vec4(ink, 1.);
                 }`,
         });
         const showQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), showMat);
