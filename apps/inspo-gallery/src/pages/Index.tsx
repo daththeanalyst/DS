@@ -161,41 +161,47 @@ const RENDER_RADIUS = IS_MOBILE ? 0 : 1;
 
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [current, setCurrent] = useState(0);
 
-  // IntersectionObserver-based current-section detection. Replaces the older
-  // `Math.round(scrollTop / window.innerHeight)` calculation, which drifts
-  // on mobile when the address bar shows/hides mid-scroll (window.innerHeight
-  // changes but section min-h:100svh does not — math snaps to wrong section
-  // after ~10 sections, leaving the page on a placeholder).
+  // Scroll-based detection using ACTUAL DOM measurements (offsetTop /
+  // offsetHeight of each child) rather than `scrollTop / window.innerHeight`.
+  // The latter broke on mobile because `window.innerHeight` mutates as the
+  // address bar hides/shows — accumulated drift sent `current` to a section
+  // that was never rendered after ~10 swipes. Reading offsets from real DOM
+  // self-corrects regardless of viewport-bar state.
   useEffect(() => {
-    const root = containerRef.current!;
-    if (!root) return;
+    const el = containerRef.current;
+    if (!el) return;
 
-    const ratios = new Map<number, number>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          const idx = Number((e.target as HTMLElement).dataset.idx);
-          ratios.set(idx, e.intersectionRatio);
-        }
-        // Pick whichever section currently shows the most pixels
-        let bestIdx = 0;
-        let bestRatio = -1;
-        ratios.forEach((r, idx) => {
-          if (r > bestRatio) { bestRatio = r; bestIdx = idx; }
-        });
-        setCurrent(bestIdx);
-      },
-      { root, threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-    sectionRefs.current.forEach((node) => { if (node) observer.observe(node); });
-    return () => observer.disconnect();
+    const recompute = () => {
+      const middle = el.scrollTop + el.clientHeight / 2;
+      const children = el.children;
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      for (let i = 0; i < children.length; i++) {
+        const c = children[i] as HTMLElement;
+        const cMid = c.offsetTop + c.offsetHeight / 2;
+        const dist = Math.abs(cMid - middle);
+        if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+      }
+      setCurrent(bestIdx);
+    };
+
+    el.addEventListener("scroll", recompute, { passive: true });
+    const ro = new ResizeObserver(recompute);
+    ro.observe(el);
+    recompute();
+    return () => {
+      el.removeEventListener("scroll", recompute);
+      ro.disconnect();
+    };
   }, []);
 
   const jump = (i: number) => {
-    sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const el = containerRef.current;
+    if (!el) return;
+    const child = el.children[i] as HTMLElement | undefined;
+    if (child) el.scrollTo({ top: child.offsetTop, behavior: "smooth" });
   };
 
   // SEO
@@ -227,27 +233,23 @@ const Index = () => {
       <div ref={containerRef} className="snap-container scrollbar-hidden">
         {SECTIONS.map((Section, i) => {
           const inRange = Math.abs(i - current) <= RENDER_RADIUS;
-          // Wrapper div carries the IntersectionObserver target + the snap-section
-          // styling so the section element underneath can be conditionally rendered
-          // without losing its place in the scroll container.
-          const setRef = (node: HTMLDivElement | null) => { sectionRefs.current[i] = node; };
           if (!inRange) {
+            // Empty placeholder — keeps scroll length / snap targets intact.
+            // Same shape (snap-section, 100svh) as a real section so the
+            // container.children indexing stays 1:1 with SECTIONS.
             return (
               <section
                 key={i}
-                ref={setRef}
-                data-idx={i}
                 className="snap-section bg-background min-h-[100svh] w-screen"
               />
             );
           }
-          // For active sections, mount the variant inside the observed wrapper
+          // Real section: variant component renders its own outer
+          // <section className="snap-section …"> so we don't wrap it.
           return (
-            <div key={i} ref={setRef} data-idx={i} className="snap-section min-h-[100svh] w-screen">
-              <SectionErrorBoundary index={i + 1} name={SECTION_TITLES[i]}>
-                <Section />
-              </SectionErrorBoundary>
-            </div>
+            <SectionErrorBoundary key={i} index={i + 1} name={SECTION_TITLES[i]}>
+              <Section />
+            </SectionErrorBoundary>
           );
         })}
       </div>
