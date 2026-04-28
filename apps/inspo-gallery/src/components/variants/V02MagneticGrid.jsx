@@ -122,8 +122,8 @@ const Scene = ({ progress, active }) => {
             state.current.mouseAct = 1;
         };
         const onLeave = () => { state.current.mouseAct = 0; };
-        el.addEventListener('mousemove', onMove);
-        el.addEventListener('mouseleave', onLeave);
+        el.addEventListener('pointermove', onMove);
+        el.addEventListener('pointerleave', onLeave);
 
         const clock = new THREE.Clock();
         let raf;
@@ -152,8 +152,8 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
-            el.removeEventListener('mouseleave', onLeave);
+            el.removeEventListener('pointermove', onMove);
+            el.removeEventListener('pointerleave', onLeave);
             renderer.dispose();
             if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
         };

@@ -32,11 +32,11 @@ const Scene = ({ progress, active }) => {
             wrap.style.setProperty('--mx', 0);
             wrap.style.setProperty('--my', 0);
         };
-        wrap.addEventListener('mousemove', onMove);
-        wrap.addEventListener('mouseleave', onLeave);
+        wrap.addEventListener('pointermove', onMove);
+        wrap.addEventListener('pointerleave', onLeave);
         return () => {
-            wrap.removeEventListener('mousemove', onMove);
-            wrap.removeEventListener('mouseleave', onLeave);
+            wrap.removeEventListener('pointermove', onMove);
+            wrap.removeEventListener('pointerleave', onLeave);
         };
     }, []);
 

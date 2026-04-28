@@ -54,6 +54,29 @@ const Scene = ({ progress, active }) => {
         rim.position.set(-5, -2, -3);
         scene.add(rim);
 
+        // Logo plane sitting BEHIND the chrome blobs — guarantees the DS is
+        // always visible even when the metaballs aren't yet in their morph
+        // position. Subtle, behind everything.
+        const logoTex = new THREE.TextureLoader().load(LOGO);
+        logoTex.colorSpace = THREE.SRGBColorSpace;
+        const logoPlane = new THREE.Mesh(
+            new THREE.PlaneGeometry(6.5, 6.5 * 0.4),
+            new THREE.ShaderMaterial({
+                uniforms: { uMap: { value: logoTex } },
+                transparent: true,
+                depthWrite: false,
+                vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+                fragmentShader: `varying vec2 vUv; uniform sampler2D uMap;
+                    void main(){
+                        vec4 t = texture2D(uMap, vUv);
+                        // Render as cool-white with low opacity — sits behind chrome
+                        gl_FragColor = vec4(0.85, 0.92, 0.98, t.a * 0.55);
+                    }`,
+            })
+        );
+        logoPlane.position.z = -1.5;
+        scene.add(logoPlane);
+
         // Backdrop — pure deep neutral, no purple wash
         const bgGeo = new THREE.PlaneGeometry(40, 40);
         const bgMat = new THREE.ShaderMaterial({
@@ -150,6 +173,9 @@ const Scene = ({ progress, active }) => {
             window.removeEventListener('resize', onResize);
             el.removeEventListener('pointermove', onMove);
             mat.dispose();
+            logoTex.dispose();
+            logoPlane.geometry.dispose();
+            logoPlane.material.dispose();
             bg.geometry.dispose(); bg.material.dispose();
             cubes.material.dispose();
             renderer.dispose();

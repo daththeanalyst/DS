@@ -40,8 +40,8 @@ const Scene = ({ progress, active }) => {
             });
             if (state.current.drops.length > 5) state.current.drops.shift();
         };
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
+        canvas.addEventListener('pointermove', onMove);
+        canvas.addEventListener('pointerleave', onLeave);
         canvas.addEventListener('click', onClick);
 
         sampleLogo(LOGO, { step: 1, threshold: 130, targetWidth: 600 }).then((s) => {
@@ -196,8 +196,8 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
-            canvas.removeEventListener('mousemove', onMove);
-            canvas.removeEventListener('mouseleave', onLeave);
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerleave', onLeave);
             canvas.removeEventListener('click', onClick);
         };
     }, []);

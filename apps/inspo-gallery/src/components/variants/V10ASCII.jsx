@@ -44,8 +44,8 @@ const Scene = ({ progress, active }) => {
             state.current.my = e.clientY - r.top;
         };
         const onLeave = () => { state.current.mx = -9999; state.current.my = -9999; };
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
+        canvas.addEventListener('pointermove', onMove);
+        canvas.addEventListener('pointerleave', onLeave);
 
         const start = () => {
             const render = () => {
@@ -123,8 +123,8 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
-            canvas.removeEventListener('mousemove', onMove);
-            canvas.removeEventListener('mouseleave', onLeave);
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerleave', onLeave);
         };
     }, []);
 

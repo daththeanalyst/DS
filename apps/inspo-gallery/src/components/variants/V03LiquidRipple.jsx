@@ -54,8 +54,8 @@ const Scene = ({ progress, active }) => {
             });
             if (state.current.ripples.length > 6) state.current.ripples.shift();
         };
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
+        canvas.addEventListener('pointermove', onMove);
+        canvas.addEventListener('pointerleave', onLeave);
         canvas.addEventListener('click', onClick);
 
         const start = () => {
@@ -131,8 +131,8 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
-            canvas.removeEventListener('mousemove', onMove);
-            canvas.removeEventListener('mouseleave', onLeave);
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerleave', onLeave);
             canvas.removeEventListener('click', onClick);
         };
     }, []);

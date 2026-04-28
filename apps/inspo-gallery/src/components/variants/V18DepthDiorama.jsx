@@ -62,11 +62,11 @@ const Scene = ({ progress, active }) => {
             my.set((e.clientY - r.top) / r.height - 0.5);
         };
         const onLeave = () => { mx.set(0); my.set(0); };
-        wrap.addEventListener('mousemove', onMove);
-        wrap.addEventListener('mouseleave', onLeave);
+        wrap.addEventListener('pointermove', onMove);
+        wrap.addEventListener('pointerleave', onLeave);
         return () => {
-            wrap.removeEventListener('mousemove', onMove);
-            wrap.removeEventListener('mouseleave', onLeave);
+            wrap.removeEventListener('pointermove', onMove);
+            wrap.removeEventListener('pointerleave', onLeave);
         };
     }, [mx, my]);
 

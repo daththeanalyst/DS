@@ -45,8 +45,8 @@ const Scene = ({ progress, active }) => {
             state.current.mx = -9999;
             state.current.lastX = -9999;
         };
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
+        canvas.addEventListener('pointermove', onMove);
+        canvas.addEventListener('pointerleave', onLeave);
 
         // offscreen persistence buffer for the trail
         let trailBuf, trailCtx;
@@ -143,8 +143,8 @@ const Scene = ({ progress, active }) => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
             window.removeEventListener('resize', onResizeBuf);
-            canvas.removeEventListener('mousemove', onMove);
-            canvas.removeEventListener('mouseleave', onLeave);
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerleave', onLeave);
         };
     }, []);
 

@@ -134,8 +134,8 @@ const Scene = ({ progress, active }) => {
             state.current.mouseActive = 1;
         };
         const onLeave = () => { state.current.mouseActive = 0; };
-        el.addEventListener('mousemove', onMove);
-        el.addEventListener('mouseleave', onLeave);
+        el.addEventListener('pointermove', onMove);
+        el.addEventListener('pointerleave', onLeave);
 
         const clock = new THREE.Clock();
         let raf;
@@ -145,9 +145,15 @@ const Scene = ({ progress, active }) => {
             const t = clock.getElapsedTime();
             if (material) {
                 material.uniforms.uTime.value = t;
-                // scroll drives assembly: 0..0.5 = assemble, 0.5..1 = slight disperse
+                // Scroll drives assembly with a long held-shape plateau in the middle:
+                //   0.00–0.20: assemble (chaos → logo)
+                //   0.20–0.85: hold the assembled shape (the visually nicest beat)
+                //   0.85–1.00: gentle disperse
                 const pr = state.current.progress ?? 0;
-                const assembly = pr < 0.5 ? pr * 2 : 1 - (pr - 0.5) * 0.6;
+                let assembly;
+                if (pr < 0.20) assembly = pr * 5;            // 0 → 1 quickly
+                else if (pr < 0.85) assembly = 1;            // long plateau
+                else assembly = 1 - (pr - 0.85) * 2;         // 1 → 0.7
                 material.uniforms.uProgress.value = Math.max(0, Math.min(1, assembly));
                 material.uniforms.uMouse.value.lerp(state.current.mouse, 0.2);
                 material.uniforms.uMouseStrength.value +=
@@ -171,8 +177,8 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
-            el.removeEventListener('mouseleave', onLeave);
+            el.removeEventListener('pointermove', onMove);
+            el.removeEventListener('pointerleave', onLeave);
             renderer.dispose();
             if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
         };

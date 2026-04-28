@@ -150,7 +150,7 @@ const Scene = ({ progress, active }) => {
             state.current.ripples.push({ x, y, t: 0 });
             if (state.current.ripples.length > MAX_RIPPLES) state.current.ripples.shift();
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
         el.addEventListener('click', onClick);
 
         const clock = new THREE.Clock();
@@ -184,7 +184,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             el.removeEventListener('click', onClick);
             mat.dispose();
             mesh.geometry.dispose();

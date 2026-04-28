@@ -39,10 +39,10 @@ const Scene = ({ progress, active }) => {
         };
         const onDown = () => { state.current.mouseDown = true; };
         const onUp = () => { state.current.mouseDown = false; };
-        canvas.addEventListener('mousemove', onMove);
-        canvas.addEventListener('mouseleave', onLeave);
-        canvas.addEventListener('mousedown', onDown);
-        window.addEventListener('mouseup', onUp);
+        canvas.addEventListener('pointermove', onMove);
+        canvas.addEventListener('pointerleave', onLeave);
+        canvas.addEventListener('pointerdown', onDown);
+        window.addEventListener('pointerup', onUp);
 
         sampleLogo(LOGO, { step: 9, threshold: 130, targetWidth: 700 }).then((s) => {
             if (disposed) return;
@@ -213,10 +213,10 @@ const Scene = ({ progress, active }) => {
             disposed = true;
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', resize);
-            window.removeEventListener('mouseup', onUp);
-            canvas.removeEventListener('mousemove', onMove);
-            canvas.removeEventListener('mouseleave', onLeave);
-            canvas.removeEventListener('mousedown', onDown);
+            window.removeEventListener('pointerup', onUp);
+            canvas.removeEventListener('pointermove', onMove);
+            canvas.removeEventListener('pointerleave', onLeave);
+            canvas.removeEventListener('pointerdown', onDown);
         };
     }, []);
 

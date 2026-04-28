@@ -16,25 +16,14 @@ export const VariantShell = ({
     children,
 }) => {
     const { ref, progress, active } = useScrollProgress();
-    const [hasMounted, setHasMounted] = useState(false);
-    const [inView, setInView] = useState(false);
+    // Index.tsx already controls which sections are mounted via RENDER_RADIUS.
+    // The old VariantShell-level lazy-mount via IntersectionObserver was leaving
+    // some sections stuck on "preparing canvas…" forever (intersection event
+    // never fired reliably inside the scroll container). Mount immediately;
+    // the parent already gates whether this VariantShell exists at all.
+    const hasMounted = true;
+    const inView = true;
     const sectionRef = useRef(null);
-
-    useEffect(() => {
-        const el = sectionRef.current;
-        if (!el) return;
-        const obs = new IntersectionObserver(
-            (entries) => {
-                for (const e of entries) {
-                    setInView(e.isIntersecting);
-                    if (e.isIntersecting) setHasMounted(true);
-                }
-            },
-            { rootMargin: '200px 0px', threshold: 0.01 }
-        );
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, []);
 
     // Combine refs (sectionRef for IntersectionObserver, ref from
     // useScrollProgress so the hook tracks the same DOM node).

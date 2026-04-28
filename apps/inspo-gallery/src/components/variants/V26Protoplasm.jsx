@@ -129,17 +129,21 @@ const Scene = ({ progress, active }) => {
         const showQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), showMat);
         showScene.add(showQuad);
 
-        // ---- Seed: paint the logo into the B channel of rtA ---------------
-        const loader = new THREE.TextureLoader();
-        loader.load(LOGO, (logoTex) => {
-            const seedScene = new THREE.Scene();
-            const seedMat = new THREE.ShaderMaterial({
+        // ---- Seed scene (paints the logo into the B channel of rtA) ------
+        // We create the seed pipeline ONCE then re-run it whenever the section
+        // becomes active again — so re-visiting the section restarts the
+        // reaction-diffusion from a fresh logo seed instead of decaying away.
+        let seedScene = null, seedMat = null, seedQuad = null;
+        let logoTexLoaded = null;
+        new THREE.TextureLoader().load(LOGO, (logoTex) => {
+            logoTexLoaded = logoTex;
+            seedScene = new THREE.Scene();
+            seedMat = new THREE.ShaderMaterial({
                 uniforms: { uLogo: { value: logoTex } },
                 vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
                 fragmentShader: `varying vec2 vUv; uniform sampler2D uLogo;
                     void main(){
                         vec2 uv = vUv;
-                        // Aspect-fit logo (assume 16:9 sim, logo wider than tall)
                         vec2 luv = (uv - 0.5) * vec2(1.6, 1.0) + 0.5;
                         if (luv.x < 0. || luv.x > 1. || luv.y < 0. || luv.y > 1.) {
                             gl_FragColor = vec4(1., 0., 0., 1.);
@@ -147,17 +151,22 @@ const Scene = ({ progress, active }) => {
                         }
                         vec4 l = texture2D(uLogo, luv);
                         float v = l.a > 0.1 ? l.r : 0.0;
-                        // start with A=1 everywhere, B = logo
                         gl_FragColor = vec4(1.0, v * 0.55, 0., 1.);
                     }`,
             });
-            const seedQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), seedMat);
+            seedQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), seedMat);
             seedScene.add(seedQuad);
+            // Initial seed
             renderer.setRenderTarget(rtA);
             renderer.render(seedScene, orthoCam);
             renderer.setRenderTarget(null);
-            seedMat.dispose();
         });
+        const reseed = () => {
+            if (!seedScene) return;
+            renderer.setRenderTarget(rtA);
+            renderer.render(seedScene, orthoCam);
+            renderer.setRenderTarget(null);
+        };
 
         const onMove = (e) => {
             const r = el.getBoundingClientRect();
@@ -178,9 +187,22 @@ const Scene = ({ progress, active }) => {
 
         const clock = new THREE.Clock();
         let raf;
+        let wasActive = false;
+        let secondsSinceReseed = 0;
         const tick = () => {
             raf = requestAnimationFrame(tick);
-            if (!state.current.active) return;
+            if (!state.current.active) {
+                wasActive = false;
+                return;
+            }
+            // Re-seed whenever the section becomes active again, OR every ~25s
+            // while active. The Gray-Scott sim eats itself toward equilibrium
+            // otherwise and the user only sees the logo briefly.
+            if (!wasActive) { reseed(); secondsSinceReseed = 0; }
+            wasActive = true;
+            const dt = clock.getDelta();
+            secondsSinceReseed += dt;
+            if (secondsSinceReseed > 25) { reseed(); secondsSinceReseed = 0; }
             const t = clock.getElapsedTime();
             stepMat.uniforms.uMouse.value.copy(state.current.mouse);
             stepMat.uniforms.uDown.value = 0.6 + state.current.down;
@@ -208,6 +230,9 @@ const Scene = ({ progress, active }) => {
             rtA.dispose(); rtB.dispose();
             stepMat.dispose(); showMat.dispose();
             stepQuad.geometry.dispose(); showQuad.geometry.dispose();
+            if (seedMat) seedMat.dispose();
+            if (seedQuad) seedQuad.geometry.dispose();
+            if (logoTexLoaded) logoTexLoaded.dispose();
             renderer.dispose();
             if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
         };

@@ -142,7 +142,7 @@ const Scene = ({ progress, active }) => {
             const y = 1.0 - (e.clientY - r.top) / r.height;
             state.current.mouse.set(x, y);
         };
-        el.addEventListener('mousemove', onMove);
+        el.addEventListener('pointermove', onMove);
 
         const clock = new THREE.Clock();
         let raf;
@@ -183,7 +183,7 @@ const Scene = ({ progress, active }) => {
         return () => {
             cancelAnimationFrame(raf);
             window.removeEventListener('resize', onResize);
-            el.removeEventListener('mousemove', onMove);
+            el.removeEventListener('pointermove', onMove);
             rtA.dispose();
             rtB.dispose();
             advMat.dispose();
