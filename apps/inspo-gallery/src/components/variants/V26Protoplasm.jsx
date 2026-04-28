@@ -117,11 +117,12 @@ const Scene = ({ progress, active }) => {
                     float B = texture2D(uTex, uv).g;
                     float B2 = texture2D(uTex, uv + vec2(0.002, 0.0)).g;
                     float B3 = texture2D(uTex, uv - vec2(0.002, 0.0)).g;
-                    float edge = abs(B2 - B3) * 6.0;
-                    vec3 ink = mix(vec3(0.0, 0.55, 0.95), vec3(0.55, 0.05, 0.85), B);
+                    float edge = abs(B2 - B3) * 4.5;
+                    // Apple Silicon palette: SF blue body → warm cream edge
+                    vec3 ink = mix(vec3(0.18, 0.55, 0.95), vec3(0.95, 0.95, 0.96), B);
                     vec3 col = ink * smoothstep(0.18, 0.55, B);
-                    col += edge * vec3(0.85, 1.0, 1.0) * 0.7;
-                    col += 0.04 * sin(vUv.y * 1200.0 + uTime * 1.5);
+                    col += edge * vec3(0.88, 0.95, 1.0) * 0.45;
+                    // Removed scanline (was 0.04) — was too noisy
                     gl_FragColor = vec4(col, 1.);
                 }`,
         });

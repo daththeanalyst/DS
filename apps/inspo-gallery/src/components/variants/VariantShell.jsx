@@ -1,6 +1,9 @@
 // VariantShell.jsx
 // Provides: full-viewport section, scroll progress, in-view detection (lazy mount),
-// and labels. Children receive { progress, active, inView }.
+// glass info card, and labels. Children receive { progress, active, inView }.
+//
+// Visual language: Apple Silicon — deep neutral background, restrained chrome,
+// frosted-glass info pill, Apple SF blue (#5AC8FA) as the single accent.
 
 import { useEffect, useRef, useState } from 'react';
 import { useScrollProgress } from '@/hooks/useScrollProgress';
@@ -11,7 +14,6 @@ export const VariantShell = ({
     technique,
     hint,
     children,
-    accent = 'primary',
 }) => {
     const { ref, progress, active } = useScrollProgress();
     const [hasMounted, setHasMounted] = useState(false);
@@ -34,21 +36,19 @@ export const VariantShell = ({
         return () => obs.disconnect();
     }, []);
 
-    // Combine refs
+    // Combine refs (sectionRef for IntersectionObserver, ref from
+    // useScrollProgress so the hook tracks the same DOM node).
     const setRefs = (node) => {
         sectionRef.current = node;
         ref.current = node;
     };
-
-    const accentClass = accent === 'primary' ? 'text-primary' : 'text-secondary';
-    const accentBg = accent === 'primary' ? 'bg-primary' : 'bg-secondary';
 
     return (
         <section
             ref={setRefs}
             data-testid={`variant-${String(index).padStart(2, '0')}`}
             id={`variant-${String(index).padStart(2, '0')}`}
-            className="snap-section relative min-h-[100svh] w-full overflow-hidden border-t border-border/30"
+            className="snap-section relative min-h-[100svh] w-full overflow-hidden bg-[#06070a]"
         >
             {/* Canvas area — only mounted after first intersection */}
             <div className="absolute inset-0">
@@ -57,44 +57,50 @@ export const VariantShell = ({
                     : children)}
                 {!hasMounted && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground/50">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/30">
                             preparing canvas…
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* Top-left: index + technique */}
-            <div className="absolute top-6 left-5 sm:left-8 z-10 flex flex-col gap-2 pointer-events-none">
-                <div className="flex items-center gap-3">
-                    <span className={`font-mono text-[10px] uppercase tracking-[0.3em] ${accentClass}`}>
-                        Variant / {String(index).padStart(2, '0')} of 20
+            {/* Top-left: glass info card */}
+            <div className="absolute top-5 left-4 sm:left-6 z-10 pointer-events-none">
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl backdrop-saturate-150 px-4 py-3 max-w-[240px] sm:max-w-xs shadow-[0_4px_24px_-8px_rgba(0,0,0,0.6)]">
+                    <div className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#5ac8fa] shadow-[0_0_8px_rgba(90,200,250,0.55)]" />
+                        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/55">
+                            Variant / {String(index).padStart(2, '0')}
+                        </span>
+                    </div>
+                    <h2 className="mt-1.5 text-[15px] sm:text-base font-semibold tracking-tight text-white/95 leading-tight">
+                        {title}
+                    </h2>
+                    <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.22em] text-white/40 leading-relaxed">
+                        {technique}
                     </span>
-                    <span className={`h-px w-8 ${accentBg}`} />
                 </div>
-                <h2 className="font-grotesk text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-foreground max-w-md leading-tight">
-                    {title}
-                </h2>
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                    {technique}
-                </span>
             </div>
 
-            {/* Bottom hint */}
+            {/* Bottom hint — glass capsule */}
             {hint && (
-                <div className="absolute bottom-6 left-5 sm:left-8 z-10 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground pointer-events-none">
-                    ↳ {hint}
+                <div className="absolute bottom-5 left-4 sm:left-6 z-10 pointer-events-none">
+                    <div className="inline-flex items-center rounded-full border border-white/[0.06] bg-white/[0.03] backdrop-blur-md px-3 py-1.5">
+                        <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/45">
+                            {hint}
+                        </span>
+                    </div>
                 </div>
             )}
 
-            {/* Scroll progress bar — right edge */}
-            <div className="absolute right-5 sm:right-8 top-1/2 -translate-y-1/2 z-10 hidden md:flex flex-col items-center gap-2 pointer-events-none">
-                <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
+            {/* Scroll progress — slim, restrained */}
+            <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-10 hidden md:flex flex-col items-center gap-2 pointer-events-none">
+                <span className="font-mono text-[9px] uppercase tracking-[0.28em] text-white/35">
                     {Math.round(progress * 100).toString().padStart(2, '0')}
                 </span>
-                <div className="relative h-40 w-px bg-foreground/15">
+                <div className="relative h-32 w-px bg-white/10">
                     <div
-                        className={`absolute top-0 left-0 right-0 ${accentBg}`}
+                        className="absolute top-0 left-0 right-0 bg-[#5ac8fa]"
                         style={{ height: `${progress * 100}%` }}
                     />
                 </div>

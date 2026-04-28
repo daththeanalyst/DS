@@ -82,10 +82,10 @@ const Scene = ({ progress, active }) => {
                 liveCtx.translate(cx, cy);
                 liveCtx.rotate(rot);
                 liveCtx.scale(1.0 + 0.12 * Math.sin(t * 1.1), 1.0 + 0.12 * Math.cos(t * 1.1));
-                // glow halo behind
+                // Subtle SF-blue halo (was alpha 0.55 — too saturated)
                 const grad = liveCtx.createRadialGradient(0, 0, 0, 0, 0, targetW * 0.7);
-                grad.addColorStop(0, 'rgba(120, 220, 255, 0.55)');
-                grad.addColorStop(1, 'rgba(120, 220, 255, 0)');
+                grad.addColorStop(0, 'rgba(90, 200, 250, 0.20)');
+                grad.addColorStop(1, 'rgba(90, 200, 250, 0)');
                 liveCtx.fillStyle = grad;
                 liveCtx.fillRect(-targetW, -targetH, targetW * 2, targetH * 2);
                 liveCtx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
@@ -116,18 +116,14 @@ const Scene = ({ progress, active }) => {
                 if (frame) ctx.drawImage(frame, x, 0, B, H, x, 0, B, H);
             }
 
-            // chromatic aberration: re-draw R and B channels offset slightly
+            // Chromatic aberration halved (was 0.18 / ±3px → 0.08 / ±1.5px)
             ctx.globalCompositeOperation = 'lighter';
-            ctx.globalAlpha = 0.18;
-            ctx.drawImage(live, -3 * dpr, 0);
-            ctx.drawImage(live, 3 * dpr, 0);
+            ctx.globalAlpha = 0.08;
+            ctx.drawImage(live, -1.5 * dpr, 0);
+            ctx.drawImage(live, 1.5 * dpr, 0);
             ctx.globalAlpha = 1;
             ctx.globalCompositeOperation = 'source-over';
-
-            // tech HUD overlay (subtle)
-            ctx.fillStyle = 'rgba(180, 220, 255, 0.55)';
-            ctx.font = `${Math.floor(11 * dpr)}px ui-monospace, monospace`;
-            ctx.fillText(`SLITSCAN · DRAG ${drag.toFixed(2)} · HIST ${history.length}/${HISTORY_LEN}`, 12 * dpr, 22 * dpr);
+            // (HUD overlay removed — VariantShell glass card already shows variant + technique)
         };
         raf = requestAnimationFrame(tick);
 

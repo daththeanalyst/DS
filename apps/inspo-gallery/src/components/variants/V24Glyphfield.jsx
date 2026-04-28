@@ -67,7 +67,7 @@ const Scene = ({ progress, active }) => {
         );
         sceneA.add(plane);
 
-        // Subtle accent light pad (pink/cyan radial)
+        // Subtle SF-blue radial accent — no magenta, restrained alpha
         const padGeo = new THREE.PlaneGeometry(20, 20);
         const padMat = new THREE.ShaderMaterial({
             uniforms: { uTime: { value: 0 } },
@@ -78,8 +78,9 @@ const Scene = ({ progress, active }) => {
                 void main(){
                     vec2 p = vUv - 0.5;
                     float r = length(p);
-                    vec3 col = mix(vec3(0.0,0.55,0.95), vec3(0.55,0.15,0.85), p.x+0.5+sin(uTime*0.4)*0.1);
-                    float a = smoothstep(0.7, 0.05, r) * 0.55;
+                    // Single SF-blue (#5AC8FA) accent that breathes very gently
+                    vec3 col = vec3(0.35, 0.78, 0.98);
+                    float a = smoothstep(0.65, 0.08, r) * (0.18 + sin(uTime*0.3)*0.04);
                     gl_FragColor = vec4(col, a);
                 }`,
         });
@@ -100,7 +101,7 @@ const Scene = ({ progress, active }) => {
                 uMouse: { value: new THREE.Vector2(0, 0) },
                 uTime: { value: 0 },
                 uNumGlyphs: { value: GLYPHS.length },
-                uTint: { value: new THREE.Color('hsl(180, 95%, 60%)') },
+                uTint: { value: new THREE.Color(0.35, 0.78, 0.98) }, // SF Blue
             },
             vertexShader: `varying vec2 vUv;
                 void main(){ vUv=uv; gl_Position=vec4(position,1.); }`,
@@ -137,12 +138,13 @@ const Scene = ({ progress, active }) => {
                     vec2 atlasUv = vec2((gIdx + local.x) / uNumGlyphs, local.y);
                     float glyphMask = texture2D(uAtlas, atlasUv).r;
 
-                    // Soft cyan→magenta gradient driven by luminance + time
-                    vec3 col = mix(uTint, vec3(0.95, 0.35, 0.85), L);
-                    col *= 0.6 + 0.6 * glyphMask;
-                    // Subtle scanline shimmer
-                    col += 0.04 * sin(vUv.y * uResolution.y * 0.7 + uTime * 2.0);
-                    gl_FragColor = vec4(col * (0.18 + glyphMask), 1.0);
+                    // Restrained: SF-blue tint → cool white at high luminance
+                    vec3 hi = vec3(0.95, 0.97, 1.0);
+                    vec3 col = mix(uTint, hi, L);
+                    col *= 0.5 + 0.55 * glyphMask;
+                    // Very faint scanline shimmer (was 0.04 → 0.012)
+                    col += 0.012 * sin(vUv.y * uResolution.y * 0.7 + uTime * 1.4);
+                    gl_FragColor = vec4(col * (0.10 + glyphMask), 1.0);
                 }`,
         });
         const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), asciiMat);

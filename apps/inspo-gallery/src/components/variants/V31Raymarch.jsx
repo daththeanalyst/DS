@@ -112,8 +112,10 @@ const Scene = ({ progress, active }) => {
 
                 vec3 envColor(vec3 d){
                     float h = clamp(d.y * 0.5 + 0.5, 0., 1.);
-                    vec3 sky = mix(vec3(0.06, 0.10, 0.18), vec3(0.55, 0.20, 0.85), pow(h, 1.8));
-                    sky += pow(max(0., dot(d, normalize(vec3(0.4, 0.6, 0.4)))), 60.) * vec3(1., 0.9, 0.8) * 0.6;
+                    // Apple-Silicon environment: deep neutral floor → soft cool sky
+                    vec3 sky = mix(vec3(0.025, 0.030, 0.038), vec3(0.18, 0.30, 0.42), pow(h, 1.5));
+                    // Single warm specular highlight (peach), restrained
+                    sky += pow(max(0., dot(d, normalize(vec3(0.4, 0.6, 0.4)))), 80.) * vec3(1.0, 0.78, 0.55) * 0.35;
                     return sky;
                 }
 
@@ -140,13 +142,12 @@ const Scene = ({ progress, active }) => {
                         vec3 refr = refract(rd, n, 1.0 / uIor);
                         vec3 refl = reflect(rd, n);
                         vec3 colRefl = envColor(refl);
-                        vec3 colRefr = envColor(refr) * vec3(0.85, 0.95, 1.05);
+                        vec3 colRefr = envColor(refr) * vec3(0.92, 0.96, 1.02);
                         float fres = pow(1. - max(0., dot(-rd, n)), 3.5);
                         col = mix(colRefr, colRefl, fres);
-                        // Edge glow
-                        col += pow(fres, 1.6) * vec3(0.6, 0.95, 1.0) * 0.6;
-                        // Inner ink
-                        col *= 0.55 + 0.45 * smoothstep(0.6, 1.0, length(n.xy));
+                        // Restrained edge glow (was 0.6 → 0.30, recoloured to SF blue)
+                        col += pow(fres, 1.6) * vec3(0.35, 0.78, 0.98) * 0.30;
+                        col *= 0.6 + 0.4 * smoothstep(0.6, 1.0, length(n.xy));
                     }
                     // vignette
                     col *= 1.0 - 0.45 * length(uv) * 0.4;

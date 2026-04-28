@@ -27,16 +27,15 @@ const Scene = ({ progress, active }) => {
         renderer.setClearColor(0x000000, 0);
         el.appendChild(renderer.domElement);
 
-        // Mercury / cyan PBR
+        // Liquid chrome PBR — neutral silver, no chromatic tint
         const mat = new THREE.MeshPhysicalMaterial({
-            color: 0xeaffff,
-            metalness: 0.9,
-            roughness: 0.18,
-            transmission: 0.0,
+            color: 0xf2f4f7,
+            metalness: 0.95,
+            roughness: 0.22,
             clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-            envMapIntensity: 1.6,
-            emissive: 0x002233,
+            clearcoatRoughness: 0.08,
+            envMapIntensity: 1.2,
+            emissive: 0x000000,
         });
 
         const resolution = IS_MOBILE ? 32 : 56;
@@ -46,16 +45,16 @@ const Scene = ({ progress, active }) => {
         cubes.isolation = 80;
         scene.add(cubes);
 
-        // Lights
-        scene.add(new THREE.AmbientLight(0x1a2a3a, 0.6));
-        const key = new THREE.DirectionalLight(0x9be7ff, 1.4);
+        // Lights — cool key + warm rim, both restrained
+        scene.add(new THREE.AmbientLight(0x1c2026, 0.55));
+        const key = new THREE.DirectionalLight(0xc8e6ff, 1.1);
         key.position.set(4, 4, 5);
         scene.add(key);
-        const rim = new THREE.DirectionalLight(0xb084ff, 0.9);
+        const rim = new THREE.DirectionalLight(0xffd9b8, 0.6); // warm peach rim
         rim.position.set(-5, -2, -3);
         scene.add(rim);
 
-        // Backdrop gradient
+        // Backdrop — pure deep neutral, no purple wash
         const bgGeo = new THREE.PlaneGeometry(40, 40);
         const bgMat = new THREE.ShaderMaterial({
             uniforms: { uTime: { value: 0 } },
@@ -63,13 +62,11 @@ const Scene = ({ progress, active }) => {
             vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
             fragmentShader: `varying vec2 vUv; uniform float uTime;
                 void main(){
-                    vec3 a = vec3(0.02, 0.04, 0.08);
-                    vec3 b = vec3(0.0, 0.1, 0.18);
-                    vec3 c = vec3(0.18, 0.05, 0.22);
-                    float h = vUv.y;
-                    vec3 col = mix(a, b, smoothstep(0., 0.6, h));
-                    col = mix(col, c, smoothstep(0.5, 1.0, h));
-                    col += 0.02 * sin(uTime + vUv.x * 8.0);
+                    // Deep near-black with the faintest cool tilt
+                    vec3 a = vec3(0.018, 0.022, 0.030);
+                    vec3 b = vec3(0.030, 0.038, 0.052);
+                    vec3 col = mix(a, b, smoothstep(0., 1., vUv.y));
+                    col += 0.006 * sin(uTime * 0.4 + vUv.x * 4.0);
                     gl_FragColor = vec4(col, 1.0);
                 }`,
         });

@@ -43,8 +43,11 @@ const Scene = ({ progress, active }) => {
             positions[i * 3 + 1] = y;
             positions[i * 3 + 2] = z;
 
-            const hue = (i / COUNT) * 360;
-            const c = new THREE.Color(`hsl(${(180 + hue * 0.6) % 360}, 90%, 60%)`);
+            // Cool dust palette: 70% near-white, 30% SF-blue tint. No rainbow.
+            const useBlue = Math.random() < 0.30;
+            const c = useBlue
+                ? new THREE.Color(0.35, 0.78, 0.98)
+                : new THREE.Color(0.92 + Math.random() * 0.08, 0.94, 0.96);
             colors[i * 3] = c.r;
             colors[i * 3 + 1] = c.g;
             colors[i * 3 + 2] = c.b;
@@ -76,7 +79,8 @@ const Scene = ({ progress, active }) => {
                     vec2 uv = gl_PointCoord - 0.5;
                     float d = length(uv);
                     float a = smoothstep(0.5, 0., d);
-                    gl_FragColor = vec4(vC * 1.4, a * a);
+                    // Brightness multiplier reduced 1.4 -> 0.9 + alpha softened
+                    gl_FragColor = vec4(vC * 0.95, a * a * 0.7);
                     if (gl_FragColor.a < 0.01) discard;
                 }`,
         });

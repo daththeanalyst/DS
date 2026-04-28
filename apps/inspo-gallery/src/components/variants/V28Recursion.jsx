@@ -61,19 +61,15 @@ const Scene = ({ progress, active }) => {
                 drawBranch(ctx, x, y, -Math.PI / 2 + (s - 2) * 0.04, len0, maxDepth, t, wind, h);
             }
 
-            // overlay grid + logo wordmark glow
+            // DS wordmark — clean white, very subtle SF-blue glow
             ctx.save();
-            ctx.globalAlpha = 0.7;
-            ctx.fillStyle = 'rgba(0,0,0,0.0)';
-            ctx.font = `${Math.floor(h * 0.18)}px ui-sans-serif, system-ui, sans-serif`;
+            ctx.globalAlpha = 0.85;
+            ctx.font = `600 ${Math.floor(h * 0.18)}px ui-sans-serif, system-ui, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            const grad = ctx.createLinearGradient(0, h * 0.3, 0, h * 0.6);
-            grad.addColorStop(0, 'rgba(160, 235, 255, 0.95)');
-            grad.addColorStop(1, 'rgba(120, 90, 255, 0.85)');
-            ctx.fillStyle = grad;
-            ctx.shadowColor = 'rgba(120, 200, 255, 0.5)';
-            ctx.shadowBlur = 18;
+            ctx.fillStyle = 'rgba(245, 247, 250, 0.92)';
+            ctx.shadowColor = 'rgba(90, 200, 250, 0.25)';
+            ctx.shadowBlur = 8;
             ctx.fillText('DS', w / 2, h * 0.45);
             ctx.restore();
         };
@@ -89,14 +85,14 @@ const Scene = ({ progress, active }) => {
             ctx.moveTo(x, y);
             ctx.lineTo(x2, y2);
             ctx.lineWidth = Math.max(0.5, depth * 0.55);
-            // colour shifts from cyan trunk to magenta tips
+            // Single cool-grey tone, brighter at tips. No magenta, no neon.
             const tDepth = depth / 9;
-            const r = 110 + (1 - tDepth) * 110;
-            const g = 200 - (1 - tDepth) * 80;
-            const b = 255 - (1 - tDepth) * 40;
-            ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.25 + tDepth * 0.55})`;
-            ctx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.6)`;
-            ctx.shadowBlur = depth * 1.5;
+            const lightness = 140 + (1 - tDepth) * 70;
+            const tint = `rgba(${lightness}, ${lightness + 16}, ${lightness + 28}, ${0.22 + tDepth * 0.45})`;
+            ctx.strokeStyle = tint;
+            // Glow halved + recoloured to subtle SF-blue (was depth*1.5 with full saturation)
+            ctx.shadowColor = `rgba(90, 200, 250, 0.18)`;
+            ctx.shadowBlur = Math.max(2, depth * 0.7);
             ctx.stroke();
 
             const branching = depth > 2 ? 2 : 3;

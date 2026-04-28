@@ -57,9 +57,10 @@ const Scene = ({ progress, active }) => {
             const ratios = new Float32Array(COUNT); // anisotropy
 
             const SCALE = 11;
-            const c1 = new THREE.Color('hsl(195, 95%, 65%)');
-            const c2 = new THREE.Color('hsl(285, 70%, 65%)');
-            const c3 = new THREE.Color('#ffffff');
+            // Restrained duotone: SF blue → warm peach, white sparkles for accent
+            const c1 = new THREE.Color(0.35, 0.78, 0.98); // #5AC8FA SF blue
+            const c2 = new THREE.Color(1.00, 0.62, 0.42); // warm peach
+            const c3 = new THREE.Color('#fafafc');
 
             for (let i = 0; i < COUNT; i++) {
                 const x = sample.positions[i * 2] * SCALE;
@@ -128,7 +129,8 @@ const Scene = ({ progress, active }) => {
                         uv.y /= vRatio;            // anisotropic Gaussian
                         float d2 = dot(uv, uv);
                         float a = exp(-d2 * 18.0); // Gaussian falloff
-                        gl_FragColor = vec4(vColor * 1.5, a * 0.85);
+                        // Brightness 1.5 -> 1.05 + alpha 0.85 -> 0.6 (less bloom)
+                        gl_FragColor = vec4(vColor * 1.05, a * 0.6);
                         if (gl_FragColor.a < 0.01) discard;
                     }`,
             });

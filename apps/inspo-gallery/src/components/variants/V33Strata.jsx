@@ -28,7 +28,9 @@ const Scene = ({ progress, active }) => {
         const cam = new THREE.PerspectiveCamera(35, el.clientWidth / el.clientHeight, 0.1, 100);
         cam.position.set(0, 0, 9);
 
-        // Backdrop with concentric scope rings
+        // Backdrop — clean Apple-Silicon dark gradient. Removed scope rings
+        // and crosshair (military-HUD vibe was too loud); kept a single
+        // subtle radial glow that breathes very slowly.
         const bg = new THREE.Mesh(
             new THREE.PlaneGeometry(40, 40),
             new THREE.ShaderMaterial({
@@ -38,13 +40,10 @@ const Scene = ({ progress, active }) => {
                     void main(){
                         vec2 p = (vUv - 0.5);
                         float r = length(p);
-                        vec3 col = mix(vec3(0.02, 0.05, 0.10), vec3(0.04, 0.02, 0.10), vUv.y);
-                        // scope rings
-                        float ring = 0.5 + 0.5 * sin(r * 70.0 - uTime * 0.4);
-                        col += smoothstep(0.85, 1.0, ring) * 0.04 * smoothstep(0.5, 0.0, r);
-                        // crosshair
-                        col += smoothstep(0.0015, 0.0, abs(p.x)) * 0.15;
-                        col += smoothstep(0.0015, 0.0, abs(p.y)) * 0.15;
+                        vec3 col = mix(vec3(0.018, 0.022, 0.030), vec3(0.030, 0.038, 0.052), vUv.y);
+                        // Single restrained SF-blue glow, breathing at ~0.05Hz
+                        float glow = smoothstep(0.55, 0.0, r) * (0.04 + 0.015 * sin(uTime * 0.3));
+                        col += glow * vec3(0.20, 0.45, 0.70);
                         gl_FragColor = vec4(col, 1.);
                     }`,
             })
@@ -61,8 +60,12 @@ const Scene = ({ progress, active }) => {
         const baseW = 6, baseH = 6 * 0.4;
         for (let i = 0; i < LAYERS; i++) {
             const t = i / (LAYERS - 1);
-            const hue = 200 + t * 80;
-            const tint = new THREE.Color(`hsl(${hue}, 90%, ${55 + t * 10}%)`);
+            // Restrained gradient: SF blue (front) → cool white (back). No purple wash.
+            const tint = new THREE.Color().lerpColors(
+                new THREE.Color(0.35, 0.78, 0.98), // SF blue front
+                new THREE.Color(0.85, 0.92, 0.98), // cool near-white back
+                t
+            );
             const mat = new THREE.ShaderMaterial({
                 transparent: true,
                 depthWrite: false,
