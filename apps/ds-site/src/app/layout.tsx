@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
-import { BackgroundFx } from "@/components/background-fx";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
       <body>
-        <BackgroundFx />
+        <div aria-hidden className="ds-stage" />
         {children}
       </body>
     </html>

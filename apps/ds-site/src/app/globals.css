@@ -51,26 +51,40 @@ body {
   color: #fff;
 }
 
-/* Animated SVG grain — re-seeded each frame for a living matte surface */
-svg#grain {
+/*
+ * Static matte stage — pure CSS, no JS, no animation.
+ *
+ * Three layers stacked (no banding, no AI feel):
+ *   1. Body fill: flat #0A0A0A
+ *   2. .ds-stage: OKLCH radial vignette — center lifted 4 units, corners 4
+ *      units below base. OKLCH (modern browsers) gives smoother dark blends
+ *      than sRGB; the diff is so small it reads as material depth, not
+ *      gradient.
+ *   3. .ds-stage::after: SVG turbulence noise tile, screen-blended at low
+ *      opacity. Noise dithers the gradient (kills 8-bit banding) AND adds
+ *      "matte material" texture — no visible grain at viewing distance,
+ *      just enough to feel like a physical surface.
+ */
+.ds-stage {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
   z-index: 0;
-  opacity: 0.55;
-  mix-blend-mode: screen;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(0.13 0 0) 0%,
+    oklch(0.06 0 0) 100%
+  );
 }
-
-/* Slow dark waves — pure-black gradients drifting across the page */
-canvas#bgfx {
-  position: fixed;
+.ds-stage::after {
+  content: "";
+  position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
+  background-image: url("/grain.svg");
+  background-size: 220px 220px;
+  background-repeat: repeat;
+  opacity: 0.05;
+  mix-blend-mode: screen;
 }
 
 nav.top, section, footer { position: relative; z-index: 1; }
