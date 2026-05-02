@@ -88,17 +88,6 @@ html, body {
 }
 
 /*
- * Mirrored logo reflection — vertical flip + linear-gradient mask that fades
- * the far end into nothing, mimicking a glass surface beneath the wordmark.
- */
-.ds-reflection {
-  transform: scaleY(-1);
-  opacity: 0.32;
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 72%);
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 72%);
-}
-
-/*
  * Cool radial glow that sits behind the hero logo. Soft, low intensity —
  * adds depth without competing with the wordmark or the reflection.
  */
