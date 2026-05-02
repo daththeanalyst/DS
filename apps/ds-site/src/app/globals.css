@@ -27,8 +27,8 @@ html, body {
 }
 
 ::selection {
-  background: var(--ds-accent);
-  color: var(--ds-ink-950);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
 }
 
 /*
@@ -70,15 +70,15 @@ html, body {
 }
 
 /*
- * Apple Midnight matte stage. Deep navy-black that reads as black in most
- * lighting; one near-imperceptible vertical gradient (top a hair lighter
- * than the bottom) gives just enough depth to feel like a surface rather
- * than a flat fill. No glow, no accent colors — uniform + matte + premium.
+ * Apple Space Black / matte-black stage. Pure neutral grays — R=G=B in
+ * every stop so there's zero color cast. Top reads as Space Gray; bottom
+ * deepens to matte black. One quiet vertical gradient gives just enough
+ * depth to feel like a surface, no glow, no accents.
  */
 .ds-stage {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, #11151F 0%, #0A0D14 100%);
+  background: linear-gradient(180deg, #1A1A1A 0%, #0A0A0A 100%);
 }

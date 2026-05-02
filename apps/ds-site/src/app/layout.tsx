@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-ink-950 text-white font-sans antialiased selection:bg-blue-500/30">
+      <body className="bg-ink-950 text-white font-sans antialiased selection:bg-white/15">
         <div aria-hidden className="ds-stage" />
         <div className="relative z-10">{children}</div>
       </body>
