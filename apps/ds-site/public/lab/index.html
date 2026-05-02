@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DS2 — Matte Black Gradient Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --silver: #A6A6A6;
+      --ghost: #6E6E6E;
+      --hairline: rgba(255,255,255,0.08);
+      --hairline-strong: rgba(255,255,255,0.16);
+    }
+    html, body {
+      height: 100%;
+      background: #050505;
+      color: #F5F5F5;
+      font-family: "Inter", ui-sans-serif, -apple-system, sans-serif;
+      letter-spacing: -0.012em;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { padding: 28px 22px 80px; min-height: 100%; }
+
+    .page-head {
+      max-width: 1240px;
+      margin: 0 auto 24px;
+      padding: 0 4px;
+    }
+    .eyebrow { font-size: 11px; color: var(--ghost); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 6px; }
+    h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+    .subhead { color: var(--silver); font-size: 14px; margin-top: 8px; max-width: 720px; line-height: 1.5; }
+
+    .toolbar {
+      max-width: 1240px;
+      margin: 16px auto 28px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 0 4px;
+    }
+    .toolbar button, .toolbar select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--hairline);
+      color: #F5F5F5;
+      font: inherit;
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .toolbar button:hover { border-color: var(--hairline-strong); background: rgba(255,255,255,0.07); }
+    .toolbar .filter-on { background: #F5F5F5; color: #0A0A0A; border-color: #F5F5F5; }
+    .toolbar .info {
+      margin-left: auto;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      color: var(--ghost);
+    }
+
+    /* Grid of variant tiles */
+    .grid {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .tile {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--hairline);
+      transition: transform 0.18s ease, border-color 0.18s ease;
+      aspect-ratio: 4 / 3;
+    }
+    .tile:hover { border-color: var(--hairline-strong); transform: translateY(-2px); }
+    .tile.selected { border-color: #2997ff; box-shadow: 0 0 0 1px #2997ff; }
+    .tile .surface {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .tile .label {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 14px 14px 12px;
+      z-index: 2;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%);
+    }
+    .tile .label .name {
+      font-size: 13px; font-weight: 600; letter-spacing: -0.012em;
+    }
+    .tile .label .meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      color: var(--silver);
+      margin-top: 3px;
+      letter-spacing: 0;
+      opacity: 0.85;
+    }
+    .tile .badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      z-index: 2;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+      color: #F5F5F5;
+    }
+    .tile .badge.pure   { background: rgba(125,125,135,0.20); }
+    .tile .badge.blue   { background: rgba(70,90,180,0.30); }
+    .tile .badge.violet { background: rgba(120,80,180,0.30); }
+    .tile .badge.teal   { background: rgba(40,140,150,0.28); }
+
+    /* Big preview panel */
+    .preview-panel {
+      max-width: 1240px;
+      margin: 32px auto 0;
+      border-radius: 18px;
+      border: 1px solid var(--hairline);
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-stage {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+    .preview-stage .surface { position: absolute; inset: 0; }
+
+    /* The fake DS2 hero rendered on top, so you see how the wordmark + caption sit on each gradient */
+    .preview-hero {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .preview-hero .wordmark {
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #F5F5F5;
+      line-height: 1;
+    }
+    .preview-hero .tag1 {
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(11px, 1.1vw, 14px);
+      font-weight: 600;
+      color: #F5F5F5;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      padding-left: 0.42em;
+      margin-top: 6px;
+    }
+    .preview-hero .tag2 {
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(9px, 0.9vw, 11px);
+      font-weight: 500;
+      color: var(--silver);
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      padding-left: 0.5em;
+    }
+
+    .preview-meta {
+      padding: 18px 24px;
+      border-top: 1px solid var(--hairline);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      color: var(--silver);
+    }
+    .preview-meta .name {
+      font-family: "Inter", sans-serif;
+      font-weight: 600;
+      color: #F5F5F5;
+      font-size: 14px;
+      letter-spacing: -0.012em;
+    }
+    .preview-meta code {
+      background: rgba(255,255,255,0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      flex: 1;
+      min-width: 240px;
+      color: #C5C5C5;
+    }
+    .preview-meta button {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--hairline-strong);
+      color: #F5F5F5;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+      transition: all 0.18s ease;
+    }
+    .preview-meta button:hover { background: rgba(255,255,255,0.10); }
+    .preview-meta button.copied { background: #2997ff; border-color: #2997ff; }
+
+    /* Live tweak panel */
+    .tweak {
+      max-width: 1240px;
+      margin: 32px auto 0;
+      padding: 22px 24px;
+      border: 1px solid var(--hairline);
+      border-radius: 14px;
+    }
+    .tweak h2 { font-size: 14px; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.012em; }
+    .tweak-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .tweak-grid label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--ghost);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .tweak-grid input, .tweak-grid select {
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--hairline);
+      border-radius: 6px;
+      color: #F5F5F5;
+      font: inherit;
+      font-size: 12px;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .tweak-grid input[type=color] {
+      padding: 4px;
+      height: 36px;
+      cursor: pointer;
+    }
+    .tweak-preview {
+      height: 180px;
+      border-radius: 10px;
+      border: 1px solid var(--hairline);
+    }
+    .tweak code {
+      display: block;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #050505;
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      color: #C5C5C5;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="eyebrow">DS2 / Internal · Gradient Lab</div>
+  <h1>Matte black gradient combinations.</h1>
+  <p class="subhead">
+    Click any tile to load it into the big preview. The wordmark + caption render on top so you can see how the brand reads against each surface. The live tweaker at the bottom lets you build your own from scratch. Generated CSS is copy-paste-ready for <code style="font-family:JetBrains Mono,monospace;font-size:12px">apps/ds-site/src/app/globals.css → .ds-stage</code>.
+  </p>
+</header>
+
+<div class="toolbar">
+  <button data-filter="all" class="filter-on">All</button>
+  <button data-filter="pure">Pure neutral</button>
+  <button data-filter="blue">Cool / blue</button>
+  <button data-filter="violet">Violet</button>
+  <button data-filter="teal">Teal / slate</button>
+  <button data-filter="ref">Real-site refs</button>
+  <span class="info" id="info-count"></span>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<section class="preview-panel">
+  <div class="preview-stage">
+    <div class="surface" id="big-surface"></div>
+    <div class="preview-hero">
+      <div class="wordmark">DS2</div>
+      <div class="tag1">Digital Solutions</div>
+      <div class="tag2">consulting</div>
+    </div>
+  </div>
+  <div class="preview-meta">
+    <div class="name" id="big-name"></div>
+    <code id="big-css"></code>
+    <button id="big-copy">Copy CSS</button>
+  </div>
+</section>
+
+<section class="tweak">
+  <h2>Live tweak — build your own</h2>
+  <div class="tweak-grid">
+    <label>Type
+      <select id="tw-type">
+        <option value="linear">linear-gradient</option>
+        <option value="radial">radial-gradient</option>
+        <option value="conic">conic-gradient</option>
+      </select>
+    </label>
+    <label>Angle (deg)
+      <input type="number" id="tw-angle" value="135" min="0" max="360" />
+    </label>
+    <label>Color 1
+      <input type="color" id="tw-c1" value="#050505" />
+    </label>
+    <label>Stop 1 (%)
+      <input type="number" id="tw-s1" value="0" min="0" max="100" />
+    </label>
+    <label>Color 2
+      <input type="color" id="tw-c2" value="#1A1A1A" />
+    </label>
+    <label>Stop 2 (%)
+      <input type="number" id="tw-s2" value="50" min="0" max="100" />
+    </label>
+    <label>Color 3
+      <input type="color" id="tw-c3" value="#0E1525" />
+    </label>
+    <label>Stop 3 (%)
+      <input type="number" id="tw-s3" value="100" min="0" max="100" />
+    </label>
+  </div>
+  <div class="tweak-preview" id="tw-preview"></div>
+  <code id="tw-css"></code>
+</section>
+
+<script>
+  // ---------------------------------------------------------------------------
+  // Variant catalog. Each entry maps to a real CSS background string.
+  // tag: filter category (pure | blue | violet | teal | ref)
+  // ---------------------------------------------------------------------------
+  const variants = [
+    { name: "DS2 Current", tag: "blue", note: "shipping on ds-site",
+      css: "linear-gradient(135deg, oklch(0.06 0 0) 0%, oklch(0.14 0 0) 50%, oklch(0.13 0.035 250) 100%)" },
+
+    { name: "Pure Matte", tag: "pure", note: "flat, no gradient",
+      css: "#0A0A0A" },
+
+    { name: "Apple Space Gray", tag: "pure", note: "warm-neutral",
+      css: "linear-gradient(180deg, #1A1B1D 0%, #0E0F11 100%)" },
+
+    { name: "Apple Midnight", tag: "blue", note: "subtle blue cast",
+      css: "linear-gradient(180deg, #15192C 0%, #0A0D14 100%)" },
+
+    { name: "Linear App", tag: "ref", note: "near-flat with subtle lift",
+      css: "linear-gradient(180deg, #0E0F13 0%, #08090C 100%)" },
+
+    { name: "Cursor Editor", tag: "ref", note: "radial top-center",
+      css: "radial-gradient(ellipse at top, #1B1D24 0%, #0A0B0E 65%)" },
+
+    { name: "Warp Terminal", tag: "ref", note: "diagonal warm-cool",
+      css: "linear-gradient(160deg, #1A1A1F 0%, #0E0E12 50%, #060608 100%)" },
+
+    { name: "Retool Dashboard", tag: "ref", note: "vertical industrial",
+      css: "linear-gradient(180deg, #1C1F26 0%, #0E1015 100%)" },
+
+    { name: "Vercel Black", tag: "pure", note: "true black",
+      css: "#000000" },
+
+    { name: "Twilight Indigo", tag: "violet", note: "indigo undertone",
+      css: "linear-gradient(135deg, #060809 0%, #18181F 50%, #131727 100%)" },
+
+    { name: "Storm Slate", tag: "blue", note: "very low chroma cool",
+      css: "linear-gradient(135deg, #0A0A0A 0%, #14181C 50%, #0F1418 100%)" },
+
+    { name: "Charcoal", tag: "pure", note: "warm carbon",
+      css: "linear-gradient(180deg, #15151A 0%, #0A0A0C 100%)" },
+
+    { name: "Onyx + Indigo", tag: "violet", note: "deep indigo accent",
+      css: "linear-gradient(135deg, #050505 0%, #1A1A24 50%, #0E1126 100%)" },
+
+    { name: "Cool Carbon", tag: "blue", note: "OKLCH low-chroma cool",
+      css: "linear-gradient(180deg, oklch(0.18 0.02 240) 0%, oklch(0.06 0 0) 100%)" },
+
+    { name: "Atmospheric", tag: "blue", note: "deep radial blue",
+      css: "radial-gradient(ellipse at top, #1A1F32 0%, #0A0D15 60%, #050608 100%)" },
+
+    { name: "Anodized", tag: "pure", note: "diagonal pure neutral",
+      css: "linear-gradient(135deg, #18181A 0%, #0A0A0A 100%)" },
+
+    { name: "Indigo Steel", tag: "violet", note: "violet + dark gray",
+      css: "linear-gradient(160deg, #0F1018 0%, #1A1A22 50%, #050608 100%)" },
+
+    { name: "Petrol", tag: "teal", note: "deep teal-slate",
+      css: "linear-gradient(135deg, #06090B 0%, #14202A 50%, #060A0E 100%)" },
+
+    { name: "Graphite Tilt", tag: "pure", note: "subtle diagonal lift",
+      css: "linear-gradient(120deg, oklch(0.10 0 0) 0%, oklch(0.14 0 0) 50%, oklch(0.06 0 0) 100%)" },
+
+    { name: "Midnight + Slate", tag: "blue", note: "two-tone deep cool",
+      css: "linear-gradient(180deg, #131927 0%, #0A0D14 50%, #14181E 100%)" },
+
+    { name: "Conic Slate", tag: "pure", note: "experimental conic",
+      css: "conic-gradient(from 220deg at 50% 50%, #0A0A0A, #14141A, #0A0A0A, #181820, #0A0A0A)" },
+
+    { name: "Smoked Glass", tag: "blue", note: "low-saturation blue smoke",
+      css: "linear-gradient(135deg, #0C1014 0%, #161B22 50%, #07090C 100%)" },
+  ];
+
+  // ---------------------------------------------------------------------------
+  // Render the grid
+  // ---------------------------------------------------------------------------
+  const grid = document.getElementById("grid");
+  let activeFilter = "all";
+
+  function render() {
+    grid.innerHTML = "";
+    const filtered = activeFilter === "all" ? variants : variants.filter(v => v.tag === activeFilter);
+    document.getElementById("info-count").textContent = `${filtered.length} of ${variants.length}`;
+    for (const v of filtered) {
+      const tile = document.createElement("article");
+      tile.className = "tile";
+      tile.dataset.name = v.name;
+      tile.innerHTML = `
+        <div class="surface" style="background:${v.css}"></div>
+        <span class="badge ${v.tag}">${v.tag}</span>
+        <div class="label">
+          <div class="name">${v.name}</div>
+          <div class="meta">${v.note}</div>
+        </div>
+      `;
+      tile.addEventListener("click", () => selectVariant(v));
+      grid.appendChild(tile);
+    }
+  }
+
+  // Filter buttons
+  document.querySelectorAll(".toolbar button[data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".toolbar button").forEach(b => b.classList.remove("filter-on"));
+      btn.classList.add("filter-on");
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Big preview
+  // ---------------------------------------------------------------------------
+  const bigSurface = document.getElementById("big-surface");
+  const bigName = document.getElementById("big-name");
+  const bigCss = document.getElementById("big-css");
+  const bigCopy = document.getElementById("big-copy");
+
+  function selectVariant(v) {
+    bigSurface.style.background = v.css;
+    bigName.textContent = v.name;
+    bigCss.textContent = v.css;
+    document.querySelectorAll(".tile").forEach(t => t.classList.toggle("selected", t.dataset.name === v.name));
+    document.querySelector(".preview-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  bigCopy.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(`background: ${bigCss.textContent};`);
+    bigCopy.textContent = "Copied";
+    bigCopy.classList.add("copied");
+    setTimeout(() => { bigCopy.textContent = "Copy CSS"; bigCopy.classList.remove("copied"); }, 1400);
+  });
+
+  // ---------------------------------------------------------------------------
+  // Live tweak
+  // ---------------------------------------------------------------------------
+  const twType = document.getElementById("tw-type");
+  const twAngle = document.getElementById("tw-angle");
+  const twC1 = document.getElementById("tw-c1");
+  const twC2 = document.getElementById("tw-c2");
+  const twC3 = document.getElementById("tw-c3");
+  const twS1 = document.getElementById("tw-s1");
+  const twS2 = document.getElementById("tw-s2");
+  const twS3 = document.getElementById("tw-s3");
+  const twPrev = document.getElementById("tw-preview");
+  const twCss = document.getElementById("tw-css");
+
+  function buildTweakCss() {
+    const stops = `${twC1.value} ${twS1.value}%, ${twC2.value} ${twS2.value}%, ${twC3.value} ${twS3.value}%`;
+    if (twType.value === "linear") return `linear-gradient(${twAngle.value}deg, ${stops})`;
+    if (twType.value === "radial") return `radial-gradient(ellipse at center, ${stops})`;
+    if (twType.value === "conic") return `conic-gradient(from ${twAngle.value}deg at 50% 50%, ${twC1.value}, ${twC2.value}, ${twC3.value}, ${twC1.value})`;
+    return "#0A0A0A";
+  }
+  function renderTweak() {
+    const css = buildTweakCss();
+    twPrev.style.background = css;
+    twCss.textContent = `background: ${css};`;
+  }
+  [twType, twAngle, twC1, twC2, twC3, twS1, twS2, twS3].forEach(el => el.addEventListener("input", renderTweak));
+
+  // ---------------------------------------------------------------------------
+  // Boot
+  // ---------------------------------------------------------------------------
+  render();
+  selectVariant(variants[0]); // start on DS2 Current
+  renderTweak();
+</script>
+
+</body>
+</html>
