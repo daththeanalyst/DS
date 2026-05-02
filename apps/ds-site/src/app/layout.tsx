@@ -1,18 +1,34 @@
 import type { Metadata } from "next";
+import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
+import { BackgroundFx } from "@/components/background-fx";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "DS2 — Digital Solutions Consulting",
   description:
-    "Athens–London. Tell us about any digital solution you want us to build.",
+    "A senior team for strategy, engineering, and applied AI. Athens and London.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-ink-950 text-white font-sans antialiased selection:bg-white/15">
-        <div aria-hidden className="ds-stage" />
-        <div className="relative z-10">{children}</div>
+    <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
+      <body>
+        <BackgroundFx />
+        {children}
       </body>
     </html>
   );
