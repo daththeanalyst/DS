@@ -63,97 +63,84 @@
       color: var(--ghost);
     }
 
-    /* Grid of variant tiles */
-    .grid {
+    /* Horizontal swipeable tab strip — replaces the previous tile grid */
+    .strip-shell {
       max-width: 1240px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
+      margin: 24px auto 0;
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      padding: 0 4px;
     }
+    .arrow {
+      flex: 0 0 auto;
+      width: 40px;
+      align-self: stretch;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--hairline);
+      color: #F5F5F5;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .arrow:hover { background: rgba(255,255,255,0.10); border-color: var(--hairline-strong); }
+    .arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+    .strip {
+      flex: 1;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 4px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .strip::-webkit-scrollbar { display: none; }
     .tile {
+      flex: 0 0 auto;
+      width: 150px;
+      height: 100px;
       position: relative;
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
       border: 1px solid var(--hairline);
       transition: transform 0.18s ease, border-color 0.18s ease;
-      aspect-ratio: 4 / 3;
+      scroll-snap-align: start;
     }
     .tile:hover { border-color: var(--hairline-strong); transform: translateY(-2px); }
-    .tile.selected { border-color: #2997ff; box-shadow: 0 0 0 1px #2997ff; }
+    .tile.selected { border-color: #F5F5F5; box-shadow: 0 0 0 1px #F5F5F5; transform: translateY(-2px); }
     .tile .surface {
       position: absolute;
       inset: 0;
       z-index: 1;
     }
-    /* DS2 wordmark + caption rendered on every tile so you see how the brand
-       reads against each surface in the grid, not just in the big preview. */
-    .tile .brand {
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 18px 60px;
-      pointer-events: none;
-    }
-    .tile .brand img {
-      width: min(58%, 180px);
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4));
-    }
-    .tile .brand .tag1 {
-      font-family: "Orbitron", sans-serif;
-      font-size: 9px;
-      font-weight: 600;
-      color: #F5F5F5;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      padding-left: 0.42em;
-      margin-top: 4px;
-    }
-    .tile .brand .tag2 {
-      font-family: "Orbitron", sans-serif;
-      font-size: 7px;
-      font-weight: 500;
-      color: var(--silver);
-      letter-spacing: 0.5em;
-      text-transform: uppercase;
-      padding-left: 0.5em;
-    }
-
     .tile .label {
       position: absolute;
       left: 0; right: 0; bottom: 0;
-      padding: 14px 14px 12px;
-      z-index: 3;
-      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+      padding: 8px 10px 7px;
+      z-index: 2;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
     }
     .tile .label .name {
-      font-size: 13px; font-weight: 600; letter-spacing: -0.012em;
-    }
-    .tile .label .meta {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 10px;
-      color: var(--silver);
-      margin-top: 3px;
-      letter-spacing: 0;
-      opacity: 0.85;
+      font-size: 11px; font-weight: 500; letter-spacing: -0.005em; color: #F5F5F5;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .tile .badge {
       position: absolute;
-      top: 10px; right: 10px;
+      top: 6px; right: 6px;
       z-index: 2;
       font-family: "JetBrains Mono", monospace;
-      font-size: 9px;
+      font-size: 7px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 3px 7px;
+      padding: 2px 5px;
       border-radius: 999px;
       background: rgba(255,255,255,0.10);
       backdrop-filter: blur(8px);
@@ -163,11 +150,12 @@
     .tile .badge.blue   { background: rgba(70,90,180,0.30); }
     .tile .badge.violet { background: rgba(120,80,180,0.30); }
     .tile .badge.teal   { background: rgba(40,140,150,0.28); }
+    .tile .badge.ref    { background: rgba(180,140,80,0.28); }
 
-    /* Big preview panel */
+    /* Big preview panel — sits at the top now */
     .preview-panel {
       max-width: 1240px;
-      margin: 32px auto 0;
+      margin: 0 auto 0;
       border-radius: 18px;
       border: 1px solid var(--hairline);
       overflow: hidden;
@@ -177,6 +165,9 @@
       width: 100%;
       aspect-ratio: 16 / 9;
       position: relative;
+    }
+    @media (max-width: 640px) {
+      .preview-stage { aspect-ratio: 4 / 3; }
     }
     .preview-stage .surface { position: absolute; inset: 0; }
 
@@ -259,7 +250,23 @@
       transition: all 0.18s ease;
     }
     .preview-meta button:hover { background: rgba(255,255,255,0.10); }
-    .preview-meta button.copied { background: #2997ff; border-color: #2997ff; }
+    .preview-meta button.copied { background: #F5F5F5; color: #0A0A0A; border-color: #F5F5F5; }
+    .preview-meta .nav {
+      display: flex;
+      gap: 4px;
+    }
+    .preview-meta .nav button {
+      width: 32px;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+    .preview-meta .pos {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      color: var(--ghost);
+      min-width: 56px;
+      text-align: center;
+    }
 
     /* Live tweak panel */
     .tweak {
@@ -325,21 +332,9 @@
   <div class="eyebrow">DS2 / Internal · Gradient Lab</div>
   <h1>Matte black gradient combinations.</h1>
   <p class="subhead">
-    Click any tile to load it into the big preview. The wordmark + caption render on top so you can see how the brand reads against each surface. The live tweaker at the bottom lets you build your own from scratch. Generated CSS is copy-paste-ready for <code style="font-family:JetBrains Mono,monospace;font-size:12px">apps/ds-site/src/app/globals.css → .ds-stage</code>.
+    The DS2 wordmark renders on every preview so you can see how the brand reads against each surface. Use the arrows (or your keyboard ← →, or swipe on mobile) to flip through. The live tweaker at the bottom lets you build your own. <strong>Copy CSS</strong> to drop a paste-ready line into <code style="font-family:JetBrains Mono,monospace;font-size:12px">apps/ds-site/src/app/globals.css → .ds-stage</code>.
   </p>
 </header>
-
-<div class="toolbar">
-  <button data-filter="all" class="filter-on">All</button>
-  <button data-filter="pure">Pure neutral</button>
-  <button data-filter="blue">Cool / blue</button>
-  <button data-filter="violet">Violet</button>
-  <button data-filter="teal">Teal / slate</button>
-  <button data-filter="ref">Real-site refs</button>
-  <span class="info" id="info-count"></span>
-</div>
-
-<main class="grid" id="grid"></main>
 
 <section class="preview-panel">
   <div class="preview-stage">
@@ -351,11 +346,32 @@
     </div>
   </div>
   <div class="preview-meta">
+    <div class="nav">
+      <button id="prev" aria-label="Previous variant">‹</button>
+      <button id="next" aria-label="Next variant">›</button>
+    </div>
+    <span class="pos" id="big-pos"></span>
     <div class="name" id="big-name"></div>
     <code id="big-css"></code>
     <button id="big-copy">Copy CSS</button>
   </div>
 </section>
+
+<div class="toolbar">
+  <button data-filter="all" class="filter-on">All</button>
+  <button data-filter="pure">Pure neutral</button>
+  <button data-filter="blue">Cool / blue</button>
+  <button data-filter="violet">Violet</button>
+  <button data-filter="teal">Teal / slate</button>
+  <button data-filter="ref">Real-site refs</button>
+  <span class="info" id="info-count"></span>
+</div>
+
+<div class="strip-shell">
+  <button class="arrow" id="strip-prev" aria-label="Scroll left">‹</button>
+  <div class="strip" id="strip"></div>
+  <button class="arrow" id="strip-next" aria-label="Scroll right">›</button>
+</div>
 
 <section class="tweak">
   <h2>Live tweak — build your own</h2>
@@ -467,62 +483,92 @@
   ];
 
   // ---------------------------------------------------------------------------
-  // Render the grid
+  // State + DOM refs
   // ---------------------------------------------------------------------------
-  const grid = document.getElementById("grid");
-  let activeFilter = "all";
-
-  function render() {
-    grid.innerHTML = "";
-    const filtered = activeFilter === "all" ? variants : variants.filter(v => v.tag === activeFilter);
-    document.getElementById("info-count").textContent = `${filtered.length} of ${variants.length}`;
-    for (const v of filtered) {
-      const tile = document.createElement("article");
-      tile.className = "tile";
-      tile.dataset.name = v.name;
-      tile.innerHTML = `
-        <div class="surface" style="background:${v.css}"></div>
-        <span class="badge ${v.tag}">${v.tag}</span>
-        <div class="brand">
-          <img src="/logos/ds2-logo.png" alt="DS2" />
-          <div class="tag1">Digital Solutions</div>
-          <div class="tag2">consulting</div>
-        </div>
-        <div class="label">
-          <div class="name">${v.name}</div>
-          <div class="meta">${v.note}</div>
-        </div>
-      `;
-      tile.addEventListener("click", () => selectVariant(v));
-      grid.appendChild(tile);
-    }
-  }
-
-  // Filter buttons
-  document.querySelectorAll(".toolbar button[data-filter]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".toolbar button").forEach(b => b.classList.remove("filter-on"));
-      btn.classList.add("filter-on");
-      activeFilter = btn.dataset.filter;
-      render();
-    });
-  });
-
-  // ---------------------------------------------------------------------------
-  // Big preview
-  // ---------------------------------------------------------------------------
+  const strip = document.getElementById("strip");
+  const stripPrev = document.getElementById("strip-prev");
+  const stripNext = document.getElementById("strip-next");
   const bigSurface = document.getElementById("big-surface");
   const bigName = document.getElementById("big-name");
   const bigCss = document.getElementById("big-css");
   const bigCopy = document.getElementById("big-copy");
+  const bigPos = document.getElementById("big-pos");
+  const navPrev = document.getElementById("prev");
+  const navNext = document.getElementById("next");
 
-  function selectVariant(v) {
+  let activeFilter = "all";
+  let filtered = variants.slice();
+  let activeIndex = 0;
+
+  function render() {
+    strip.innerHTML = "";
+    filtered = activeFilter === "all" ? variants.slice() : variants.filter(v => v.tag === activeFilter);
+    document.getElementById("info-count").textContent = `${filtered.length} of ${variants.length}`;
+    if (activeIndex >= filtered.length) activeIndex = 0;
+
+    for (let i = 0; i < filtered.length; i++) {
+      const v = filtered[i];
+      const tile = document.createElement("article");
+      tile.className = "tile";
+      tile.dataset.name = v.name;
+      tile.dataset.index = i;
+      tile.innerHTML = `
+        <div class="surface" style="background:${v.css}"></div>
+        <span class="badge ${v.tag}">${v.tag}</span>
+        <div class="label">
+          <div class="name">${v.name}</div>
+        </div>
+      `;
+      tile.addEventListener("click", () => selectByIndex(i));
+      strip.appendChild(tile);
+    }
+    selectByIndex(activeIndex);
+  }
+
+  function selectByIndex(i) {
+    if (filtered.length === 0) return;
+    activeIndex = ((i % filtered.length) + filtered.length) % filtered.length;
+    const v = filtered[activeIndex];
     bigSurface.style.background = v.css;
     bigName.textContent = v.name;
     bigCss.textContent = v.css;
-    document.querySelectorAll(".tile").forEach(t => t.classList.toggle("selected", t.dataset.name === v.name));
-    document.querySelector(".preview-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    bigPos.textContent = `${activeIndex + 1} / ${filtered.length}`;
+    document.querySelectorAll(".tile").forEach(t => {
+      t.classList.toggle("selected", Number(t.dataset.index) === activeIndex);
+    });
+    // Keep the active tile visible in the strip
+    const activeTile = strip.querySelector(".tile.selected");
+    if (activeTile) {
+      activeTile.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
   }
+
+  navPrev.addEventListener("click", () => selectByIndex(activeIndex - 1));
+  navNext.addEventListener("click", () => selectByIndex(activeIndex + 1));
+
+  // Strip-level arrows scroll by ~3 tiles at a time
+  stripPrev.addEventListener("click", () => strip.scrollBy({ left: -480, behavior: "smooth" }));
+  stripNext.addEventListener("click", () => strip.scrollBy({ left: 480, behavior: "smooth" }));
+
+  // Keyboard arrows step through the variants regardless of focus, unless the
+  // user is typing in the live tweak inputs
+  window.addEventListener("keydown", (e) => {
+    const t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "SELECT" || t.tagName === "TEXTAREA")) return;
+    if (e.key === "ArrowLeft")  { selectByIndex(activeIndex - 1); e.preventDefault(); }
+    if (e.key === "ArrowRight") { selectByIndex(activeIndex + 1); e.preventDefault(); }
+  });
+
+  // Filter buttons
+  document.querySelectorAll(".toolbar button[data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".toolbar button[data-filter]").forEach(b => b.classList.remove("filter-on"));
+      btn.classList.add("filter-on");
+      activeFilter = btn.dataset.filter;
+      activeIndex = 0;
+      render();
+    });
+  });
 
   bigCopy.addEventListener("click", async () => {
     await navigator.clipboard.writeText(`background: ${bigCss.textContent};`);
@@ -562,8 +608,7 @@
   // ---------------------------------------------------------------------------
   // Boot
   // ---------------------------------------------------------------------------
-  render();
-  selectVariant(variants[0]); // start on DS2 Current
+  render();         // builds strip + selects index 0 (DS2 Current) by default
   renderTweak();
 </script>
 
