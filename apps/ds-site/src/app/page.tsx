@@ -1,30 +1,24 @@
+import Image from "next/image";
+
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-
-import { Hero } from "@/components/heroes/hero";
-
-import { WhatWeDo } from "@/components/sections/what-we-do";
-import { WhatMakesUsDifferent } from "@/components/sections/what-makes-us-different";
-import { ProcessPreview } from "@/components/sections/process-preview";
-import { Proof } from "@/components/sections/proof";
-import { TrustSignals } from "@/components/sections/trust-signals";
-import { EngageUs } from "@/components/sections/engage-us";
-import { FinalCTA } from "@/components/sections/final-cta";
-import { ScrollReveal } from "@/components/scroll-reveal";
 
 export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen">
-        <Hero />
-        <ScrollReveal><WhatWeDo /></ScrollReveal>
-        <ScrollReveal><WhatMakesUsDifferent /></ScrollReveal>
-        <ScrollReveal><ProcessPreview /></ScrollReveal>
-        <ScrollReveal><Proof /></ScrollReveal>
-        <ScrollReveal><TrustSignals /></ScrollReveal>
-        <ScrollReveal><EngageUs /></ScrollReveal>
-        <ScrollReveal><FinalCTA /></ScrollReveal>
+      <main className="min-h-[100svh] flex flex-col items-center justify-center px-6">
+        <Image
+          src="/logos/logo-white.png"
+          alt="DS2"
+          width={520}
+          height={208}
+          priority
+          className="w-[min(80vw,520px)] h-auto"
+        />
+        <p className="mt-8 text-sm md:text-base uppercase tracking-[0.32em] text-white/60">
+          Digital Solutions
+        </p>
       </main>
       <SiteFooter />
     </>

@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { CanvasBackground } from "@/components/canvas-background";
 
 export const metadata: Metadata = {
-  title: "DS — Digital Solutions Consultancy",
+  title: "DS2 — Digital Solutions",
   description:
-    "Athens–London based. We advise, design, and build digital products — consulting-only, build-only, or end-to-end. Challenge-first, transparent delivery.",
+    "Athens–London. Tell us about any digital solution you want us to build.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-transparent text-white font-sans antialiased selection:bg-blue-500/30 relative">
-        <CanvasBackground />
-        <div className="relative z-10">{children}</div>
+      <body className="bg-ink-950 text-white font-sans antialiased selection:bg-blue-500/30">
+        {children}
       </body>
     </html>
   );
