@@ -1,0 +1,62 @@
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+
+import { HeroShell } from "@/components/heroes/hero-shell";
+import { AnimParticleAssembly } from "@/components/heroes/anim-particle-assembly";
+import { AnimIsosurface } from "@/components/heroes/anim-isosurface";
+import { AnimIronFilings } from "@/components/heroes/anim-iron-filings";
+import { AnimAsciiRain } from "@/components/heroes/anim-ascii-rain";
+import { AnimStrata } from "@/components/heroes/anim-strata";
+
+import { WhatWeDo } from "@/components/sections/what-we-do";
+import { WhatMakesUsDifferent } from "@/components/sections/what-makes-us-different";
+import { ProcessPreview } from "@/components/sections/process-preview";
+import { Proof } from "@/components/sections/proof";
+import { TrustSignals } from "@/components/sections/trust-signals";
+import { EngageUs } from "@/components/sections/engage-us";
+import { FinalCTA } from "@/components/sections/final-cta";
+import { ScrollReveal } from "@/components/scroll-reveal";
+
+const TOTAL = 5;
+
+export default function HomePage() {
+  return (
+    <>
+      <SiteHeader />
+      <main className="min-h-screen">
+        {/* HERO COMPARISON STACK — five candidates, one full-viewport section
+            each. Same DS copy + CTAs overlaid on each animation so we can
+            see how the brand reads against every option. After picking, we
+            keep one and delete the rest. */}
+        <HeroShell candidate={1} total={TOTAL} name="Particle Assembly" technique="WebGL · Shader Particles · Hold-state">
+          <AnimParticleAssembly />
+        </HeroShell>
+        <HeroShell candidate={2} total={TOTAL} name="Isosurface — Mercury Chrome" technique="WebGL · Marching Cubes · PBR">
+          <AnimIsosurface />
+        </HeroShell>
+        <HeroShell candidate={3} total={TOTAL} name="Iron Filings" technique="Canvas 2D · Field-line flow · Ultra-light">
+          <AnimIronFilings />
+        </HeroShell>
+        <HeroShell candidate={4} total={TOTAL} name="ASCII Rain" technique="Canvas 2D · Glyph atlas · Brightness map">
+          <AnimAsciiRain />
+        </HeroShell>
+        <HeroShell candidate={5} total={TOTAL} name="Strata — Depth Layers" technique="WebGL · Z-stacked Parallax · Additive">
+          <AnimStrata />
+        </HeroShell>
+
+        {/* The rest of the site stays here so we can see the transition
+            from a chosen hero into the actual content. Once we pick a
+            winner, only that hero remains and these flow underneath as
+            today. */}
+        <ScrollReveal><WhatWeDo /></ScrollReveal>
+        <ScrollReveal><WhatMakesUsDifferent /></ScrollReveal>
+        <ScrollReveal><ProcessPreview /></ScrollReveal>
+        <ScrollReveal><Proof /></ScrollReveal>
+        <ScrollReveal><TrustSignals /></ScrollReveal>
+        <ScrollReveal><EngageUs /></ScrollReveal>
+        <ScrollReveal><FinalCTA /></ScrollReveal>
+      </main>
+      <SiteFooter />
+    </>
+  );
+}
