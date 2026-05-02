@@ -35,6 +35,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
+      three:
+        specifier: ^0.184.0
+        version: 0.184.0
     devDependencies:
       '@ds/eslint-config':
         specifier: workspace:*
@@ -54,6 +57,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.3
         version: 19.2.3(@types/react@19.2.14)
+      '@types/three':
+        specifier: ^0.184.0
+        version: 0.184.0
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.6.1)

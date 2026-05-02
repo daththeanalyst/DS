@@ -15,9 +15,9 @@ export default function HomePage() {
           height={1024}
           priority
           sizes="(min-width: 768px) 640px, 80vw"
-          className="w-[min(80vw,640px)] h-auto"
+          className="w-[min(80vw,640px)] h-auto drop-shadow-[0_2px_30px_rgba(90,200,250,0.18)]"
         />
-        <p className="mt-8 text-sm md:text-base uppercase tracking-[0.32em] text-white/75">
+        <p className="mt-6 md:mt-8 text-base md:text-xl uppercase tracking-[0.42em] text-white/85 font-medium">
           Digital Solutions
         </p>
       </main>
