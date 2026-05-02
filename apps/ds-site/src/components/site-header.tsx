@@ -7,13 +7,12 @@ export function SiteHeader() {
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-20 md:h-24 flex items-center justify-between">
         <Link href="/" aria-label="DS2 home" className="flex items-center">
           <Image
-            src="/logos/ds2-d.png"
+            src="/logos/ds2-white.png"
             alt="DS2"
-            width={240}
-            height={160}
+            width={384}
+            height={256}
             priority
             className="h-12 md:h-14 w-auto"
-            style={{ mixBlendMode: "screen" }}
           />
         </Link>
         <Link

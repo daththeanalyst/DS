@@ -9,14 +9,13 @@ export default function HomePage() {
       <SiteHeader />
       <main className="min-h-[100svh] flex flex-col items-center justify-center px-6">
         <Image
-          src="/logos/ds2-d.png"
+          src="/logos/ds2-white.png"
           alt="DS2"
-          width={768}
-          height={512}
+          width={1536}
+          height={1024}
           priority
           sizes="(min-width: 768px) 640px, 80vw"
           className="w-[min(80vw,640px)] h-auto"
-          style={{ mixBlendMode: "screen" }}
         />
         <p className="mt-8 text-sm md:text-base uppercase tracking-[0.32em] text-white/75">
           Digital Solutions
