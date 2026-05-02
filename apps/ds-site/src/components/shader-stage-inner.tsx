@@ -17,6 +17,10 @@ export function ShaderStage() {
         width: "100vw",
         height: "100vh",
         zIndex: 0,
+        // Belt-and-suspenders: force grayscale even if the shader's lighting
+        // model leaks any color through. Combined with the .ds-glass-overlay
+        // saturate(0) above, color cannot survive to the user's eye.
+        filter: "grayscale(1) saturate(0)",
       }}
       pointerEvents="none"
       pixelDensity={1}
