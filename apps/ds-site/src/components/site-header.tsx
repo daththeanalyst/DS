@@ -3,21 +3,22 @@ import Link from "next/link";
 
 export function SiteHeader() {
   return (
-    <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-md bg-ink-950/70 border-b border-ink-800/60">
-      <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
+    <header className="fixed top-0 inset-x-0 z-40 backdrop-blur-md bg-ink-950/40 border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 h-20 md:h-24 flex items-center justify-between">
         <Link href="/" aria-label="DS2 home" className="flex items-center">
           <Image
-            src="/logos/logo-white.png"
+            src="/logos/ds2-d.png"
             alt="DS2"
-            width={120}
-            height={48}
+            width={240}
+            height={160}
             priority
-            className="h-7 md:h-8 w-auto"
+            className="h-12 md:h-14 w-auto"
+            style={{ mixBlendMode: "screen" }}
           />
         </Link>
         <Link
           href="/contact"
-          className="rounded-full border border-white/30 text-white px-4 py-1.5 text-sm font-medium hover:bg-white/10 transition-colors"
+          className="rounded-full border border-white/40 text-white px-5 py-2 text-sm md:text-base font-medium hover:bg-white/10 transition-colors"
         >
           Contact
         </Link>
