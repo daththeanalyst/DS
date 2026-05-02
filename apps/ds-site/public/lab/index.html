@@ -87,12 +87,52 @@
       inset: 0;
       z-index: 1;
     }
+    /* DS2 wordmark + caption rendered on every tile so you see how the brand
+       reads against each surface in the grid, not just in the big preview. */
+    .tile .brand {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px 60px;
+      pointer-events: none;
+    }
+    .tile .brand img {
+      width: min(58%, 180px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4));
+    }
+    .tile .brand .tag1 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      color: #F5F5F5;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      padding-left: 0.42em;
+      margin-top: 4px;
+    }
+    .tile .brand .tag2 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 7px;
+      font-weight: 500;
+      color: var(--silver);
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      padding-left: 0.5em;
+    }
+
     .tile .label {
       position: absolute;
       left: 0; right: 0; bottom: 0;
       padding: 14px 14px 12px;
-      z-index: 2;
-      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%);
+      z-index: 3;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
     }
     .tile .label .name {
       font-size: 13px; font-weight: 600; letter-spacing: -0.012em;
@@ -152,13 +192,11 @@
       z-index: 2;
       pointer-events: none;
     }
-    .preview-hero .wordmark {
-      font-family: "Orbitron", sans-serif;
-      font-size: clamp(48px, 7vw, 96px);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: #F5F5F5;
-      line-height: 1;
+    .preview-hero img.wordmark {
+      width: min(48vw, 540px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
     }
     .preview-hero .tag1 {
       font-family: "Orbitron", sans-serif;
@@ -307,7 +345,7 @@
   <div class="preview-stage">
     <div class="surface" id="big-surface"></div>
     <div class="preview-hero">
-      <div class="wordmark">DS2</div>
+      <img class="wordmark" src="/logos/ds2-logo.png" alt="DS2" />
       <div class="tag1">Digital Solutions</div>
       <div class="tag2">consulting</div>
     </div>
@@ -445,6 +483,11 @@
       tile.innerHTML = `
         <div class="surface" style="background:${v.css}"></div>
         <span class="badge ${v.tag}">${v.tag}</span>
+        <div class="brand">
+          <img src="/logos/ds2-logo.png" alt="DS2" />
+          <div class="tag1">Digital Solutions</div>
+          <div class="tag2">consulting</div>
+        </div>
         <div class="label">
           <div class="name">${v.name}</div>
           <div class="meta">${v.note}</div>
