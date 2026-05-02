@@ -70,32 +70,15 @@ html, body {
 }
 
 /*
- * Apple-style matte-black stage. Three quiet layers stacked:
- *   1. soft cool glow lifting from the lower-third (floor light)
- *   2. very subtle cool wash across the upper-half (ambient)
- *   3. slight radial vignette from center to edges
- * No animation. The whole point is calm + premium.
+ * Apple Midnight matte stage. Deep navy-black that reads as black in most
+ * lighting; one near-imperceptible vertical gradient (top a hair lighter
+ * than the bottom) gives just enough depth to feel like a surface rather
+ * than a flat fill. No glow, no accent colors — uniform + matte + premium.
  */
 .ds-stage {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 75vw 55vh at 50% 78%, rgba(90, 200, 250, 0.12), transparent 70%),
-    radial-gradient(ellipse 100vw 50vh at 50% 30%, rgba(122, 200, 255, 0.04), transparent 75%),
-    radial-gradient(ellipse at center, #0a0c12 0%, #03040a 100%);
-}
-
-/*
- * Cool radial glow that sits behind the hero logo. Soft, low intensity —
- * adds depth without competing with the wordmark or the reflection.
- */
-.ds-hero-halo {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(90, 200, 250, 0.20), transparent 70%);
-  filter: blur(40px);
-  pointer-events: none;
+  background: linear-gradient(180deg, #11151F 0%, #0A0D14 100%);
 }

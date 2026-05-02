@@ -9,10 +9,10 @@ export function SiteHeader() {
           <Image
             src="/logos/ds2-white.png"
             alt="DS2"
-            width={384}
-            height={256}
+            width={1131}
+            height={292}
             priority
-            className="h-12 md:h-14 w-auto"
+            className="h-7 md:h-9 w-auto"
           />
         </Link>
         <Link
