@@ -87,6 +87,26 @@ body {
   mix-blend-mode: screen;
 }
 
+/*
+ * Frosted-glass overlay sitting above the live shader. Three jobs:
+ *   1. Heavy backdrop-blur diffuses the shader's specifics (motion + spots
+ *      become a calm undertone, not visible animation)
+ *   2. saturate(0) kills any color cast that leaks through the shader
+ *      (HDRI greens, etc.) — guarantees pure grayscale regardless of upstream
+ *   3. Slight black tint pushes the whole stage matte
+ * The cards/sections (z-index 1) layer on top with their own glass treatment.
+ */
+.ds-glass-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  backdrop-filter: blur(60px) saturate(0) brightness(0.55);
+  -webkit-backdrop-filter: blur(60px) saturate(0) brightness(0.55);
+  background: rgba(10, 10, 10, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
 nav.top, section, footer { position: relative; z-index: 1; }
 
 /* ─── Top Nav ─────────────────────────────────── */

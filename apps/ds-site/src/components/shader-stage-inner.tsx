@@ -41,7 +41,7 @@ export function ShaderStage() {
         color1="#1A1A1A"
         color2="#0E0E0E"
         color3="#050505"
-        reflection={0.05}
+        reflection={0}
         cAzimuthAngle={180}
         cPolarAngle={80}
         cDistance={2.8}

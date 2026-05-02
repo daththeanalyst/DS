@@ -31,6 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div aria-hidden className="ds-stage" />
         {/* Live shader background — takes over once hydrated */}
         <ShaderStage />
+        {/* Frosted glass — diffuses shader, desaturates, matifies */}
+        <div aria-hidden className="ds-glass-overlay" />
         {children}
       </body>
     </html>
