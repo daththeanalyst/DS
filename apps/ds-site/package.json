@@ -13,9 +13,14 @@
   "dependencies": {
     "@ds/tokens": "workspace:*",
     "@ds/ui": "workspace:*",
+    "@react-three/fiber": "^9.6.0",
+    "@shadergradient/react": "^2.4.20",
+    "camera-controls": "^3.1.2",
     "next": "16.2.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "three": "^0.184.0",
+    "three-stdlib": "^2.36.1"
   },
   "devDependencies": {
     "@ds/eslint-config": "workspace:*",
@@ -24,6 +29,7 @@
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
+    "@types/three": "^0.184.0",
     "eslint": "^9.17.0",
     "eslint-config-next": "16.2.4",
     "postcss": "^8.5.1",
