@@ -60,14 +60,14 @@
     }
 
     .hex img {
-      width: 50%;
-      height: 50%;
+      width: 52%;
+      height: 52%;
       object-fit: contain;
-      opacity: 0.22;
+      opacity: 0.18;
       transition: opacity 0.18s ease;
       pointer-events: none;
     }
-    .hex.has-icon:hover img { opacity: 0.85; }
+    .hex.has-icon:hover img { opacity: 0.9; }
 
     .label {
       position: fixed;
@@ -180,9 +180,10 @@
   const stage = document.getElementById("stage");
   const labelEl = document.getElementById("label");
 
-  // Density: probability that any given hex contains an icon.
-  // 0.16 → roughly 1 in 6 hexes shows a service.
-  const ICON_PROB = 0.16;
+  // Every hex gets one of the six service icons. Random pick per hex so the
+  // distribution feels organic; opacity is dialed low so the dense field
+  // doesn't fight the hero.
+  let serviceCursor = 0;
 
   function buildGrid() {
     stage.innerHTML = "";
@@ -231,22 +232,21 @@
           hex.style.opacity = String((dist - 1) / fadeBand);
         }
 
-        if (Math.random() < ICON_PROB) {
-          const svc = services[Math.floor(Math.random() * services.length)];
-          hex.classList.add("has-icon");
-          hex.dataset.service = svc.name;
-          const img = document.createElement("img");
-          img.src = svc.icon;
-          img.alt = svc.name;
-          hex.appendChild(img);
+        // Every hex carries one of the six services. Random pick so the
+        // distribution looks organic rather than tiled / repeating.
+        const svc = services[Math.floor(Math.random() * services.length)];
+        hex.classList.add("has-icon");
+        hex.dataset.service = svc.name;
+        const img = document.createElement("img");
+        img.src = svc.icon;
+        img.alt = svc.name;
+        hex.appendChild(img);
 
-          // Hover (desktop) shows the floating label near the cursor
-          hex.addEventListener("pointerenter", showLabel);
-          hex.addEventListener("pointerleave", hideLabel);
-          hex.addEventListener("pointermove", positionLabel);
-          // Click on touch — toggles a brief sticky label
-          hex.addEventListener("click", toggleLabel);
-        }
+        hex.addEventListener("pointerenter", showLabel);
+        hex.addEventListener("pointerleave", hideLabel);
+        hex.addEventListener("pointermove", positionLabel);
+        hex.addEventListener("click", toggleLabel);
+
         stage.appendChild(hex);
       }
     }
