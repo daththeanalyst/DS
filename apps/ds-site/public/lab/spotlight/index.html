@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — Cursor Spotlight Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: #050505;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, oklch(0.07 0 0) 0%, oklch(0.04 0 0) 100%);
+  }
+  /* Hidden words tiled across the surface — invisible until the spotlight passes over */
+  .field {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: 60px;
+    gap: 14px;
+    padding: 60px 40px;
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.025); /* almost invisible by default */
+  }
+  .field span {
+    font-family: "Orbitron", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-align: center;
+    align-self: center;
+  }
+  /* The cursor spotlight — a CSS mask reveals nearby text */
+  .spotlight {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+      circle 320px at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.04) 40%,
+      transparent 70%
+    );
+    mix-blend-mode: screen;
+    transition: opacity 0.4s ease;
+  }
+  /* When cursor is gone (off the page), spotlight fades out */
+  body.cursor-gone .spotlight { opacity: 0; }
+  /* Boost the field opacity within the spotlight via a second mask */
+  .field-reveal {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: 60px;
+    gap: 14px;
+    padding: 60px 40px;
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.55);
+    -webkit-mask-image: radial-gradient(circle 280px at var(--mx, 50%) var(--my, 50%), black 0%, transparent 70%);
+            mask-image: radial-gradient(circle 280px at var(--mx, 50%) var(--my, 50%), black 0%, transparent 70%);
+    transition: opacity 0.4s ease;
+  }
+  body.cursor-gone .field-reveal { opacity: 0; }
+  .field-reveal span {
+    font-family: "Orbitron", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-align: center;
+    align-self: center;
+  }
+  /* Hero on top — always fully visible */
+  .hero {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    pointer-events: none;
+  }
+  .hero img {
+    width: min(46vw, 440px);
+    height: auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.7));
+  }
+  .hero .tag1 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 600;
+    font-size: clamp(11px, 1.1vw, 14px);
+    color: #F5F5F5;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+  }
+  .hero .tag2 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 500;
+    font-size: clamp(9px, 0.9vw, 11px);
+    color: var(--silver);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+  }
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+</style>
+</head>
+<body class="cursor-gone">
+
+<div class="stage" aria-hidden="true"></div>
+
+<!-- Two passes of the same word grid — base layer at very low contrast,
+     reveal layer at much higher contrast but masked to a circle around the cursor -->
+<div class="field" id="field" aria-hidden="true"></div>
+<div class="field-reveal" id="field-reveal" aria-hidden="true"></div>
+<div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+<div class="hero" id="hero" aria-hidden="true">
+  <img src="/logos/ds2-logo.png" alt="DS2" />
+  <div class="tag1">Digital Solutions</div>
+  <div class="tag2">consulting</div>
+</div>
+
+<div class="lab-info">ds2 / lab / spotlight · <a href="/lab">↩ all variants</a></div>
+
+<script>
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("bgOnly") === "1") {
+    document.getElementById("hero")?.style.setProperty("display", "none");
+    document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  }
+
+  // Words tiled across the surface — a mix of services + brand keywords +
+  // signature phrases. Random shuffle so the layout is organic, not grid-y.
+  const words = [
+    "Websites", "Chatbots", "AI agents", "Data solutions", "ML pipelines", "App development",
+    "Diagnose", "Risk", "Alternatives", "Decision",
+    "Athens", "London", "DS2", "Consulting", "Strategy", "Engineering", "Design", "Delivery",
+    "Honest early", "Senior team", "End to end", "Build only", "Stewardship",
+    "Truth early", "Premium", "Restrained", "Matte",
+  ];
+  // Fill grid with ~4× the unique words so layout feels dense
+  const filled = [];
+  while (filled.length < 80) for (const w of shuffle(words.slice())) filled.push(w);
+
+  const field = document.getElementById("field");
+  const fieldReveal = document.getElementById("field-reveal");
+  for (const w of filled) {
+    const a = document.createElement("span"); a.textContent = w; field.appendChild(a);
+    const b = document.createElement("span"); b.textContent = w; fieldReveal.appendChild(b);
+  }
+
+  // Track cursor + drive the CSS variables
+  function setMouse(x, y) {
+    document.documentElement.style.setProperty("--mx", x + "px");
+    document.documentElement.style.setProperty("--my", y + "px");
+  }
+  setMouse(window.innerWidth / 2, window.innerHeight / 2);
+  window.addEventListener("pointermove", e => {
+    document.body.classList.remove("cursor-gone");
+    setMouse(e.clientX, e.clientY);
+  });
+  window.addEventListener("pointerleave", () => document.body.classList.add("cursor-gone"));
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+})();
+</script>
+
+</body>
+</html>

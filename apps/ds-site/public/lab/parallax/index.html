@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — Vision Pro Parallax Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: #0A0A0A;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  /* Static matte gradient stage — same DS2 palette */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, oklch(0.06 0 0) 0%, oklch(0.13 0 0) 50%, oklch(0.13 0.035 250) 100%);
+  }
+  /* The 3D tilt scene */
+  .scene {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1400px;
+    pointer-events: none;
+  }
+  .deck {
+    transform-style: preserve-3d;
+    transition: transform 0.08s linear;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  /* Each layer sits at a different translateZ for parallax depth */
+  .deck img.wordmark {
+    width: min(48vw, 540px);
+    height: auto;
+    transform: translateZ(70px);
+    filter: drop-shadow(0 14px 36px rgba(0,0,0,0.55));
+  }
+  .deck .tag1 {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(11px, 1.1vw, 14px);
+    font-weight: 600;
+    color: #F5F5F5;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+    transform: translateZ(40px);
+  }
+  .deck .tag2 {
+    font-family: "Orbitron", sans-serif;
+    font-size: clamp(9px, 0.9vw, 11px);
+    font-weight: 500;
+    color: var(--silver);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+    transform: translateZ(30px);
+  }
+  /* Soft cool ring, deepest layer — hint of depth behind the wordmark */
+  .deck .halo {
+    position: absolute;
+    width: min(60vw, 640px);
+    aspect-ratio: 1.35 / 1;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(122, 200, 255, 0.06) 0%, transparent 60%);
+    filter: blur(28px);
+    transform: translateZ(-30px);
+    pointer-events: none;
+  }
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+</style>
+</head>
+<body>
+
+<div class="stage" aria-hidden="true"></div>
+
+<div class="scene" aria-hidden="true">
+  <div class="deck" id="deck">
+    <span class="halo"></span>
+    <img class="wordmark" src="/logos/ds2-logo.png" alt="DS2" />
+    <div class="tag1">Digital Solutions</div>
+    <div class="tag2">consulting</div>
+  </div>
+</div>
+
+<div class="lab-info">ds2 / lab / parallax · <a href="/lab">↩ all variants</a></div>
+
+<script>
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("bgOnly") === "1") {
+    document.querySelector(".scene")?.style.setProperty("display", "none");
+    document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  }
+
+  const deck = document.getElementById("deck");
+  const MAX_TILT = 8;     // degrees — keep restrained
+  const SMOOTH = 0.10;    // lerp factor — lower = smoother
+
+  let targetX = 0, targetY = 0;
+  let currentX = 0, currentY = 0;
+
+  function onMove(x, y) {
+    const w = window.innerWidth, h = window.innerHeight;
+    const cx = w / 2, cy = h / 2;
+    targetX = -((y - cy) / cy) * MAX_TILT;  // tilt up when cursor goes up
+    targetY = ((x - cx) / cx) * MAX_TILT;   // tilt right when cursor goes right
+  }
+  window.addEventListener("pointermove", e => onMove(e.clientX, e.clientY));
+  window.addEventListener("pointerleave", () => { targetX = 0; targetY = 0; });
+
+  function frame() {
+    currentX += (targetX - currentX) * SMOOTH;
+    currentY += (targetY - currentY) * SMOOTH;
+    deck.style.transform = `rotateX(${currentX.toFixed(2)}deg) rotateY(${currentY.toFixed(2)}deg)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

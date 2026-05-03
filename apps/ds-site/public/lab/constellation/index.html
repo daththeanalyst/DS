@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — Service Constellation Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: #060606;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, oklch(0.06 0 0) 0%, oklch(0.13 0 0) 50%, oklch(0.13 0.035 250) 100%);
+  }
+  /* SVG layer with the connection lines + nodes */
+  svg.constellation {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+  }
+  /* Faint baseline lines: visible at low opacity by default. */
+  svg.constellation line.edge {
+    stroke: rgba(255,255,255,0.10);
+    stroke-width: 1;
+    transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+  }
+  svg.constellation line.edge.active {
+    stroke: rgba(255,255,255,0.55);
+    stroke-width: 1.4;
+  }
+  svg.constellation circle.node-bg {
+    fill: rgba(255,255,255,0.025);
+    stroke: rgba(255,255,255,0.08);
+    stroke-width: 1;
+    transition: fill 0.25s ease, stroke 0.25s ease;
+  }
+  svg.constellation g.node:hover circle.node-bg,
+  svg.constellation g.node.active circle.node-bg {
+    fill: rgba(255,255,255,0.10);
+    stroke: rgba(255,255,255,0.30);
+  }
+  /* Nodes themselves are wrapped in <foreignObject> so we can use real <img> + label */
+  .node-html {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  .node-html img {
+    width: 64%;
+    height: 64%;
+    object-fit: contain;
+    opacity: 0.85;
+    transition: opacity 0.25s ease;
+  }
+  .node-html .name {
+    position: absolute;
+    bottom: -28px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--silver);
+    white-space: nowrap;
+    opacity: 0.75;
+    transition: opacity 0.25s ease, color 0.25s ease;
+  }
+  .node-html:hover img,
+  .node-html.active img { opacity: 1; }
+  .node-html:hover .name,
+  .node-html.active .name { opacity: 1; color: #F5F5F5; }
+
+  /* Centered DS2 mark */
+  .center-mark {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .center-mark img {
+    width: min(28vw, 280px);
+    height: auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+  }
+  .center-mark .tag1 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 600;
+    font-size: clamp(10px, 0.9vw, 12px);
+    color: #F5F5F5;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+  }
+  .center-mark .tag2 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 500;
+    font-size: clamp(8px, 0.75vw, 10px);
+    color: var(--silver);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+  }
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+</style>
+</head>
+<body>
+
+<div class="stage" aria-hidden="true"></div>
+
+<svg class="constellation" id="svg" aria-hidden="true"></svg>
+
+<div class="center-mark" id="center-mark" aria-hidden="true">
+  <img src="/logos/ds2-logo.png" alt="DS2" />
+  <div class="tag1">Digital Solutions</div>
+  <div class="tag2">consulting</div>
+</div>
+
+<div class="lab-info">ds2 / lab / constellation · <a href="/lab">↩ all variants</a></div>
+
+<script>
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("bgOnly") === "1") {
+    document.getElementById("center-mark")?.style.setProperty("display", "none");
+    document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  }
+
+  // Six services arranged around a central wordmark. Polar layout — each
+  // service sits on a circle of radius R, at evenly spaced angles, then
+  // pushed slightly outward / inward by its theme weight.
+  const services = [
+    { id: "websites",         name: "Websites",         icon: "/icons/websites.png",         angle: -90 },
+    { id: "chatbots",         name: "Chatbots",         icon: "/icons/chatbots.png",         angle: -30 },
+    { id: "ai-agents",        name: "AI agents",        icon: "/icons/ai-agents.png",        angle:  30 },
+    { id: "ml-pipelines",     name: "ML pipelines",     icon: "/icons/ml-pipelines.png",     angle:  90 },
+    { id: "data-solutions",   name: "Data solutions",   icon: "/icons/data-solutions.png",   angle: 150 },
+    { id: "app-development",  name: "App development",  icon: "/icons/app-development.png",  angle: 210 },
+  ];
+
+  // Connection map — each service points to its conceptual peers. Lines fade
+  // in when the source or target is hovered.
+  const edges = [
+    ["chatbots", "ai-agents"],         // AI → conversational
+    ["ai-agents", "ml-pipelines"],     // agent intelligence comes from models
+    ["ai-agents", "data-solutions"],   // agents query data
+    ["ml-pipelines", "data-solutions"],// data feeds models
+    ["websites", "chatbots"],          // chat lives on a site
+    ["websites", "app-development"],   // shared customer surfaces
+    ["chatbots", "app-development"],   // chat lives in apps too
+    // every service is also tied to the centre
+    ["__center", "websites"], ["__center", "chatbots"], ["__center", "ai-agents"],
+    ["__center", "ml-pipelines"], ["__center", "data-solutions"], ["__center", "app-development"],
+  ];
+
+  const svg = document.getElementById("svg");
+  const NODE_SIZE = 92;
+
+  function layout() {
+    svg.innerHTML = "";
+    const W = window.innerWidth, H = window.innerHeight;
+    const cx = W / 2, cy = H / 2;
+    const isMobile = W < 640;
+    const R = Math.min(W, H) * (isMobile ? 0.32 : 0.30);
+
+    const positions = { __center: { x: cx, y: cy } };
+    for (const s of services) {
+      const a = (s.angle * Math.PI) / 180;
+      positions[s.id] = { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+    }
+
+    // Render edges first (behind nodes)
+    for (const [a, b] of edges) {
+      const p1 = positions[a], p2 = positions[b];
+      if (!p1 || !p2) continue;
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", p1.x); line.setAttribute("y1", p1.y);
+      line.setAttribute("x2", p2.x); line.setAttribute("y2", p2.y);
+      line.setAttribute("class", "edge");
+      line.dataset.from = a; line.dataset.to = b;
+      svg.appendChild(line);
+    }
+
+    // Render nodes
+    for (const s of services) {
+      const p = positions[s.id];
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("class", "node");
+      g.dataset.id = s.id;
+
+      const bg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      bg.setAttribute("cx", p.x); bg.setAttribute("cy", p.y);
+      bg.setAttribute("r", NODE_SIZE / 2);
+      bg.setAttribute("class", "node-bg");
+      g.appendChild(bg);
+
+      const fo = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+      fo.setAttribute("x", p.x - NODE_SIZE / 2);
+      fo.setAttribute("y", p.y - NODE_SIZE / 2);
+      fo.setAttribute("width", NODE_SIZE);
+      fo.setAttribute("height", NODE_SIZE);
+      fo.setAttribute("style", "overflow:visible");
+      fo.innerHTML = `
+        <div class="node-html" data-id="${s.id}">
+          <img src="${s.icon}" alt="${s.name}" />
+          <div class="name">${s.name}</div>
+        </div>`;
+      g.appendChild(fo);
+      svg.appendChild(g);
+    }
+
+    // Hover wiring — when an .node-html is hovered, light up its connected edges
+    document.querySelectorAll(".node-html").forEach(el => {
+      el.addEventListener("pointerenter", () => activate(el.dataset.id));
+      el.addEventListener("pointerleave", () => deactivate());
+      el.addEventListener("click", () => {
+        // sticky toggle on touch
+        if (el.classList.contains("active")) { el.classList.remove("active"); deactivate(); }
+        else { activate(el.dataset.id, true); }
+      });
+    });
+  }
+
+  function activate(id, sticky) {
+    deactivate();
+    document.querySelectorAll(".node-html").forEach(n => {
+      if (n.dataset.id === id) n.classList.add("active");
+    });
+    document.querySelectorAll("svg line.edge").forEach(line => {
+      if (line.dataset.from === id || line.dataset.to === id) line.classList.add("active");
+    });
+  }
+  function deactivate() {
+    document.querySelectorAll(".node-html.active").forEach(n => n.classList.remove("active"));
+    document.querySelectorAll("svg line.edge.active").forEach(l => l.classList.remove("active"));
+  }
+
+  layout();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layout, 150);
+  });
+})();
+</script>
+
+</body>
+</html>
