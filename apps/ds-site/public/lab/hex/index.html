@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DS2 — Hex Grid Background Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A;
+      --silver: #A6A6A6;
+      --ghost: #6E6E6E;
+      --hairline: rgba(255,255,255,0.08);
+    }
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: #F5F5F5;
+      font-family: "Inter", ui-sans-serif, sans-serif;
+      letter-spacing: -0.012em;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden; /* prototype is fullscreen-only */
+    }
+
+    /* ─── Hex stage — fills viewport, sits behind everything ─── */
+    .stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none; /* let pointer events through to individual hexes */
+      background: linear-gradient(
+        135deg,
+        oklch(0.06 0 0) 0%,
+        oklch(0.13 0 0) 50%,
+        oklch(0.13 0.035 250) 100%
+      );
+    }
+
+    .hex {
+      position: absolute;
+      pointer-events: auto;
+      width: 100px;
+      height: 115px; /* ~ 100 * 2/√3 — pointy-top hex */
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      background: rgba(255,255,255,0.020);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+    .hex.has-icon { cursor: pointer; }
+    .hex:hover {
+      background: rgba(255,255,255,0.055);
+      transform: scale(1.04);
+      z-index: 5;
+    }
+
+    .hex img {
+      width: 50%;
+      height: 50%;
+      object-fit: contain;
+      opacity: 0.22;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+    .hex.has-icon:hover img { opacity: 0.85; }
+
+    .label {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--hairline);
+      color: #F5F5F5;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 7px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      letter-spacing: 0;
+      opacity: 0;
+      transform: translate(-50%, calc(-100% - 14px));
+      transition: opacity 0.16s ease;
+    }
+    .label.show { opacity: 1; }
+
+    /* ─── Floating hero on top — to test how the wordmark reads ─── */
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .hero img {
+      width: min(46vw, 440px);
+      height: auto;
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.7));
+    }
+    .hero .tag1 {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 600;
+      font-size: clamp(11px, 1.1vw, 14px);
+      color: #F5F5F5;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      padding-left: 0.42em;
+    }
+    .hero .tag2 {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 500;
+      font-size: clamp(9px, 0.9vw, 11px);
+      color: var(--silver);
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      padding-left: 0.5em;
+    }
+
+    /* ─── Tiny lab strip floating bottom-right ─── */
+    .lab-info {
+      position: fixed;
+      bottom: 12px;
+      right: 12px;
+      z-index: 6;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10px;
+      color: var(--ghost);
+      background: rgba(10,10,10,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--hairline);
+      padding: 6px 10px;
+      border-radius: 999px;
+      letter-spacing: 0;
+    }
+    .lab-info a { color: var(--silver); text-decoration: none; }
+    .lab-info a:hover { color: #F5F5F5; }
+
+    /* Touch / smaller screens — labels show on tap (handled in JS) */
+    @media (max-width: 640px) {
+      .hex { width: 84px; height: 97px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="stage" id="stage" aria-hidden="true"></div>
+
+<div class="hero" aria-hidden="true">
+  <img src="/logos/ds2-logo.png" alt="DS2" />
+  <div class="tag1">Digital Solutions</div>
+  <div class="tag2">consulting</div>
+</div>
+
+<div class="label" id="label"></div>
+
+<div class="lab-info">
+  ds2 / lab / hex prototype · <a href="/lab">↩ all variants</a>
+</div>
+
+<script>
+(() => {
+  const services = [
+    { name: "Websites",         icon: "/icons/websites.png" },
+    { name: "Chatbots",         icon: "/icons/chatbots.png" },
+    { name: "AI agents",        icon: "/icons/ai-agents.png" },
+    { name: "Data solutions",   icon: "/icons/data-solutions.png" },
+    { name: "ML pipelines",     icon: "/icons/ml-pipelines.png" },
+    { name: "App development",  icon: "/icons/app-development.png" },
+  ];
+
+  const stage = document.getElementById("stage");
+  const labelEl = document.getElementById("label");
+
+  // Density: probability that any given hex contains an icon.
+  // 0.16 → roughly 1 in 6 hexes shows a service.
+  const ICON_PROB = 0.16;
+
+  function buildGrid() {
+    stage.innerHTML = "";
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const isMobile = W < 640;
+    const hexW = isMobile ? 84 : 100;
+    const hexH = hexW * 2 / Math.sqrt(3); // pointy-top
+    const horiz = hexW;
+    const vert  = hexH * 0.75;
+
+    const cols = Math.ceil(W / horiz) + 2;
+    const rows = Math.ceil(H / vert) + 2;
+
+    // Hero clear-zone: an ellipse around viewport center where hexes don't
+    // render (or fade out). Sized to clear the logo + caption with a margin.
+    const heroX = W / 2;
+    const heroY = H / 2;
+    const heroRx = isMobile ? Math.min(W * 0.42, 220) : Math.min(W * 0.30, 360);
+    const heroRy = isMobile ? 150 : 200;
+    const fadeBand = 0.22; // 22% extra past the edge that fades in
+
+    for (let r = 0; r < rows; r++) {
+      const xOff = (r % 2) * (hexW / 2);
+      for (let c = 0; c < cols; c++) {
+        const x = c * horiz + xOff - hexW / 2;
+        const y = r * vert - hexH / 2;
+        const cx = x + hexW / 2;
+        const cy = y + hexH / 2;
+
+        // Normalised distance from hero center (1 = at the ellipse edge)
+        const dx = (cx - heroX) / heroRx;
+        const dy = (cy - heroY) / heroRy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 1) continue; // inside the clear zone — skip entirely
+
+        const hex = document.createElement("div");
+        hex.className = "hex";
+        hex.style.left = x + "px";
+        hex.style.top  = y + "px";
+        hex.style.width = hexW + "px";
+        hex.style.height = hexH + "px";
+
+        // Soft fade band at the inner edge so the boundary doesn't read as a hard cut
+        if (dist < 1 + fadeBand) {
+          hex.style.opacity = String((dist - 1) / fadeBand);
+        }
+
+        if (Math.random() < ICON_PROB) {
+          const svc = services[Math.floor(Math.random() * services.length)];
+          hex.classList.add("has-icon");
+          hex.dataset.service = svc.name;
+          const img = document.createElement("img");
+          img.src = svc.icon;
+          img.alt = svc.name;
+          hex.appendChild(img);
+
+          // Hover (desktop) shows the floating label near the cursor
+          hex.addEventListener("pointerenter", showLabel);
+          hex.addEventListener("pointerleave", hideLabel);
+          hex.addEventListener("pointermove", positionLabel);
+          // Click on touch — toggles a brief sticky label
+          hex.addEventListener("click", toggleLabel);
+        }
+        stage.appendChild(hex);
+      }
+    }
+  }
+
+  let stickyTimer = 0;
+
+  function showLabel(e) {
+    labelEl.textContent = e.currentTarget.dataset.service;
+    labelEl.classList.add("show");
+    positionLabel(e);
+  }
+  function hideLabel() {
+    if (stickyTimer) return; // a click is keeping it up
+    labelEl.classList.remove("show");
+  }
+  function positionLabel(e) {
+    labelEl.style.left = e.clientX + "px";
+    labelEl.style.top  = e.clientY + "px";
+  }
+  function toggleLabel(e) {
+    showLabel(e);
+    clearTimeout(stickyTimer);
+    stickyTimer = window.setTimeout(() => {
+      stickyTimer = 0;
+      labelEl.classList.remove("show");
+    }, 1400);
+  }
+
+  // Build on load + on resize (with debounce)
+  buildGrid();
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildGrid, 150);
+  });
+})();
+</script>
+
+</body>
+</html>
