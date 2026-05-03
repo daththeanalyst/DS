@@ -415,6 +415,12 @@
   // tag: filter category (pure | blue | violet | teal | ref)
   // ---------------------------------------------------------------------------
   const variants = [
+    { name: "Hex Grid (interactive)", tag: "ref", note: "live icons + hover labels",
+      kind: "iframe",
+      src: "/lab/hex?bgOnly=1",
+      // gradient used only as the strip thumbnail since an iframe is too heavy at thumb size
+      css: "linear-gradient(135deg, oklch(0.06 0 0) 0%, oklch(0.13 0 0) 50%, oklch(0.13 0.035 250) 100%)" },
+
     { name: "Anodized Curves (image)", tag: "ref", note: "rendered matte bg PNG",
       css: "url('/backgrounds/anodized-curves.png') center/cover no-repeat, #050505" },
 
@@ -532,14 +538,24 @@
     if (filtered.length === 0) return;
     activeIndex = ((i % filtered.length) + filtered.length) % filtered.length;
     const v = filtered[activeIndex];
-    bigSurface.style.background = v.css;
+    if (v.kind === "iframe") {
+      bigSurface.style.background = "";
+      bigSurface.innerHTML = `<iframe src="${v.src}" title="${v.name}" style="position:absolute;inset:0;width:100%;height:100%;border:0;" loading="lazy"></iframe>`;
+      bigCss.textContent = `iframe → ${v.src}`;
+      bigCopy.disabled = true;
+      bigCopy.textContent = "iframe variant";
+    } else {
+      bigSurface.innerHTML = "";
+      bigSurface.style.background = v.css;
+      bigCss.textContent = v.css;
+      bigCopy.disabled = false;
+      bigCopy.textContent = "Copy CSS";
+    }
     bigName.textContent = v.name;
-    bigCss.textContent = v.css;
     bigPos.textContent = `${activeIndex + 1} / ${filtered.length}`;
     document.querySelectorAll(".tile").forEach(t => {
       t.classList.toggle("selected", Number(t.dataset.index) === activeIndex);
     });
-    // Keep the active tile visible in the strip
     const activeTile = strip.querySelector(".tile.selected");
     if (activeTile) {
       activeTile.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });

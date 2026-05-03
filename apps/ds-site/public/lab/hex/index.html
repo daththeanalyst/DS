@@ -154,7 +154,7 @@
 
 <div class="stage" id="stage" aria-hidden="true"></div>
 
-<div class="hero" aria-hidden="true">
+<div class="hero" id="hero" aria-hidden="true">
   <img src="/logos/ds2-logo.png" alt="DS2" />
   <div class="tag1">Digital Solutions</div>
   <div class="tag2">consulting</div>
@@ -168,6 +168,14 @@
 
 <script>
 (() => {
+  // ?bgOnly=1 hides the hero + lab-info chip so this page can be iframed
+  // into /lab as a clean background-only variant
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("bgOnly") === "1") {
+    document.getElementById("hero")?.style.setProperty("display", "none");
+    document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  }
+
   const services = [
     { name: "Websites",         icon: "/icons/websites.png" },
     { name: "Chatbots",         icon: "/icons/chatbots.png" },
