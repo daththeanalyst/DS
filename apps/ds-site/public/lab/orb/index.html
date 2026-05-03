@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — Black Orb / Singularity Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: #000;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  /* The shader canvas fills the viewport behind everything */
+  #orb-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
+  /* Soft vignette so the orb feels framed */
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 90%);
+  }
+  /* Optional technical overlays (recreate the original section's chrome) */
+  .hud-bottom {
+    position: fixed;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .hud-corner {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 5;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+</style>
+</head>
+<body>
+
+<canvas id="orb-canvas" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="hud-corner" id="hud-corner">EVENT.HORIZON r₀ = 0.10</div>
+<div class="hud-bottom" id="hud-bottom">SINGULARITY — GRAV. LENSING</div>
+
+<div class="lab-info" id="lab-info">ds2 / lab / orb · <a href="/lab">↩ all variants</a></div>
+
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js";
+
+// ─── bgOnly mode: hide the HUD overlays so /lab can iframe just the orb ──
+const params = new URLSearchParams(window.location.search);
+if (params.get("bgOnly") === "1") {
+  document.getElementById("hud-corner").style.display = "none";
+  document.getElementById("hud-bottom").style.display = "none";
+  document.getElementById("lab-info").style.display = "none";
+}
+
+// ─── Scene setup ─────────────────────────────────────────────────────────
+const canvas = document.getElementById("orb-canvas");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.setClearColor(0x000000, 1);
+
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+// Logo as the lensed texture — gets warped by the gravity well
+const tex = new THREE.TextureLoader().load("/logos/ds2-logo.png");
+tex.colorSpace = THREE.SRGBColorSpace;
+tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+
+const uniforms = {
+  uTex:    { value: tex },
+  uTime:   { value: 0 },
+  uMouse:  { value: new THREE.Vector2(0, 0) },
+  uAspect: { value: 1 },
+};
+
+const material = new THREE.ShaderMaterial({
+  uniforms,
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 1.0);
+    }
+  `,
+  // Fragment shader ported from inspo-gallery Section16 VORTEX. Renders a
+  // gravitational-lensing singularity: a black event horizon at the center,
+  // a glowing accretion disk around it, and the DS2 logo getting warped by
+  // the lensing as if pulled toward the singularity. Cursor controls the
+  // position of the orb within the viewport.
+  fragmentShader: `
+    precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uTex;
+    uniform float uTime;
+    uniform vec2 uMouse;
+    uniform float uAspect;
+
+    void main() {
+      vec2 c = vec2(0.5) + uMouse * 0.5;
+      vec2 d = vUv - c;
+      d.x *= uAspect;
+      float r = length(d);
+      float angle = atan(d.y, d.x);
+
+      // gravitational swirl + lensing
+      float swirl = 1.5 / (r * r + 0.05);
+      angle += swirl * 0.04 + uTime * 0.4;
+      float warp = 1.0 - exp(-r * 2.5);
+      float nr = mix(r, warp * 0.45, 0.6);
+
+      vec2 sampleUv = c + vec2(cos(angle), sin(angle)) * nr;
+      sampleUv.x = (sampleUv.x - c.x) / uAspect + c.x;
+
+      // Logo placement (square in center)
+      vec2 logoUv = (sampleUv - 0.5) / 0.55 + 0.5;
+      vec4 logo = vec4(0.0);
+      if (logoUv.x > 0.0 && logoUv.x < 1.0 && logoUv.y > 0.0 && logoUv.y < 1.0) {
+        logo = texture2D(uTex, logoUv);
+      }
+
+      // Accretion disk glow
+      float disk = exp(-pow(r * 6.0 - 1.5, 2.0)) * (0.6 + 0.4 * sin(angle * 8.0 + uTime * 3.0));
+      vec3 hot = mix(vec3(1.0, 0.4, 0.0), vec3(1.0, 0.9, 0.6), disk);
+      vec3 col = hot * disk;
+
+      // Event horizon — pure black core
+      float horizon = smoothstep(0.12, 0.08, r);
+      col = mix(col, vec3(0.0), horizon);
+
+      // Logo on top, lensed and faded inside the horizon
+      col = mix(col, logo.rgb, logo.a * (1.0 - horizon));
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `,
+});
+
+const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+scene.add(quad);
+
+// ─── Cursor + resize handling ────────────────────────────────────────────
+const targetMouse = new THREE.Vector2(0, 0);
+function resize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  uniforms.uAspect.value = w / h;
+}
+resize();
+window.addEventListener("resize", resize);
+window.addEventListener("pointermove", (e) => {
+  // Convert client coords to normalised [-0.5, 0.5] (y flipped, matches the
+  // R3F convention the original section used)
+  const x = (e.clientX / window.innerWidth) * 2 - 1;
+  const y = -((e.clientY / window.innerHeight) * 2 - 1);
+  targetMouse.set(x * 0.5, y * 0.5);
+});
+window.addEventListener("pointerleave", () => {
+  targetMouse.set(0, 0);
+});
+
+// ─── Render loop ─────────────────────────────────────────────────────────
+const clock = new THREE.Clock();
+function tick() {
+  uniforms.uTime.value = clock.getElapsedTime();
+  uniforms.uMouse.value.lerp(targetMouse, 0.05);
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+</script>
+
+</body>
+</html>
