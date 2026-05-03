@@ -309,6 +309,10 @@ h2.section-title em {
   display: block;
   margin-bottom: 10px;
 }
+.svc-icon--lg {
+  width: 102px;
+  height: 102px;
+}
 .svc-icon img { width: 100%; height: 100%; display: block; object-fit: contain; }
 
 .svc-num {

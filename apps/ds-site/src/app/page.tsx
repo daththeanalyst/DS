@@ -74,8 +74,8 @@ export default function HomePage() {
             </article>
 
             <article className="svc">
-              <div className="svc-icon">
-                <Image src="/icons/ai-agents.png" alt="" width={144} height={144} />
+              <div className="svc-icon svc-icon--lg">
+                <Image src="/icons/ai-agents.png" alt="" width={204} height={204} />
               </div>
               <div className="svc-num">03 — AI agents</div>
               <h3>Multi-step autonomous workflows that actually finish.</h3>
@@ -92,8 +92,8 @@ export default function HomePage() {
             </article>
 
             <article className="svc">
-              <div className="svc-icon">
-                <Image src="/icons/ml-pipelines.png" alt="" width={144} height={144} />
+              <div className="svc-icon svc-icon--lg">
+                <Image src="/icons/ml-pipelines.png" alt="" width={204} height={204} />
               </div>
               <div className="svc-num">05 — ML pipelines</div>
               <h3>From raw data to served prediction.</h3>
