@@ -57,14 +57,7 @@ export default function HomePage() {
           <div className="services">
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="5" y="7" width="30" height="22" rx="2" />
-                  <path d="M5 13h30" />
-                  <circle cx="9" cy="10" r="0.7" fill="currentColor" />
-                  <circle cx="12" cy="10" r="0.7" fill="currentColor" />
-                  <path d="M14 33h12" />
-                  <path d="M20 29v4" />
-                </svg>
+                <Image src="/icons/websites.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">01 — Websites</div>
               <h3>Marketing and product sites in Next.js / React.</h3>
@@ -73,12 +66,7 @@ export default function HomePage() {
 
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M7 9h20a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4H17l-6 5v-5H7a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4z" />
-                  <circle cx="13" cy="17.5" r="1" fill="currentColor" />
-                  <circle cx="19" cy="17.5" r="1" fill="currentColor" />
-                  <circle cx="25" cy="17.5" r="1" fill="currentColor" />
-                </svg>
+                <Image src="/icons/chatbots.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">02 — Chatbots</div>
               <h3>Production LLM assistants, not toy demos.</h3>
@@ -87,14 +75,7 @@ export default function HomePage() {
 
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="20" cy="20" r="4" />
-                  <circle cx="8" cy="8" r="2.5" />
-                  <circle cx="32" cy="8" r="2.5" />
-                  <circle cx="8" cy="32" r="2.5" />
-                  <circle cx="32" cy="32" r="2.5" />
-                  <path d="M10 10l7 7M30 10l-7 7M10 30l7-7M30 30l-7-7" />
-                </svg>
+                <Image src="/icons/ai-agents.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">03 — AI agents</div>
               <h3>Multi-step autonomous workflows that actually finish.</h3>
@@ -103,17 +84,7 @@ export default function HomePage() {
 
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 33V20" />
-                  <path d="M13 33V14" />
-                  <path d="M21 33V8" />
-                  <path d="M29 33V17" />
-                  <path d="M5 33h32" />
-                  <circle cx="5" cy="20" r="1.4" fill="currentColor" />
-                  <circle cx="13" cy="14" r="1.4" fill="currentColor" />
-                  <circle cx="21" cy="8" r="1.4" fill="currentColor" />
-                  <circle cx="29" cy="17" r="1.4" fill="currentColor" />
-                </svg>
+                <Image src="/icons/data-solutions.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">04 — Data solutions</div>
               <h3>Bring us a dataset, we tell you what it actually says.</h3>
@@ -122,15 +93,7 @@ export default function HomePage() {
 
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <ellipse cx="10" cy="10" rx="5" ry="2.5" />
-                  <path d="M5 10v6c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-6" />
-                  <path d="M5 16v6c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-6" />
-                  <path d="M15 18l5 4 5-4" />
-                  <path d="M20 22v-6" />
-                  <circle cx="30" cy="22" r="5" />
-                  <path d="M30 19v6M27 22h6" />
-                </svg>
+                <Image src="/icons/ml-pipelines.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">05 — ML pipelines</div>
               <h3>From raw data to served prediction.</h3>
@@ -139,12 +102,7 @@ export default function HomePage() {
 
             <article className="svc">
               <div className="svc-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="12" y="4" width="16" height="32" rx="3" />
-                  <path d="M12 9h16" />
-                  <path d="M12 31h16" />
-                  <circle cx="20" cy="33.5" r="0.9" fill="currentColor" />
-                </svg>
+                <Image src="/icons/app-development.png" alt="" width={144} height={144} />
               </div>
               <div className="svc-num">06 — App development</div>
               <h3>Native iOS and Android, cross-platform when it fits.</h3>
