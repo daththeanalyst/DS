@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — Liquid Sheet Hero Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    width: 100%;
+    background: #050505;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* The 2D liquid plane — fullscreen WebGL canvas */
+  #fluid-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+  }
+
+  /* Dark vignette over the fluid so edges feel framed */
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 95%);
+  }
+
+  /* Hero content on top — DS2 wordmark + caption */
+  .hero {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    pointer-events: none;
+  }
+  .hero img {
+    width: min(46vw, 440px);
+    height: auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.7));
+  }
+  .hero .tag1 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 600;
+    font-size: clamp(11px, 1.1vw, 14px);
+    color: #F5F5F5;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+  }
+  .hero .tag2 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 500;
+    font-size: clamp(9px, 0.9vw, 11px);
+    color: var(--silver);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+  }
+
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+
+  .hint {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    animation: fade-in 1.5s 0.5s forwards;
+  }
+  @keyframes fade-in { to { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<canvas id="fluid-canvas"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="hint">move cursor across the sheet</div>
+
+<div class="hero" id="hero" aria-hidden="true">
+  <img src="/logos/ds2-logo.png" alt="DS2" />
+  <div class="tag1">Digital Solutions</div>
+  <div class="tag2">consulting</div>
+</div>
+
+<div class="lab-info">ds2 / lab / liquid-sheet · <a href="/lab">↩ all variants</a></div>
+
+<script type="module">
+// bgOnly mode hides the hero overlay so /lab can iframe just the sheet
+const params = new URLSearchParams(window.location.search);
+if (params.get("bgOnly") === "1") {
+  document.getElementById("hero")?.style.setProperty("display", "none");
+  document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  document.querySelector(".hint")?.style.setProperty("display", "none");
+}
+
+// Pavel Dobryakov's WebGL Fluid Simulation, served via jsDelivr.
+// Same engine used on countless premium sites — Stripe-Pay-style ink-on-water.
+import WebGLFluid from "https://cdn.jsdelivr.net/npm/webgl-fluid@0.3.7/build/webgl-fluid.js";
+
+const canvas = document.getElementById("fluid-canvas");
+
+// Tuned for DS2 brand: monochrome silver on matte black, restrained motion,
+// no rainbow, no bloom. Cursor causes the "ink" to spread across the sheet.
+WebGLFluid(canvas, {
+  IMMEDIATE: true,
+  TRIGGER: "hover",            // spreads on cursor hover, not just click
+  SIM_RESOLUTION: 128,
+  DYE_RESOLUTION: 1024,
+  CAPTURE_RESOLUTION: 512,
+  DENSITY_DISSIPATION: 1.6,    // ink fades over ~3 seconds
+  VELOCITY_DISSIPATION: 0.6,   // motion calms slowly
+  PRESSURE: 0.8,
+  PRESSURE_ITERATIONS: 20,
+  CURL: 18,                    // mild rotational curl, less chaotic than default 30
+  SPLAT_RADIUS: 0.18,
+  SPLAT_FORCE: 4500,
+  SHADING: true,
+  COLORFUL: false,             // KEY: no rainbow cycling
+  COLOR_UPDATE_SPEED: 0,
+  PAUSED: false,
+  BACK_COLOR: { r: 10, g: 10, b: 12 },
+  TRANSPARENT: false,
+  BLOOM: false,                // keep restrained
+  SUNRAYS: false,
+});
+
+// Auto-drop a few liquid splatters on page load so the sheet "wakes up"
+// even before the user moves their cursor.
+function autoDrop() {
+  // Synthesise pointer events to make the lib think the cursor moved
+  const drops = [
+    { x: 0.5, y: 0.3, delay: 600 },
+    { x: 0.5, y: 0.5, delay: 1100 },
+    { x: 0.7, y: 0.6, delay: 1500 },
+    { x: 0.3, y: 0.7, delay: 1900 },
+  ];
+  for (const d of drops) {
+    setTimeout(() => {
+      const cx = canvas.width * d.x;
+      const cy = canvas.height * d.y;
+      // Send synthetic pointer events through the canvas so the lib's hover
+      // trigger picks them up
+      const down = new PointerEvent("pointerdown", { clientX: cx, clientY: cy, pointerType: "mouse", bubbles: true });
+      const move1 = new PointerEvent("pointermove", { clientX: cx + 30, clientY: cy + 30, pointerType: "mouse", bubbles: true });
+      const up = new PointerEvent("pointerup", { clientX: cx + 30, clientY: cy + 30, pointerType: "mouse", bubbles: true });
+      canvas.dispatchEvent(down);
+      canvas.dispatchEvent(move1);
+      canvas.dispatchEvent(up);
+    }, d.delay);
+  }
+}
+autoDrop();
+</script>
+
+</body>
+</html>
