@@ -52,7 +52,7 @@
   .deck img.wordmark {
     width: min(48vw, 540px);
     height: auto;
-    transform: translateZ(70px);
+    transform: translateZ(140px);
     filter: drop-shadow(0 14px 36px rgba(0,0,0,0.55));
   }
   .deck .tag1 {
@@ -63,7 +63,7 @@
     letter-spacing: 0.42em;
     text-transform: uppercase;
     padding-left: 0.42em;
-    transform: translateZ(40px);
+    transform: translateZ(80px);
   }
   .deck .tag2 {
     font-family: "Orbitron", sans-serif;
@@ -73,7 +73,7 @@
     letter-spacing: 0.5em;
     text-transform: uppercase;
     padding-left: 0.5em;
-    transform: translateZ(30px);
+    transform: translateZ(60px);
   }
   /* Soft cool ring, deepest layer — hint of depth behind the wordmark */
   .deck .halo {
@@ -83,7 +83,7 @@
     border-radius: 50%;
     background: radial-gradient(ellipse, rgba(122, 200, 255, 0.06) 0%, transparent 60%);
     filter: blur(28px);
-    transform: translateZ(-30px);
+    transform: translateZ(-60px);
     pointer-events: none;
   }
   .lab-info {
@@ -127,8 +127,8 @@
   }
 
   const deck = document.getElementById("deck");
-  const MAX_TILT = 8;     // degrees — keep restrained
-  const SMOOTH = 0.10;    // lerp factor — lower = smoother
+  const MAX_TILT = 16;    // degrees — visible but still restrained
+  const SMOOTH = 0.12;    // lerp factor
 
   let targetX = 0, targetY = 0;
   let currentX = 0, currentY = 0;

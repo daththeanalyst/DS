@@ -194,19 +194,32 @@
   ];
 
   const svg = document.getElementById("svg");
-  const NODE_SIZE = 92;
 
   function layout() {
     svg.innerHTML = "";
     const W = window.innerWidth, H = window.innerHeight;
     const cx = W / 2, cy = H / 2;
     const isMobile = W < 640;
-    const R = Math.min(W, H) * (isMobile ? 0.32 : 0.30);
+    const NODE_SIZE = isMobile ? 72 : 92;
+
+    // Elliptical ring. Two constraints in tension:
+    //   1. Inner edge must clear the central wordmark + caption stack. When
+    //      iframed in /lab, the parent overlays a 540px logo, so the ring's
+    //      inner edge needs to sit at least ~340px out horizontally.
+    //   2. Outer edge must stay inside the viewport so no node clips off.
+    // Use independent Rx/Ry so the ring can stretch wider than tall on
+    // typical 16:9 screens.
+    const minRx = isMobile ? 200 : 360;
+    const minRy = isMobile ? 180 : 240;
+    const maxRx = W / 2 - NODE_SIZE / 2 - 24;
+    const maxRy = H / 2 - NODE_SIZE / 2 - 40; // extra room for the label below the icon
+    const Rx = Math.min(maxRx, Math.max(minRx, W * 0.34));
+    const Ry = Math.min(maxRy, Math.max(minRy, H * 0.34));
 
     const positions = { __center: { x: cx, y: cy } };
     for (const s of services) {
       const a = (s.angle * Math.PI) / 180;
-      positions[s.id] = { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) };
+      positions[s.id] = { x: cx + Rx * Math.cos(a), y: cy + Ry * Math.sin(a) };
     }
 
     // Render edges first (behind nodes)

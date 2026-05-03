@@ -38,49 +38,53 @@
       radial-gradient(ellipse at center, oklch(0.10 0 0) 0%, oklch(0.04 0 0) 100%);
   }
   /*
-   * Layer 2 — a soft, large specular highlight that follows the cursor with
-   * easing. Mix-blend-mode: screen lifts the surface where the highlight is
-   * without ever overshooting white.
+   * Specular streak — a single diagonal line of light that sweeps across the
+   * polished surface as the cursor moves. Two layers stacked: a wide soft
+   * halo line (slow lerp, lots of blur) and a thin bright core line (fast
+   * lerp, tight) so the streak feels like a polished surface catching ambient
+   * light, not a wand. Both at fixed 62° rotation — the angle of a glancing
+   * reflection from an off-frame upper-left light source.
    */
-  .shine {
+  .shine, .shine-core {
     position: fixed;
-    z-index: 1;
+    left: 50%; top: 50%;
     pointer-events: none;
-    width: 720px;
-    height: 720px;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.20) 0%,
-      rgba(255, 255, 255, 0.10) 18%,
-      rgba(255, 255, 255, 0.04) 38%,
-      transparent 60%
-    );
-    transform: translate(-50%, -50%);
     will-change: left, top;
     mix-blend-mode: screen;
-    filter: blur(8px);
+    transform-origin: 50% 50%;
     transition: opacity 0.3s ease;
   }
-  /* tiny bright core — the actual mirror catch-light */
-  .shine-core {
-    position: fixed;
-    z-index: 2;
-    pointer-events: none;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.18) 25%,
-      transparent 60%
+  .shine {
+    z-index: 1;
+    width: 200vmax;
+    height: 240px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 38%,
+      rgba(255,255,255,0.08) 45%,
+      rgba(255,255,255,0.28) 50%,
+      rgba(255,255,255,0.08) 55%,
+      transparent 62%,
+      transparent 100%
     );
-    transform: translate(-50%, -50%);
-    will-change: left, top;
-    mix-blend-mode: screen;
-    filter: blur(2px);
-    transition: opacity 0.3s ease;
+    filter: blur(28px);
+    transform: translate(-50%, -50%) rotate(62deg);
+  }
+  .shine-core {
+    z-index: 2;
+    width: 200vmax;
+    height: 60px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 46%,
+      rgba(255,255,255,0.55) 50%,
+      transparent 54%,
+      transparent 100%
+    );
+    filter: blur(3px);
+    transform: translate(-50%, -50%) rotate(62deg);
   }
   body.cursor-gone .shine,
   body.cursor-gone .shine-core { opacity: 0; }
