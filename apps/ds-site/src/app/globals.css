@@ -45,11 +45,6 @@ body {
   pointer-events: none;
   opacity: 0.55;
 }
-body::before {
-  content: ""; position: fixed; inset: 0; z-index: 0;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(10,10,10,0.55) 70%);
-  pointer-events: none;
-}
 nav.top, section, footer { position: relative; z-index: 1; }
 
 /* Top Nav */
@@ -233,28 +228,28 @@ h2.section-title em { font-style: normal; color: var(--silver); }
 }
 .svc:hover::after { transform: scaleX(1); }
 
-/* ── How we work — manifesto ── */
-.how-manifesto { max-width: 1180px; margin: 0 auto; padding: 0 8px; }
+/* ── How we work — compact manifesto ── */
+.how-manifesto { max-width: 980px; margin: 0 auto; padding: 0 8px; }
 .manifesto-row {
   display: grid;
-  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
-  gap: 0 64px;
-  padding: 96px 0 100px;
+  grid-template-columns: minmax(120px, 160px) minmax(0, 1fr);
+  gap: 0 44px;
+  padding: 40px 0 44px;
   border-top: 1px solid var(--hairline);
   align-items: start;
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 1s cubic-bezier(0.22,0.61,0.36,1),
-              transform 1s cubic-bezier(0.22,0.61,0.36,1);
+  transform: translateY(18px);
+  transition: opacity 0.8s cubic-bezier(0.22,0.61,0.36,1),
+              transform 0.8s cubic-bezier(0.22,0.61,0.36,1);
   position: relative;
 }
-.manifesto-row:first-child { border-top: none; padding-top: 32px; }
-.manifesto-row:last-child { padding-bottom: 64px; }
+.manifesto-row:first-child { border-top: none; padding-top: 16px; }
+.manifesto-row:last-child { padding-bottom: 32px; }
 .manifesto-row.in { opacity: 1; transform: translateY(0); }
-.manifesto-num-wrap { position: relative; padding-top: 4px; }
+.manifesto-num-wrap { position: relative; padding-top: 2px; }
 .manifesto-num {
   font-family: var(--font-orbitron), "Orbitron", sans-serif;
-  font-size: clamp(72px, 10vw, 132px);
+  font-size: clamp(48px, 6.4vw, 84px);
   font-weight: 200;
   line-height: 0.88;
   letter-spacing: -0.045em;
@@ -266,32 +261,32 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   display: block;
 }
 .manifesto-rule {
-  margin-top: 22px; width: 64px; height: 1px;
+  margin-top: 14px; width: 48px; height: 1px;
   background: linear-gradient(90deg, var(--white) 0%, var(--hairline-strong) 100%);
   opacity: 0.55;
 }
 .manifesto-tag {
-  margin-top: 14px;
+  margin-top: 10px;
   font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
-  font-size: 10.5px;
+  font-size: 10px;
   letter-spacing: 0.22em;
   color: var(--ghost);
   text-transform: uppercase;
 }
-.manifesto-content { display: flex; flex-direction: column; gap: 26px; padding-top: 14px; max-width: 660px; }
+.manifesto-content { display: flex; flex-direction: column; gap: 14px; padding-top: 6px; max-width: 640px; }
 .manifesto-title {
-  font-size: clamp(28px, 3.4vw, 44px);
+  font-size: clamp(20px, 2.2vw, 28px);
   font-weight: 500;
-  letter-spacing: -0.026em;
-  line-height: 1.05;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
   color: var(--white);
   text-wrap: balance;
   margin: 0;
 }
 .manifesto-title em { font-style: italic; font-weight: 400; color: var(--silver); letter-spacing: -0.018em; }
 .manifesto-body {
-  font-size: 17px;
-  line-height: 1.62;
+  font-size: 14.5px;
+  line-height: 1.55;
   color: var(--silver);
   text-wrap: pretty;
   font-weight: 300;
@@ -302,22 +297,22 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-top: 14px;
-  margin-top: 8px;
+  padding-top: 10px;
+  margin-top: 4px;
   border-top: 1px dashed var(--hairline);
   font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ghost);
   letter-spacing: 0.04em;
   line-height: 1.5;
 }
 .manifesto-aside::before { content: "//"; color: rgba(255,255,255,0.22); flex-shrink: 0; }
 @media (max-width: 860px) {
-  .manifesto-row { grid-template-columns: 1fr; gap: 24px; padding: 64px 0 68px; }
-  .manifesto-row:first-child { padding-top: 24px; }
-  .manifesto-num { font-size: 76px; }
+  .manifesto-row { grid-template-columns: 1fr; gap: 16px; padding: 32px 0 36px; }
+  .manifesto-row:first-child { padding-top: 12px; }
+  .manifesto-num { font-size: 56px; }
   .manifesto-content { padding-top: 0; }
-  .manifesto-rule { width: 48px; margin-top: 16px; }
+  .manifesto-rule { width: 36px; margin-top: 10px; }
 }
 
 .how-coda { margin-top: 72px; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto; }
@@ -708,8 +703,8 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   background: linear-gradient(180deg, rgba(10,10,10,0.35) 0%, rgba(10,10,10,0.85) 100%);
 }
 .founder-half:hover .photo { filter: grayscale(0.15) brightness(0.65) contrast(1.05); transform: scale(1.04); }
-.founder-half.left .photo  { background-image: url('https://images.unsplash.com/photo-1555993539-1732b0258235?w=1400&q=80'); }
-.founder-half.right .photo { background-image: url('https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=1400&q=80'); }
+.founder-half.left .photo  { background-image: url('/founders/athens.png'); }
+.founder-half.right .photo { background-image: url('/founders/london.png'); }
 .founder-half.left { transform: translateX(-40px); }
 .founder-half.right { transform: translateX(40px); }
 .founders-split.is-revealed .founder-half { transform: translateX(0); opacity: 1; }

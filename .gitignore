@@ -42,6 +42,8 @@ assets/BLENDER3DANIMATION/
 
 # Image source files (exported versions live in public/)
 assets/icons-website/
+/*-UPSCALE-PHOTO.png
+/*-UPSCALED-PHOTO.png
 
 # Claude Code ephemeral
 .claude/logs/

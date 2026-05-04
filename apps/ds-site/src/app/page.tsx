@@ -303,11 +303,11 @@ export default function HomePage() {
       let typeAbort = { aborted: false };
       if (subjectEl && bodyEl && contactSection) {
         const draft = {
-          subject: "We need an AI underwriting copilot, not a chatbot.",
+          subject: "We need a new website that doesn't feel ten years old.",
           body: [
-            "Hi DS2 — we're a <hl>regional lender</hl> in the Midwest. Our senior loan officers are spending almost half their week reading the same five document types over and over.",
-            "We've trialled two off-the-shelf tools. Both hallucinate, neither integrates with our core. We need <hl>a real internal tool</hl> our team can trust on a Monday morning.",
-            "Can we book 30 minutes next week?",
+            "Hi DS2 — we're a <hl>gym chain in Athens</hl> with eight locations. Our current site is a WordPress build from 2016 that the marketing team can't update without something breaking.",
+            "We need <hl>a proper product site</hl> — class schedules, trial signups, location pages, member portal — and something that doesn't look like every other gym website. Most of our traffic is on mobile.",
+            "Could we book 30 minutes next week to walk you through what we have?",
           ],
         };
         const setHTML = (el: Element, text: string, withCaret = false) => {
