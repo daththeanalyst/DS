@@ -397,69 +397,112 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   .thesis figcaption { margin-top: 36px; }
 }
 
-/* Modes — engagement spectrum */
-.modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+/* Modes — engagement spectrum (monochrome, intensity ramps L→R) */
+.modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .mode {
-  --accent: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.025);
+  --accent: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.08));
+  --halo: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.012) 100%);
   backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 18px;
-  padding: 36px 32px 28px;
+  border: 1px solid rgba(255,255,255,0.075);
+  border-radius: 16px;
+  padding: 38px 32px 28px;
   display: flex; flex-direction: column; gap: 22px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 20px 40px -20px rgba(0,0,0,0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 0 0 1px rgba(255,255,255,0.005),
+    0 20px 40px -20px rgba(0,0,0,0.55);
   position: relative;
   overflow: hidden;
-  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  isolation: isolate;
+  transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.5s ease;
 }
 .mode:hover {
-  border-color: rgba(255,255,255,0.18);
-  transform: translateY(-3px);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 30px 60px -20px rgba(0,0,0,0.7);
+  border-color: rgba(255,255,255,0.22);
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 32px 60px -22px rgba(0,0,0,0.75),
+    0 0 0 1px rgba(255,255,255,0.02);
 }
+/* Vertical accent stripe on left edge — silver intensity ramps per mode */
 .mode::before {
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
   background: var(--accent);
-  opacity: 0.45;
-  transition: opacity 0.4s ease;
+  opacity: 0.55;
+  transition: opacity 0.45s ease, width 0.45s ease;
+  z-index: 1;
 }
-.mode:hover::before { opacity: 1; }
-.mode.m1 { --accent: linear-gradient(180deg, #6b8aff, #4a68d8); }
-.mode.m2 { --accent: linear-gradient(180deg, #ffb84a, #e08828); }
-.mode.m3 { --accent: linear-gradient(180deg, #4ade80, #22a35a); }
+.mode:hover::before { opacity: 1; width: 3px; }
+/* Soft top-edge halo on hover — radial wash that pulls focus without colour */
+.mode::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at 50% -20%,
+    rgba(255,255,255,calc(0.04 + var(--halo) * 0.05)),
+    transparent 55%
+  );
+  opacity: var(--halo);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.mode:hover { --halo: 1; }
+/* Three intensities of silver — subtle / medium / bright — replacing blue/orange/green */
+.mode.m1 { --accent: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.06)); }
+.mode.m2 { --accent: linear-gradient(180deg, rgba(255,255,255,0.70), rgba(255,255,255,0.16)); }
+.mode.m3 {
+  --accent: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,0.32));
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.014) 100%);
+  border-color: rgba(255,255,255,0.10);
+}
+.mode.m3::before { width: 3px; opacity: 0.85; }
+.mode.m3:hover::before { width: 4px; opacity: 1; }
 
 .mode-head {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 16px;
   border-bottom: 1px solid var(--hairline);
-  padding-bottom: 18px;
+  padding-bottom: 20px;
+  position: relative; z-index: 2;
 }
-.mode-head-text { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; }
+.mode-head-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; flex: 1; }
 .mode-num {
   font-family: var(--font-orbitron), "Orbitron", sans-serif;
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--ghost);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.24em;
+  font-weight: 500;
 }
 .mode h3 {
   font-size: 26px;
   font-weight: 600;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.028em;
   color: var(--white);
-  line-height: 1.1;
+  line-height: 1.08;
 }
 .mode-bigfig {
   font-family: var(--font-orbitron), "Orbitron", sans-serif;
-  font-size: 56px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.92);
-  line-height: 0.85;
-  letter-spacing: -0.02em;
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 0.82;
+  letter-spacing: -0.04em;
   flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.32) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: transform 0.5s cubic-bezier(0.22,0.61,0.36,1);
 }
+.mode:hover .mode-bigfig { transform: scale(1.04); }
 .mode-best {
   font-size: 12px;
   color: var(--ghost);
