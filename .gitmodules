@@ -1,0 +1,3 @@
+[submodule "apps/ds-site/public/MegaGym-Website"]
+	path = apps/ds-site/public/MegaGym-Website
+	url = https://github.com/sirdath/mega-gym-website
