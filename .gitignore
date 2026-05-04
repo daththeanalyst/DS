@@ -35,5 +35,13 @@ pnpm-debug.log*
 assets/motion-sequences/generated/
 apps/*/public/research/*/scrape-cache/
 
+# Blender experimental work (heavy binaries, not deliverable)
+assets/BLENDER3DANIMATION/
+**/cache_fluid*/
+*.blend1
+
+# Image source files (exported versions live in public/)
+assets/icons-website/
+
 # Claude Code ephemeral
 .claude/logs/

@@ -18,6 +18,7 @@ Skills are prompt packages with YAML frontmatter that Claude Code auto-invokes b
 | [`client-project-scaffold`](../.claude/skills/client-project-scaffold/SKILL.md) | "new client project for {name}" | One-shot client-engagement bootstrap. Creates `apps/{slug}/`, seeds research folder, opens delivery checklist. |
 | [`chatbot-integration`](../.claude/skills/chatbot-integration/SKILL.md) | "add a chatbot to {X}" | Standard DS chatbot playbook. Anthropic SDK + prompt caching + RAG + Supabase + cost dashboard. |
 | [`premium-motion-pipeline`](../.claude/skills/premium-motion-pipeline/SKILL.md) | "premium hero / scroll-scrubbed animation" | Flux 1.1 Pro → Veo 3.1 → ffmpeg → WebP → GSAP ScrollTrigger recipe. |
+| [`blender-mcp-workflow`](../.claude/skills/blender-mcp-workflow/SKILL.md) | "blender / mantaflow / fluid sim / 3D animation for the website" | Hard-won field manual for driving Blender via `ahujasid/blender-mcp`. Save discipline, MCP call chunking, Mantaflow Python-API bugs (empty-cache symptoms, inflow keyframe traps), Blender 4.x Action API drift, GPU/OptiX setup, when to NOT use Blender for hero animations. |
 
 ### Adopted from [`CLAUDE-STUFF/.claude/skills/`](file:///C:/Users/Dath/OneDrive/Desktop/AntiGravity%20Stuff/CLAUDE-STUFF/.claude/skills/) (18)
 
