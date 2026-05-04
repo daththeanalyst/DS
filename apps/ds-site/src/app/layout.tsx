@@ -25,10 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
-      <body>
-        <div aria-hidden className="ds-stage" />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
