@@ -146,7 +146,7 @@ function LoginForm() {
           width: '112%',
           height: '112%',
           border: 'none',
-          filter: 'blur(20px)',
+          filter: 'blur(8px)',
           pointerEvents: 'none',
         }}
       />
