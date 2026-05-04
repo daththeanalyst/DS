@@ -1,4 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
+import Link from 'next/link'
+import { PROJECTS } from './projects'
+
+export const dynamic = 'force-dynamic'
 
 function getSupabase() {
   return createClient(
@@ -7,135 +11,137 @@ function getSupabase() {
   )
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleString('en-GB', {
-    day: '2-digit', month: 'short', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
-  })
+function timeAgo(iso: string) {
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  return `${Math.floor(hrs / 24)}d ago`
 }
 
-function truncate(str: string | null, n: number) {
-  if (!str) return '—'
-  return str.length > n ? str.slice(0, n) + '…' : str
+function sevenDaysAgo() {
+  const d = new Date()
+  d.setDate(d.getDate() - 7)
+  return d.toISOString()
 }
 
-export default async function Analytics() {
+export default async function AnalyticsOverview() {
   const sb = getSupabase()
 
-  const { data: visits } = await sb
+  const { data: allVisits } = await sb
     .from('visits')
-    .select('*')
+    .select('path, created_at, country')
     .order('created_at', { ascending: false })
-    .limit(200)
 
-  const total = visits?.length ?? 0
+  const week = sevenDaysAgo()
 
-  const countryCounts = (visits ?? []).reduce<Record<string, number>>((acc, v) => {
-    const key = v.country ?? 'Unknown'
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
+  const projectStats = PROJECTS.map(project => {
+    const visits = (allVisits ?? []).filter(v =>
+      v.path?.startsWith(project.pathPrefix),
+    )
+    const weekVisits = visits.filter(v => v.created_at > week)
 
-  const topCountries = Object.entries(countryCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
+    const countryCounts = visits.reduce<Record<string, number>>((acc, v) => {
+      const k = v.country ?? 'Unknown'
+      acc[k] = (acc[k] ?? 0) + 1
+      return acc
+    }, {})
+    const topCountry = Object.entries(countryCounts).sort((a, b) => b[1] - a[1])[0]
 
-  const pathCounts = (visits ?? []).reduce<Record<string, number>>((acc, v) => {
-    const key = v.path ?? '/'
-    acc[key] = (acc[key] ?? 0) + 1
-    return acc
-  }, {})
-
-  const topPaths = Object.entries(pathCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
+    return {
+      project,
+      total: visits.length,
+      weekCount: weekVisits.length,
+      topCountry: topCountry?.[0] ?? null,
+      lastVisit: visits[0]?.created_at ?? null,
+    }
+  })
 
   return (
     <main style={{
       minHeight: '100vh',
       background: '#0a0a0a',
       color: '#f5f5f5',
-      padding: '48px 32px',
+      padding: '52px 36px',
       fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif',
     }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ marginBottom: '40px' }}>
-          <p style={{ fontSize: '11px', color: '#555', letterSpacing: '0.2em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '8px' }}>
-            DS2 · INTERNAL
+        <div style={{ marginBottom: '52px' }}>
+          <p style={{ fontSize: '11px', color: '#444', letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '10px' }}>
+            DS2 · Analytics
           </p>
-          <h1 style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '-0.02em', color: '#f5f5f5', margin: 0 }}>
-            MegaGym — Visitor Analytics
+          <h1 style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.025em', margin: 0 }}>
+            Client projects
           </h1>
-          <p style={{ marginTop: '6px', fontSize: '13px', color: '#555', fontFamily: 'ui-monospace, monospace' }}>
-            ds2-consulting.com/MegaGym-Website
+          <p style={{ marginTop: '8px', fontSize: '14px', color: '#555', lineHeight: 1.5 }}>
+            {PROJECTS.length} active {PROJECTS.length === 1 ? 'project' : 'projects'} · click any card for deeper insights
           </p>
         </div>
 
-        {/* Stat cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '40px' }}>
-          <StatCard label="Total visits" value={total} />
-          <StatCard label="Top country" value={topCountries[0]?.[0] ?? '—'} />
-          <StatCard label="Top page" value={topPaths[0]?.[0]?.replace('/MegaGym-Website', '') || '/'} />
-        </div>
+        {/* Project cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '14px' }}>
+          {projectStats.map(({ project, total, weekCount, topCountry, lastVisit }) => (
+            <Link
+              key={project.slug}
+              href={`/$ecretAnalytics/${project.slug}`}
+              style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+            >
+              <div style={{
+                background: 'rgba(255,255,255,0.025)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '14px',
+                padding: '32px',
+                cursor: 'pointer',
+                transition: 'border-color 0.2s, background 0.2s',
+              }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor = 'rgba(255,255,255,0.18)'
+                  el.style.background = 'rgba(255,255,255,0.04)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget as HTMLDivElement
+                  el.style.borderColor = 'rgba(255,255,255,0.08)'
+                  el.style.background = 'rgba(255,255,255,0.025)'
+                }}
+              >
+                {/* Project name + URL */}
+                <div style={{ marginBottom: '28px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
+                    <h2 style={{ fontSize: '20px', fontWeight: 500, letterSpacing: '-0.018em', margin: 0 }}>
+                      {project.name}
+                    </h2>
+                    <span style={{ fontSize: '11px', color: '#444', fontFamily: 'ui-monospace, monospace', marginTop: '3px', flexShrink: 0 }}>
+                      {lastVisit ? timeAgo(lastVisit) : 'no visits yet'}
+                    </span>
+                  </div>
+                  <p style={{ marginTop: '4px', fontSize: '12px', color: '#555', fontFamily: 'ui-monospace, monospace' }}>
+                    {project.url}
+                  </p>
+                  <p style={{ marginTop: '6px', fontSize: '13px', color: '#666' }}>
+                    {project.description}
+                  </p>
+                </div>
 
-        {/* Two column breakdown */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '40px' }}>
-          <BreakdownTable title="Top pages" rows={topPaths} total={total} />
-          <BreakdownTable title="Top countries" rows={topCountries} total={total} />
-        </div>
+                {/* Stats row */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', overflow: 'hidden' }}>
+                  <MiniStat label="Total visits" value={total} />
+                  <MiniStat label="This week" value={weekCount} highlight={weekCount > 0} />
+                  <MiniStat label="Top country" value={topCountry ?? '—'} />
+                </div>
 
-        {/* Recent visits table */}
-        <div style={{
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid rgba(255,255,255,0.07)',
-          borderRadius: '10px',
-          overflow: 'hidden',
-        }}>
-          <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-            <h2 style={{ fontSize: '13px', fontWeight: 500, color: '#a0a0a0', letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: 0 }}>
-              Recent visits
-            </h2>
-          </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                  {['Time', 'Path', 'Country', 'Referrer'].map(h => (
-                    <th key={h} style={{ padding: '12px 20px', textAlign: 'left', color: '#555', fontWeight: 400, fontFamily: 'ui-monospace, monospace', fontSize: '11px', letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {(visits ?? []).map(v => (
-                  <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '13px 20px', color: '#666', whiteSpace: 'nowrap', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
-                      {formatDate(v.created_at)}
-                    </td>
-                    <td style={{ padding: '13px 20px', color: '#d0d0d0' }}>
-                      {v.path ?? '—'}
-                    </td>
-                    <td style={{ padding: '13px 20px', color: '#888' }}>
-                      {v.country ?? '—'}
-                    </td>
-                    <td style={{ padding: '13px 20px', color: '#555', maxWidth: '280px' }}>
-                      {truncate(v.referrer, 50)}
-                    </td>
-                  </tr>
-                ))}
-                {total === 0 && (
-                  <tr>
-                    <td colSpan={4} style={{ padding: '32px 20px', textAlign: 'center', color: '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
-                      No visits recorded yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                {/* Arrow */}
+                <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px', fontSize: '12px', color: '#555' }}>
+                  <span>View insights</span>
+                  <span style={{ fontSize: '14px' }}>→</span>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
 
       </div>
@@ -143,57 +149,15 @@ export default async function Analytics() {
   )
 }
 
-function StatCard({ label, value }: { label: string; value: string | number }) {
+function MiniStat({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
   return (
-    <div style={{
-      background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: '10px',
-      padding: '24px 28px',
-    }}>
-      <p style={{ fontSize: '11px', color: '#555', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: '0 0 10px' }}>
+    <div style={{ background: '#111', padding: '16px 18px' }}>
+      <p style={{ fontSize: '10px', color: '#444', letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: '0 0 6px' }}>
         {label}
       </p>
-      <p style={{ fontSize: '36px', fontWeight: 300, letterSpacing: '-0.03em', color: '#f5f5f5', margin: 0, lineHeight: 1 }}>
+      <p style={{ fontSize: '22px', fontWeight: 300, letterSpacing: '-0.02em', margin: 0, color: highlight ? '#f5f5f5' : '#888' }}>
         {value}
       </p>
-    </div>
-  )
-}
-
-function BreakdownTable({ title, rows, total }: { title: string; rows: [string, number][]; total: number }) {
-  return (
-    <div style={{
-      background: 'rgba(255,255,255,0.02)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: '10px',
-      overflow: 'hidden',
-    }}>
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <h2 style={{ fontSize: '11px', fontWeight: 500, color: '#555', letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: 0 }}>
-          {title}
-        </h2>
-      </div>
-      <div style={{ padding: '8px 0' }}>
-        {rows.length === 0 && (
-          <p style={{ padding: '16px 20px', color: '#444', fontSize: '12px', fontFamily: 'ui-monospace, monospace' }}>No data yet.</p>
-        )}
-        {rows.map(([label, count]) => (
-          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 20px' }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: '13px', color: '#d0d0d0', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {label}
-              </p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-              <div style={{ width: '80px', height: '3px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${total > 0 ? (count / total) * 100 : 0}%`, background: 'rgba(255,255,255,0.4)', borderRadius: '99px' }} />
-              </div>
-              <span style={{ fontSize: '12px', color: '#666', fontFamily: 'ui-monospace, monospace', minWidth: '24px', textAlign: 'right' }}>{count}</span>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
