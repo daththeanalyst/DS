@@ -114,8 +114,8 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  transition: padding 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-              background-color 0.4s ease;
+  transition: padding 1.1s cubic-bezier(0.22, 0.61, 0.36, 1),
+              background-color 0.7s ease;
   opacity: 0;
   transform: translateY(28px);
 }
@@ -131,8 +131,8 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   transform: translateY(0);
   transition: opacity 0.9s cubic-bezier(0.22,0.61,0.36,1),
               transform 0.9s cubic-bezier(0.22,0.61,0.36,1),
-              padding 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-              background-color 0.4s ease;
+              padding 1.1s cubic-bezier(0.22, 0.61, 0.36, 1),
+              background-color 0.7s ease;
 }
 .svc::before {
   content: "";
@@ -143,7 +143,7 @@ h2.section-title em { font-style: normal; color: var(--silver); }
     transparent 50%
   );
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.7s ease;
   pointer-events: none;
   z-index: 0;
 }
@@ -160,7 +160,7 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   color: var(--ghost);
   letter-spacing: 0.02em;
   line-height: 1;
-  transition: color 0.4s ease, font-size 0.6s cubic-bezier(0.22,0.61,0.36,1);
+  transition: color 0.7s ease, font-size 1.1s cubic-bezier(0.22,0.61,0.36,1);
   position: relative; z-index: 2;
 }
 .svc:hover .svc-num-big { color: var(--white); font-size: 44px; }
@@ -174,7 +174,7 @@ h2.section-title em { font-style: normal; color: var(--silver); }
 .svc-kind {
   font-size: 12px; color: var(--ghost); font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase;
-  transition: color 0.4s ease;
+  transition: color 0.7s ease;
 }
 .svc:hover .svc-kind { color: var(--silver); }
 .svc h3 {
@@ -184,7 +184,7 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   line-height: 1.08;
   color: var(--white);
   text-wrap: balance;
-  transition: transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
+  transition: transform 1.1s cubic-bezier(0.22,0.61,0.36,1);
 }
 .svc:hover h3 { transform: translateX(4px); }
 .svc-desc {
@@ -195,23 +195,23 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   line-height: 1.55;
   color: var(--silver);
   max-width: 620px;
-  transition: max-height 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-              opacity 0.5s ease,
-              margin-top 0.6s cubic-bezier(0.22,0.61,0.36,1);
+  transition: max-height 1.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+              opacity 1.0s ease,
+              margin-top 1.4s cubic-bezier(0.22,0.61,0.36,1);
   margin-top: 0;
 }
 .svc:hover .svc-desc {
   max-height: 200px;
   opacity: 1;
   margin-top: 4px;
-  transition-delay: 0.05s;
+  transition-delay: 0.18s;
 }
 .svc-icon {
   width: 42px; height: 42px;
   color: var(--ghost);
   flex-shrink: 0;
   position: relative; z-index: 2;
-  transition: color 0.4s ease, transform 0.6s cubic-bezier(0.22,0.61,0.36,1);
+  transition: color 0.7s ease, transform 1.1s cubic-bezier(0.22,0.61,0.36,1);
 }
 .svc-icon svg { width: 100%; height: 100%; }
 .svc:hover .svc-icon { color: var(--white); transform: scale(1.1) rotate(-2deg); }
@@ -223,7 +223,7 @@ h2.section-title em { font-style: normal; color: var(--silver); }
   background: var(--white);
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform 1.3s cubic-bezier(0.22, 0.61, 0.36, 1);
   z-index: 3;
 }
 .svc:hover::after { transform: scaleX(1); }

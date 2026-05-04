@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
+// Toggle to show/hide the Selected Work section (and its nav/footer links + modal)
+const SHOW_PROJECTS = false;
+
 type ProjectId = 0 | 1 | 2 | 3 | 4 | 5;
 
 const PROJECTS = [
@@ -446,7 +449,7 @@ export default function HomePage() {
           <ul className="nav-links">
             <li><a href="#services">Services</a></li>
             <li><a href="#how">How we work</a></li>
-            <li><a href="#projects">Projects</a></li>
+            {SHOW_PROJECTS && <li><a href="#projects">Projects</a></li>}
             <li><a href="#engage">Engage</a></li>
             <li><a href="#founders">Team</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -636,6 +639,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── Projects ────────────────────────────────── */}
+      {SHOW_PROJECTS && (
       <section className="section" id="projects">
         <div className="wrap">
           <div className="section-head">
@@ -662,8 +666,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* ─── Modal ───────────────────────────────────── */}
+      {/* ─── Modal (only meaningful when SHOW_PROJECTS is true) ─── */}
+      {SHOW_PROJECTS && (
       <div className={`modal ${activeProj !== null ? "is-open" : ""}`} onClick={(e) => { if (e.target === e.currentTarget) setActiveProj(null); }}>
         <div className="modal-card">
           <div className={`modal-cover ${proj?.bg ?? ""}`} />
@@ -683,6 +689,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* ─── Engage ──────────────────────────────────── */}
       <section className="section" id="engage">
@@ -866,7 +873,7 @@ export default function HomePage() {
         <ul className="links">
           <li><a href="#services">Services</a></li>
           <li><a href="#how">How we work</a></li>
-          <li><a href="#projects">Projects</a></li>
+          {SHOW_PROJECTS && <li><a href="#projects">Projects</a></li>}
           <li><a href="mailto:hello@ds2-consulting.com">Contact</a></li>
         </ul>
       </footer>
