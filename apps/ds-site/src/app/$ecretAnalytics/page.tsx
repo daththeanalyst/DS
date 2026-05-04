@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
-import Link from 'next/link'
 import { PROJECTS } from './projects'
+import ProjectCard from './ProjectCard'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,16 +15,6 @@ function getSupabase() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) return null
   return createClient(url, key)
-}
-
-function timeAgo(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  return `${Math.floor(hrs / 24)}d ago`
 }
 
 function sevenDaysAgo() {
@@ -60,11 +50,10 @@ export default async function AnalyticsOverview() {
   const week = sevenDaysAgo()
 
   const projectStats = PROJECTS.map(project => {
-    const visits = (allVisits ?? []).filter(v =>
+    const visits = allVisits.filter(v =>
       v.path?.startsWith(project.pathPrefix),
     )
     const weekVisits = visits.filter(v => v.created_at > week)
-
     const countryCounts = visits.reduce<Record<string, number>>((acc, v) => {
       const k = v.country ?? 'Unknown'
       acc[k] = (acc[k] ?? 0) + 1
@@ -91,7 +80,6 @@ export default async function AnalyticsOverview() {
     }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-        {/* Header */}
         <div style={{ marginBottom: '52px' }}>
           <p style={{ fontSize: '11px', color: '#444', letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '10px' }}>
             DS2 · Analytics
@@ -121,72 +109,23 @@ export default async function AnalyticsOverview() {
           </div>
         )}
 
-        {/* Project cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '14px' }}>
           {projectStats.map(({ project, total, weekCount, topCountry, lastVisit }) => (
-            <Link
+            <ProjectCard
               key={project.slug}
-              href={`/$ecretAnalytics/${project.slug}`}
-              className="analytics-card"
-              style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-            >
-              <div className="analytics-card__inner" style={{
-                background: 'rgba(255,255,255,0.025)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: '14px',
-                padding: '32px',
-                cursor: 'pointer',
-                transition: 'border-color 0.2s ease, background 0.2s ease',
-              }}>
-                {/* Project name + URL */}
-                <div style={{ marginBottom: '28px' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-                    <h2 style={{ fontSize: '20px', fontWeight: 500, letterSpacing: '-0.018em', margin: 0 }}>
-                      {project.name}
-                    </h2>
-                    <span style={{ fontSize: '11px', color: '#444', fontFamily: 'ui-monospace, monospace', marginTop: '3px', flexShrink: 0 }}>
-                      {lastVisit ? timeAgo(lastVisit) : 'no visits yet'}
-                    </span>
-                  </div>
-                  <p style={{ marginTop: '4px', fontSize: '12px', color: '#555', fontFamily: 'ui-monospace, monospace' }}>
-                    {project.url}
-                  </p>
-                  <p style={{ marginTop: '6px', fontSize: '13px', color: '#666' }}>
-                    {project.description}
-                  </p>
-                </div>
-
-                {/* Stats row */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', overflow: 'hidden' }}>
-                  <MiniStat label="Total visits" value={total} />
-                  <MiniStat label="This week" value={weekCount} highlight={weekCount > 0} />
-                  <MiniStat label="Top country" value={topCountry ?? '—'} />
-                </div>
-
-                {/* Arrow */}
-                <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px', fontSize: '12px', color: '#555' }}>
-                  <span>View insights</span>
-                  <span style={{ fontSize: '14px' }}>→</span>
-                </div>
-              </div>
-            </Link>
+              slug={project.slug}
+              name={project.name}
+              url={project.url}
+              description={project.description}
+              total={total}
+              weekCount={weekCount}
+              topCountry={topCountry}
+              lastVisit={lastVisit}
+            />
           ))}
         </div>
 
       </div>
     </main>
-  )
-}
-
-function MiniStat({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
-  return (
-    <div style={{ background: '#111', padding: '16px 18px' }}>
-      <p style={{ fontSize: '10px', color: '#444', letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: '0 0 6px' }}>
-        {label}
-      </p>
-      <p style={{ fontSize: '22px', fontWeight: 300, letterSpacing: '-0.02em', margin: 0, color: highlight ? '#f5f5f5' : '#888' }}>
-        {value}
-      </p>
-    </div>
   )
 }
