@@ -334,49 +334,88 @@ h2.section-title em {
   font-weight: 400;
 }
 
-/* ─── How we work — 4-beat process ────────────── */
-.beats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  counter-reset: beat;
-}
-.beat {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 32px 26px;
-  min-height: 280px;
+/* ─── How we work — manifesto ──────────────────── */
+.how-manifesto {
+  max-width: 1040px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  position: relative;
 }
-.beat-icon {
-  width: 36px;
-  height: 36px;
-  color: var(--silver);
-  margin-bottom: 4px;
+.manifesto-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 200px) minmax(0, 1fr);
+  gap: 0 60px;
+  padding: 64px 0 72px;
+  border-top: 1px solid var(--hairline);
+  align-items: start;
 }
-.beat-icon svg { width: 100%; height: 100%; display: block; }
-.beat-num {
+.manifesto-row:first-child {
+  border-top: none;
+  padding-top: 8px;
+}
+.manifesto-num {
   font-family: var(--font-orbitron), sans-serif;
-  font-size: 13px;
-  color: var(--silver);
-  letter-spacing: 0.18em;
-  font-weight: 500;
-}
-.beat h3 {
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-size: clamp(80px, 11vw, 140px);
+  font-weight: 200;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
   color: var(--white);
-  line-height: 1.2;
+  background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.32) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  padding-top: 8px;
 }
-.beat p {
-  font-size: 14px;
-  line-height: 1.55;
+.manifesto-num::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 56px;
+  height: 1px;
+  background: var(--hairline-strong);
+}
+.manifesto-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 12px;
+  max-width: 640px;
+}
+.manifesto-title {
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: var(--white);
+  text-wrap: balance;
+}
+.manifesto-title em {
+  font-style: italic;
+  font-weight: 400;
   color: var(--silver);
+}
+.manifesto-body {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--silver);
+  text-wrap: pretty;
+  font-weight: 300;
+}
+/* Scroll-driven fade-up — modern browsers only; older browsers see rows always visible */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .manifesto-row {
+      animation: manifestoFadeIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+    @keyframes manifestoFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  }
 }
 
 .quote-band {
@@ -404,30 +443,41 @@ h2.section-title em {
   gap: 8px;
 }
 .mode {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.025);
   backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 18px;
-  padding: 40px 32px;
+  border-radius: 16px;
+  padding: 36px 32px 28px;
   min-height: 380px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
     0 20px 40px -20px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.25s ease;
 }
-.mode-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--silver);
-  margin-bottom: 4px;
+.mode:hover { border-color: rgba(255,255,255,0.14); }
+.mode-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--hairline);
 }
-.mode-icon svg { width: 100%; height: 100%; display: block; }
-.mode-label {
-  font-size: 12px;
-  color: var(--ghost);
+.mode-num {
+  font-family: var(--font-orbitron), sans-serif;
+  font-size: 11px;
   font-weight: 500;
+  color: var(--silver);
+  letter-spacing: 0.22em;
+}
+.mode-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ghost);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 .mode h3 {
   font-size: 26px;
@@ -440,14 +490,13 @@ h2.section-title em {
   font-size: 15px;
   line-height: 1.55;
   color: var(--silver);
-  flex: 1;
 }
 .mode ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 8px;
+  flex: 1;
 }
 .mode li {
   font-size: 13.5px;
@@ -464,6 +513,16 @@ h2.section-title em {
   width: 8px;
   height: 1px;
   background: var(--silver);
+}
+.mode-foot {
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+  font-family: var(--font-orbitron), sans-serif;
+  font-size: 11px;
+  color: var(--ghost);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .stewardship {
@@ -551,11 +610,14 @@ h2.section-title em {
   backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 24px;
-  padding: 88px 64px;
+  padding: 80px 64px 64px;
   text-align: center;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 30px 60px -20px rgba(0, 0, 0, 0.5);
+}
+.contact-card .eyebrow {
+  margin-bottom: 18px;
 }
 .contact-card h2 {
   font-size: clamp(32px, 4vw, 48px);
@@ -570,19 +632,21 @@ h2.section-title em {
   color: var(--silver);
 }
 .contact-card p {
-  margin-top: 16px;
+  margin-top: 18px;
   font-size: 17px;
   color: var(--silver);
-  max-width: 540px;
+  max-width: 580px;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 .contact-card .cta-row { margin-top: 36px; }
 .contact-mail {
   margin-top: 28px;
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--ghost);
+  letter-spacing: 0.04em;
 }
 .contact-mail a {
   color: var(--silver);
@@ -615,14 +679,21 @@ footer a:hover { color: var(--silver); }
 /* ─── Responsive ──────────────────────────────── */
 @media (max-width: 960px) {
   .services { grid-template-columns: 1fr 1fr; }
-  .beats { grid-template-columns: 1fr 1fr; }
   .modes { grid-template-columns: 1fr; }
   .founders { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .manifesto-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 48px 0 56px;
+  }
+  .manifesto-num { font-size: 88px; }
+  .manifesto-num::after { width: 40px; }
 }
 @media (max-width: 640px) {
   .nav-links { display: none; }
   .services { grid-template-columns: 1fr; }
-  .beats { grid-template-columns: 1fr; }
   .section { padding: 80px 0; }
   .contact-card { padding: 56px 24px; }
 }

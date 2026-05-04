@@ -112,64 +112,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── How we work — 4 beats ───────────────────────── */}
+      {/* ─── How we work — manifesto ─────────────────────── */}
       <section className="section" id="how">
         <div className="wrap">
           <div className="section-head">
             <div className="eyebrow">How we work</div>
-            <h2 className="section-title">Challenge first. <em>Then build.</em></h2>
-            <p className="section-sub">Every engagement, four beats — in this order. It's how we keep the work honest and the decisions yours.</p>
+            <h2 className="section-title">Four principles, in our <em>own voice.</em></h2>
+            <p className="section-sub">Not a methodology. The actual rules we hold ourselves to, written so you can hold us to them too.</p>
           </div>
 
-          <div className="beats">
-            <div className="beat">
-              <div className="beat-icon">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="15" cy="15" r="9" />
-                  <path d="M22 22l7 7" />
-                  <path d="M11 15h8M15 11v8" />
-                </svg>
+          <div className="how-manifesto">
+            <article className="manifesto-row">
+              <div className="manifesto-num">01</div>
+              <div className="manifesto-content">
+                <h3 className="manifesto-title">Diagnose <em>before</em> you build.</h3>
+                <p className="manifesto-body">The first two weeks of every engagement go to understanding what you actually have. Code, data, team shape, decisions in flight — we read it all before we propose anything. We've inherited too many projects where the previous team built the wrong thing perfectly.</p>
               </div>
-              <div className="beat-num">01 / Diagnose</div>
-              <h3>Diagnose &amp; challenge.</h3>
-              <p>We assess what's working, what isn't, and what we'd do differently. Before any roadmap, before any sprint plan.</p>
-            </div>
-            <div className="beat">
-              <div className="beat-icon">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 5L4 30h28L18 5z" />
-                  <path d="M18 14v8" />
-                  <circle cx="18" cy="26" r="0.9" fill="currentColor" />
-                </svg>
+            </article>
+
+            <article className="manifesto-row">
+              <div className="manifesto-num">02</div>
+              <div className="manifesto-content">
+                <h3 className="manifesto-title">Frame critique as <em>risk.</em></h3>
+                <p className="manifesto-body">&ldquo;Wrong&rdquo; is rarely useful. &ldquo;Risky&rdquo; is. We don't tell you your architecture is wrong; we tell you where it creates risk under load, what the blast radius looks like, and which fix gives you the most leverage. You decide what you can live with.</p>
               </div>
-              <div className="beat-num">02 / Risk</div>
-              <h3>Say what creates risk.</h3>
-              <p>Always &ldquo;this creates risk because…&rdquo;, never &ldquo;this is wrong&rdquo;. Risk is specific, attributable, and discussable. Opinion isn't.</p>
-            </div>
-            <div className="beat">
-              <div className="beat-icon">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 6v6" />
-                  <path d="M18 12L9 22v6h18v-6L18 12z" />
-                  <path d="M9 28h18" />
-                  <circle cx="18" cy="6" r="1.4" fill="currentColor" />
-                </svg>
+            </article>
+
+            <article className="manifesto-row">
+              <div className="manifesto-num">03</div>
+              <div className="manifesto-content">
+                <h3 className="manifesto-title">Never criticize without <em>alternatives.</em></h3>
+                <p className="manifesto-body">A list of problems isn't a contribution. We bring at least two paths forward — usually a fast one and a careful one — with the trade-offs spelled out in language your CFO will understand. Critique without alternatives is just complaining.</p>
               </div>
-              <div className="beat-num">03 / Alternatives</div>
-              <h3>Present alternatives with reasoning.</h3>
-              <p>Critique paired with constructive options and tradeoffs. You see the route we'd take and the one we'd pass on, with the why for each.</p>
-            </div>
-            <div className="beat">
-              <div className="beat-icon">
-                <svg viewBox="0 0 36 36" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="18" cy="18" r="12" />
-                  <path d="M18 11v7l5 3" />
-                </svg>
+            </article>
+
+            <article className="manifesto-row">
+              <div className="manifesto-num">04</div>
+              <div className="manifesto-content">
+                <h3 className="manifesto-title">Take a week to <em>decide.</em></h3>
+                <p className="manifesto-body">We don't write proposals with expiry dates. The decision to start matters more than the speed of starting. If you need to sleep on it, sleep on it. We'd rather hear no slowly than yes too quickly.</p>
               </div>
-              <div className="beat-num">04 / Decision</div>
-              <h3>Decision pause.</h3>
-              <p>You don't need to decide now. Take time. We're happy to proceed either way — that's the point of doing this in the open.</p>
-            </div>
+            </article>
           </div>
 
           <div className="quote-band">
@@ -189,14 +172,10 @@ export default function HomePage() {
 
           <div className="modes">
             <article className="mode">
-              <div className="mode-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="20" cy="14" r="6" />
-                  <path d="M8 33c0-6 5-10 12-10s12 4 12 10" />
-                  <path d="M27 8l3 3 5-5" />
-                </svg>
+              <div className="mode-head">
+                <span className="mode-num">01</span>
+                <span className="mode-label">Consulting</span>
               </div>
-              <div className="mode-label">Mode 01</div>
               <h3>Consulting only.</h3>
               <p>Strategic advice and challenge. We pressure-test the plan, the architecture, the team — without picking up a keyboard.</p>
               <ul>
@@ -204,17 +183,14 @@ export default function HomePage() {
                 <li>Architecture &amp; data review</li>
                 <li>Hiring and team shape</li>
               </ul>
+              <div className="mode-foot">Typical engagement · 2–6 weeks</div>
             </article>
 
             <article className="mode">
-              <div className="mode-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 12L5 20l9 8" />
-                  <path d="M26 12l9 8-9 8" />
-                  <path d="M23 8l-6 24" />
-                </svg>
+              <div className="mode-head">
+                <span className="mode-num">02</span>
+                <span className="mode-label">Build</span>
               </div>
-              <div className="mode-label">Mode 02</div>
               <h3>Build only.</h3>
               <p>You bring the spec, we deliver. Senior engineers, weekly visibility, code we'd be willing to maintain after the handover.</p>
               <ul>
@@ -222,20 +198,14 @@ export default function HomePage() {
                 <li>Specialist squads</li>
                 <li>Direct access to the people writing the code</li>
               </ul>
+              <div className="mode-foot">Typical engagement · 6–16 weeks</div>
             </article>
 
             <article className="mode">
-              <div className="mode-icon">
-                <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="8" cy="20" r="3" />
-                  <circle cx="20" cy="20" r="3" />
-                  <circle cx="32" cy="20" r="3" />
-                  <path d="M11 20h6M23 20h6" />
-                  <path d="M8 14V8M20 14V8M32 14V8" />
-                  <path d="M5 8h6M17 8h6M29 8h6" />
-                </svg>
+              <div className="mode-head">
+                <span className="mode-num">03</span>
+                <span className="mode-label">End-to-end</span>
               </div>
-              <div className="mode-label">Mode 03</div>
               <h3>End-to-end.</h3>
               <p>Strategy, design, build, handoff — under one roof. The mode where the challenge-first delivery pays back the most.</p>
               <ul>
@@ -243,6 +213,7 @@ export default function HomePage() {
                 <li>One team, one accountability line</li>
                 <li>Documented handover, no lock-in</li>
               </ul>
+              <div className="mode-foot">Typical engagement · 12–24 weeks</div>
             </article>
           </div>
 
@@ -288,14 +259,25 @@ export default function HomePage() {
       <section className="section tight" id="contact">
         <div className="wrap">
           <div className="contact-card">
-            <h2>Tell us what you're trying to do. <em>We'll be honest about whether we can help.</em></h2>
-            <p>Founded 2026. Athens and London. Currently taking on partners for the second half of the year.</p>
+            <div className="eyebrow">Contact</div>
+            <h2>Tell us what you're building. <em>We'll be honest about whether we can help.</em></h2>
+            <p>Websites, data science, AI agents, and machine-learning pipelines — that's what we ship most. Founded 2026, based in Athens and London. Currently taking on partners for the second half of the year.</p>
             <div className="cta-row">
-              <a href="mailto:hello@ds2-consulting.com?subject=Booking%20a%20call" className="btn btn-primary">Book a call</a>
-              <a href="mailto:hello@ds2-consulting.com?subject=Project%20brief" className="btn btn-ghost">Send us a brief</a>
+              <a
+                href="mailto:hello@ds2-consulting.com?subject=DS2%20%E2%80%94%20Website%20%26%20data%20science%20enquiry&body=Company%3A%0AWhat%20we%27re%20trying%20to%20do%3A%0ATimeline%3A%0ABudget%20range%3A%0AAnything%20else%20we%20should%20know%3A"
+                className="btn btn-primary"
+              >
+                Start a conversation
+              </a>
+              <a
+                href="mailto:hello@ds2-consulting.com?subject=DS2%20%E2%80%94%20Project%20brief&body=Project%3A%0ACurrent%20stack%2Fteam%3A%0AOutcome%20we%27re%20after%3A%0ATimeline%3A%0ABudget%20range%3A"
+                className="btn btn-ghost"
+              >
+                Send a brief
+              </a>
             </div>
             <div className="contact-mail">
-              <a href="mailto:hello@ds2-consulting.com">hello@ds2-consulting.com</a>
+              <a href="mailto:hello@ds2-consulting.com">hello@ds2-consulting.com</a> · Athens · London
             </div>
           </div>
         </div>
