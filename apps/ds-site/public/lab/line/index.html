@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS2 — 2D Line Hero Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --silver: #A6A6A6;
+    --ghost: #6E6E6E;
+    --hairline: rgba(255,255,255,0.08);
+  }
+  html, body {
+    height: 100%;
+    background: #0A0A0A;
+    color: #F5F5F5;
+    font-family: "Inter", ui-sans-serif, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+  /* Static matte stage */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(180deg, #11111A 0%, #0A0A0A 100%);
+  }
+
+  /* The big 2D line — a wide horizontal stroke that draws itself across the viewport */
+  .line-svg {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+  }
+  .line-stroke {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    /* Drawing animation — stroke-dasharray + stroke-dashoffset */
+    stroke-dasharray: 2400;
+    stroke-dashoffset: 2400;
+    animation: draw-line 2.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards;
+    filter: drop-shadow(0 0 14px rgba(255,255,255,0.18));
+  }
+  @keyframes draw-line {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Hero content sitting on top */
+  .hero {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    pointer-events: none;
+  }
+  .hero img {
+    width: min(46vw, 440px);
+    height: auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.6));
+    opacity: 0;
+    animation: fade-up 1.2s 1.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .hero .tag1 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 600;
+    font-size: clamp(11px, 1.1vw, 14px);
+    color: #F5F5F5;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    padding-left: 0.42em;
+    opacity: 0;
+    animation: fade-up 1.2s 1.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .hero .tag2 {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 500;
+    font-size: clamp(9px, 0.9vw, 11px);
+    color: var(--silver);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding-left: 0.5em;
+    opacity: 0;
+    animation: fade-up 1.2s 2.1s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .lab-info {
+    position: fixed;
+    bottom: 12px; right: 12px;
+    z-index: 6;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    background: rgba(10,10,10,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+  .lab-info a { color: var(--silver); text-decoration: none; }
+  .lab-info a:hover { color: #F5F5F5; }
+</style>
+</head>
+<body>
+
+<div class="stage" aria-hidden="true"></div>
+
+<svg class="line-svg" viewBox="0 0 2400 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <!-- Big 2D line: a wide horizontal stroke that crosses the hero, with a slight low-frequency curve so it feels organic, not architectural -->
+  <path class="line-stroke" d="M -100 600 C 400 580, 800 620, 1200 600 C 1600 580, 2000 620, 2500 600" />
+</svg>
+
+<div class="hero" id="hero" aria-hidden="true">
+  <img src="/logos/ds2-logo.png" alt="DS2" />
+  <div class="tag1">Digital Solutions</div>
+  <div class="tag2">consulting</div>
+</div>
+
+<div class="lab-info">ds2 / lab / line · <a href="/lab">↩ all variants</a></div>
+
+<script>
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("bgOnly") === "1") {
+    document.getElementById("hero")?.style.setProperty("display", "none");
+    document.querySelector(".lab-info")?.style.setProperty("display", "none");
+  }
+})();
+</script>
+
+</body>
+</html>
