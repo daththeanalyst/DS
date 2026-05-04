@@ -223,7 +223,7 @@ function LoginForm() {
       >
         {/* DS2 logo — top center */}
         <div style={{ position: 'absolute', top: '36px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-          <img src="/logos/logo-black.png" alt="DS2" style={{ height: '44px', width: 'auto', opacity: 0.7 }} />
+          <img src="/logos/black_DS2_logo.png" alt="DS2" style={{ height: '44px', width: 'auto', opacity: 0.7 }} />
         </div>
 
         <LockIcon />
