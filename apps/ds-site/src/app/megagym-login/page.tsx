@@ -70,11 +70,27 @@ function EyeIcon({ open }: { open: boolean }) {
   )
 }
 
+const MAX_ATTEMPTS = 5
+const LOCKOUT_MS = 2 * 60 * 1000
+const LS_ATTEMPTS = 'mgym_attempts'
+const LS_LOCKOUT = 'mgym_lockout'
+
+function getRemainingLockout(): number {
+  const until = parseInt(localStorage.getItem(LS_LOCKOUT) ?? '0', 10)
+  return Math.max(0, until - Date.now())
+}
+
+function getAttempts(): number {
+  return parseInt(localStorage.getItem(LS_ATTEMPTS) ?? '0', 10)
+}
+
 function LoginForm() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [lockedOut, setLockedOut] = useState(false)
+  const [secondsLeft, setSecondsLeft] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -93,9 +109,29 @@ function LoginForm() {
     return () => window.removeEventListener('resize', resize)
   }, [])
 
+  // Check lockout on mount and tick countdown
+  useEffect(() => {
+    const check = () => {
+      const remaining = getRemainingLockout()
+      if (remaining > 0) {
+        setLockedOut(true)
+        setSecondsLeft(Math.ceil(remaining / 1000))
+      } else {
+        setLockedOut(false)
+        setSecondsLeft(0)
+      }
+    }
+    check()
+    const interval = setInterval(check, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!password || loading) return
+    if (!password || loading || lockedOut) return
+
+    if (getRemainingLockout() > 0) return
+
     setError(false)
     setLoading(true)
 
@@ -107,6 +143,12 @@ function LoginForm() {
       })
 
       if (!res.ok) {
+        const attempts = getAttempts() + 1
+        localStorage.setItem(LS_ATTEMPTS, String(attempts))
+        if (attempts >= MAX_ATTEMPTS) {
+          localStorage.setItem(LS_LOCKOUT, String(Date.now() + LOCKOUT_MS))
+          localStorage.setItem(LS_ATTEMPTS, '0')
+        }
         setError(true)
         setLoading(false)
         return
@@ -224,8 +266,8 @@ function LoginForm() {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Enter password"
-              disabled={loading}
+              placeholder={lockedOut ? `Try again in ${secondsLeft}s` : 'Enter password'}
+              disabled={loading || lockedOut}
               autoFocus
               style={{
                 flex: 1,
@@ -255,13 +297,13 @@ function LoginForm() {
             </button>
             <button
               type="submit"
-              disabled={loading || !password}
+              disabled={loading || !password || lockedOut}
               style={{
                 padding: '18px 22px',
                 background: 'transparent',
                 border: 'none',
-                cursor: loading || !password ? 'default' : 'pointer',
-                color: loading || !password ? '#ccc' : '#666',
+                cursor: loading || !password || lockedOut ? 'default' : 'pointer',
+                color: loading || !password || lockedOut ? '#ccc' : '#666',
                 fontSize: '20px',
                 lineHeight: 1,
                 transition: 'color 0.2s',
@@ -271,15 +313,14 @@ function LoginForm() {
             </button>
           </div>
 
-          {error && (
-            <p style={{
-              marginTop: '10px',
-              fontSize: '13px',
-              color: '#c0392b',
-              textAlign: 'center',
-              fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif',
-            }}>
-              Incorrect password. Please try again.
+          {lockedOut && (
+            <p style={{ marginTop: '10px', fontSize: '13px', color: '#c0392b', textAlign: 'center', fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif' }}>
+              Too many attempts. Try again in {secondsLeft}s.
+            </p>
+          )}
+          {error && !lockedOut && (
+            <p style={{ marginTop: '10px', fontSize: '13px', color: '#c0392b', textAlign: 'center', fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif' }}>
+              Incorrect password. {MAX_ATTEMPTS - getAttempts()} attempt{MAX_ATTEMPTS - getAttempts() !== 1 ? 's' : ''} remaining.
             </p>
           )}
         </form>
