@@ -303,10 +303,10 @@ export default function HomePage() {
       let typeAbort = { aborted: false };
       if (subjectEl && bodyEl && contactSection) {
         const draft = {
-          subject: "We need a new website that doesn't feel ten years old.",
+          subject: "We need a real website rebuild for our stores.",
           body: [
-            "Hi DS2 — we're a <hl>gym chain in Athens</hl> with eight locations. Our current site is a WordPress build from 2016 that the marketing team can't update without something breaking.",
-            "We need <hl>a proper product site</hl> — class schedules, trial signups, location pages, member portal — and something that doesn't look like every other gym website. Most of our traffic is on mobile.",
+            "Hi DS2 — we run a <hl>sports retailer</hl> with twelve locations. Our current site is a Shopify build that's been patched into something nobody on the team wants to touch any more.",
+            "We need <hl>a proper product site</hl> — store locator, inventory by location, gear guides, decent search — and something that doesn't look like every other sports retailer out there. Most of our customers find us on mobile.",
             "Could we book 30 minutes next week to walk you through what we have?",
           ],
         };
