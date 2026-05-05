@@ -40,5 +40,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/MegaGym-Website/:path*',
+  matcher: ['/clients/:path*', '/MegaGym-Website/:path*'],
 }

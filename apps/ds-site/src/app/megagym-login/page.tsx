@@ -92,7 +92,6 @@ function LoginForm() {
   const [lockedOut, setLockedOut] = useState(false)
   const [secondsLeft, setSecondsLeft] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -109,7 +108,6 @@ function LoginForm() {
     return () => window.removeEventListener('resize', resize)
   }, [])
 
-  // Check lockout on mount and tick countdown
   useEffect(() => {
     const check = () => {
       const remaining = getRemainingLockout()
@@ -129,7 +127,6 @@ function LoginForm() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
     if (!password || loading || lockedOut) return
-
     if (getRemainingLockout() > 0) return
 
     setError(false)
@@ -154,44 +151,47 @@ function LoginForm() {
         return
       }
 
-      const redirect = searchParams.get('redirect') ?? '/MegaGym-Website'
+      // Reset attempt counter on success
+      localStorage.setItem(LS_ATTEMPTS, '0')
+
+      // Default destination is the clients listing — falls through to whatever
+      // path the middleware put in `?redirect=` if the user was deep-linked.
+      const redirect = searchParams.get('redirect') ?? '/clients'
+
+      // Prime sessionStorage so the MegaGym preloader skips itself when the
+      // user navigates from the clients page into /MegaGym-Website. Same
+      // origin (ds2-consulting.com) so the flag is readable there.
+      try {
+        sessionStorage.setItem('megagym-loaded', '1')
+      } catch {
+        /* private browsing or quota — non-fatal */
+      }
+
       const canvas = canvasRef.current!
       const overlay = overlayRef.current!
-      const iframe = iframeRef.current!
 
       overlay.style.transition = 'opacity 0.2s ease'
       overlay.style.opacity = '0'
 
-      iframe.style.transition = 'filter 1.1s ease'
-      iframe.style.filter = 'blur(0px)'
-
       setTimeout(() => {
         canvas.style.display = 'block'
-        dissolve(canvas, 'rgba(244, 243, 241, 0.94)', () => router.push(redirect))
+        dissolve(canvas, 'rgba(244, 243, 241, 0.96)', () => router.push(redirect))
       }, 180)
     } catch {
       setError(true)
       setLoading(false)
     }
-  }, [password, loading, router, searchParams])
+  }, [password, loading, lockedOut, router, searchParams])
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', background: '#f0efed' }}>
-      {/* Live blurred MegaGym site as background */}
-      <iframe
-        ref={iframeRef}
-        src="https://megagym.dathproject.com"
-        title="preview"
-        style={{
-          position: 'absolute',
-          inset: '-6%',
-          width: '112%',
-          height: '112%',
-          border: 'none',
-          filter: 'blur(8px)',
-          pointerEvents: 'none',
-        }}
-      />
+    <div className="lock-shell">
+      {/* Animated drifting-blob background — pure CSS */}
+      <div className="lock-bg" aria-hidden="true">
+        <span className="lock-blob lock-blob--a" />
+        <span className="lock-blob lock-blob--b" />
+        <span className="lock-blob lock-blob--c" />
+        <span className="lock-grain" />
+      </div>
 
       {/* Pixel dissolve canvas — hidden until auth success */}
       <canvas
@@ -206,135 +206,59 @@ function LoginForm() {
         }}
       />
 
-      {/* Password overlay */}
-      <div
-        ref={overlayRef}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'rgba(244, 243, 241, 0.88)',
-          backdropFilter: 'blur(3px)',
-        }}
-      >
-        {/* DS2 logo — top center */}
-        <div style={{ position: 'absolute', top: '36px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-          <img src="/logos/black_DS2_logo.png" alt="DS2" style={{ height: '44px', width: 'auto', opacity: 0.7 }} />
+      {/* Password card */}
+      <div ref={overlayRef} className="lock-overlay">
+        <div className="lock-brand">
+          <img src="/logos/black_DS2_logo.png" alt="DS2" />
         </div>
 
-        <LockIcon />
+        <div className="lock-card">
+          <LockIcon />
 
-        <h1 style={{
-          marginTop: '28px',
-          fontSize: 'clamp(26px, 3.5vw, 38px)',
-          fontWeight: 300,
-          color: '#1c1c1c',
-          letterSpacing: '-0.018em',
-          textAlign: 'center',
-          fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif',
-        }}>
-          This content is protected.
-        </h1>
+          <h1 className="lock-title">This content is protected.</h1>
+          <p className="lock-sub">To view, please enter the password.</p>
 
-        <p style={{
-          marginTop: '12px',
-          fontSize: '15.5px',
-          color: '#888',
-          textAlign: 'center',
-          fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif',
-        }}>
-          To view, please enter the password.
-        </p>
+          <form onSubmit={handleSubmit} className="lock-form">
+            <div className={`lock-input-wrap ${lockedOut ? 'is-locked' : ''}`}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder={lockedOut ? `Try again in ${secondsLeft}s` : 'Enter password'}
+                disabled={loading || lockedOut}
+                autoFocus
+                className="lock-input"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                className="lock-eye"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <EyeIcon open={showPassword} />
+              </button>
+              <button
+                type="submit"
+                disabled={loading || !password || lockedOut}
+                className="lock-submit"
+                aria-label="Submit"
+              >
+                →
+              </button>
+            </div>
 
-        <form
-          onSubmit={handleSubmit}
-          style={{ marginTop: '48px', width: '100%', maxWidth: '500px', padding: '0 24px' }}
-        >
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: '#fff',
-            border: '1px solid #ddd',
-            borderRadius: '3px',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-          }}>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder={lockedOut ? `Try again in ${secondsLeft}s` : 'Enter password'}
-              disabled={loading || lockedOut}
-              autoFocus
-              style={{
-                flex: 1,
-                padding: '18px 22px',
-                fontSize: '15px',
-                color: '#333',
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif',
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(v => !v)}
-              style={{
-                padding: '18px 12px',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#aaa',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <EyeIcon open={showPassword} />
-            </button>
-            <button
-              type="submit"
-              disabled={loading || !password || lockedOut}
-              style={{
-                padding: '18px 22px',
-                background: 'transparent',
-                border: 'none',
-                cursor: loading || !password || lockedOut ? 'default' : 'pointer',
-                color: loading || !password || lockedOut ? '#ccc' : '#666',
-                fontSize: '20px',
-                lineHeight: 1,
-                transition: 'color 0.2s',
-              }}
-            >
-              →
-            </button>
-          </div>
+            {lockedOut && (
+              <p className="lock-error">Too many attempts. Try again in {secondsLeft}s.</p>
+            )}
+            {error && !lockedOut && (
+              <p className="lock-error">
+                Incorrect password. {MAX_ATTEMPTS - getAttempts()} attempt{MAX_ATTEMPTS - getAttempts() !== 1 ? 's' : ''} remaining.
+              </p>
+            )}
+          </form>
+        </div>
 
-          {lockedOut && (
-            <p style={{ marginTop: '10px', fontSize: '13px', color: '#c0392b', textAlign: 'center', fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif' }}>
-              Too many attempts. Try again in {secondsLeft}s.
-            </p>
-          )}
-          {error && !lockedOut && (
-            <p style={{ marginTop: '10px', fontSize: '13px', color: '#c0392b', textAlign: 'center', fontFamily: 'var(--font-inter), ui-sans-serif, sans-serif' }}>
-              Incorrect password. {MAX_ATTEMPTS - getAttempts()} attempt{MAX_ATTEMPTS - getAttempts() !== 1 ? 's' : ''} remaining.
-            </p>
-          )}
-        </form>
-
-        <p style={{
-          position: 'absolute',
-          bottom: '28px',
-          fontSize: '11px',
-          color: '#bbb',
-          letterSpacing: '0.06em',
-          fontFamily: 'ui-monospace, monospace',
-        }}>
-          DS2 · DIGITAL SOLUTIONS
-        </p>
+        <p className="lock-foot">DS2 · DIGITAL SOLUTIONS</p>
       </div>
     </div>
   )

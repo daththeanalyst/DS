@@ -4,11 +4,17 @@ import { PROJECTS } from './projects'
 
 export const dynamic = 'force-dynamic'
 
+interface VisitRow {
+  path: string | null
+  created_at: string
+  country: string | null
+}
+
 function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  )
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
 }
 
 function timeAgo(iso: string) {
@@ -30,10 +36,26 @@ function sevenDaysAgo() {
 export default async function AnalyticsOverview() {
   const sb = getSupabase()
 
-  const { data: allVisits } = await sb
-    .from('visits')
-    .select('path, created_at, country')
-    .order('created_at', { ascending: false })
+  let allVisits: VisitRow[] = []
+  let fetchError: string | null = null
+
+  if (!sb) {
+    fetchError = 'Supabase env vars not set (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY).'
+  } else {
+    try {
+      const { data, error } = await sb
+        .from('visits')
+        .select('path, created_at, country')
+        .order('created_at', { ascending: false })
+      if (error) {
+        fetchError = error.message
+      } else if (data) {
+        allVisits = data as VisitRow[]
+      }
+    } catch (err) {
+      fetchError = err instanceof Error ? err.message : 'Unknown fetch error.'
+    }
+  }
 
   const week = sevenDaysAgo()
 
@@ -81,6 +103,23 @@ export default async function AnalyticsOverview() {
             {PROJECTS.length} active {PROJECTS.length === 1 ? 'project' : 'projects'} · click any card for deeper insights
           </p>
         </div>
+
+        {fetchError && (
+          <div style={{
+            marginBottom: '32px',
+            padding: '18px 22px',
+            border: '1px solid rgba(255,170,80,0.32)',
+            background: 'rgba(255,170,80,0.06)',
+            borderRadius: '10px',
+            color: '#e8b46a',
+            fontSize: '13px',
+            lineHeight: 1.55,
+            fontFamily: 'ui-monospace, monospace',
+          }}>
+            <strong style={{ color: '#f5c98a' }}>Analytics data unavailable.</strong>{' '}
+            {fetchError} The page is rendering with empty stats — check Vercel project env vars.
+          </div>
+        )}
 
         {/* Project cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '14px' }}>

@@ -5,11 +5,19 @@ import { getProject } from '../projects'
 
 export const dynamic = 'force-dynamic'
 
+interface VisitRow {
+  id: string | number
+  path: string | null
+  created_at: string
+  country: string | null
+  referrer: string | null
+}
+
 function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  )
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return null
+  return createClient(url, key)
 }
 
 function formatDate(iso: string) {
@@ -49,14 +57,30 @@ export default async function ProjectAnalytics({
 
   const sb = getSupabase()
 
-  const { data: visits } = await sb
-    .from('visits')
-    .select('*')
-    .like('path', `${project.pathPrefix}%`)
-    .order('created_at', { ascending: false })
-    .limit(500)
+  let visits: VisitRow[] = []
+  let fetchError: string | null = null
 
-  const all = visits ?? []
+  if (!sb) {
+    fetchError = 'Supabase env vars not set (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY).'
+  } else {
+    try {
+      const { data, error } = await sb
+        .from('visits')
+        .select('*')
+        .like('path', `${project.pathPrefix}%`)
+        .order('created_at', { ascending: false })
+        .limit(500)
+      if (error) {
+        fetchError = error.message
+      } else if (data) {
+        visits = data as VisitRow[]
+      }
+    } catch (err) {
+      fetchError = err instanceof Error ? err.message : 'Unknown fetch error.'
+    }
+  }
+
+  const all = visits
   const total = all.length
   const weekVisits = all.filter(v => v.created_at > sevenDaysAgo())
 
@@ -124,6 +148,23 @@ export default async function ProjectAnalytics({
             {project.url}
           </p>
         </div>
+
+        {fetchError && (
+          <div style={{
+            marginBottom: '24px',
+            padding: '18px 22px',
+            border: '1px solid rgba(255,170,80,0.32)',
+            background: 'rgba(255,170,80,0.06)',
+            borderRadius: '10px',
+            color: '#e8b46a',
+            fontSize: '13px',
+            lineHeight: 1.55,
+            fontFamily: 'ui-monospace, monospace',
+          }}>
+            <strong style={{ color: '#f5c98a' }}>Analytics data unavailable.</strong>{' '}
+            {fetchError} Stats below show zero — check Vercel project env vars.
+          </div>
+        )}
 
         {/* Stat cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '32px' }}>
