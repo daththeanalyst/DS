@@ -127,27 +127,17 @@ export default async function AnalyticsOverview() {
             <Link
               key={project.slug}
               href={`/$ecretAnalytics/${project.slug}`}
+              className="analytics-card"
               style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
             >
-              <div style={{
+              <div className="analytics-card__inner" style={{
                 background: 'rgba(255,255,255,0.025)',
                 border: '1px solid rgba(255,255,255,0.08)',
                 borderRadius: '14px',
                 padding: '32px',
                 cursor: 'pointer',
-                transition: 'border-color 0.2s, background 0.2s',
-              }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor = 'rgba(255,255,255,0.18)'
-                  el.style.background = 'rgba(255,255,255,0.04)'
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLDivElement
-                  el.style.borderColor = 'rgba(255,255,255,0.08)'
-                  el.style.background = 'rgba(255,255,255,0.025)'
-                }}
-              >
+                transition: 'border-color 0.2s ease, background 0.2s ease',
+              }}>
                 {/* Project name + URL */}
                 <div style={{ marginBottom: '28px' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>

@@ -1295,6 +1295,12 @@ footer a:hover { color: var(--silver); }
   .client-card { padding: 22px 20px; }
   .client-card__name { font-size: 20px; }
 }
+
+/* Analytics overview cards — CSS hover only (server component compatible) */
+.analytics-card:hover .analytics-card__inner {
+  border-color: rgba(255,255,255,0.18) !important;
+  background: rgba(255,255,255,0.04) !important;
+}
 @media (max-width: 640px) {
   .nav-links { display: none; }
   .services { grid-template-columns: 1fr; }
