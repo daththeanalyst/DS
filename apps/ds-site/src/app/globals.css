@@ -1051,6 +1051,8 @@ footer a:hover { color: var(--silver); }
 }
 .lock-input::placeholder { color: rgba(255,255,255,0.28); }
 .lock-input::selection  { background: rgba(255,255,255,0.28); color: #fff; }
+.lock-input::-ms-reveal,
+.lock-input::-ms-clear  { display: none; }
 .lock-eye, .lock-submit {
   background: transparent;
   border: none;
