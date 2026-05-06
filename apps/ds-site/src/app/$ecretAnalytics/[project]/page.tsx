@@ -14,6 +14,7 @@ interface VisitRow {
   country: string | null
   referrer: string | null
   visitor_id: string | null
+  client_id: string | null
 }
 
 function getSupabase() {
@@ -256,7 +257,7 @@ export default async function ProjectAnalytics({
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  {['Time', 'Page', 'Country', 'Referrer'].map(h => (
+                  {['Time', 'Page', 'Country', 'Via', 'Referrer'].map(h => (
                     <th key={h} style={{ padding: '11px 20px', textAlign: 'left', color: '#444', fontWeight: 400, fontFamily: 'ui-monospace, monospace', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
                       {h}
                     </th>
@@ -275,6 +276,9 @@ export default async function ProjectAnalytics({
                     <td style={{ padding: '12px 20px', color: '#777' }}>
                       {v.country ?? '—'}
                     </td>
+                    <td style={{ padding: '12px 20px', color: v.client_id ? '#a78bfa' : '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                      {v.client_id ?? '—'}
+                    </td>
                     <td style={{ padding: '12px 20px', color: '#555', maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {truncate(v.referrer, 48)}
                     </td>
@@ -282,7 +286,7 @@ export default async function ProjectAnalytics({
                 ))}
                 {total === 0 && (
                   <tr>
-                    <td colSpan={4} style={{ padding: '36px 20px', textAlign: 'center', color: '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
+                    <td colSpan={5} style={{ padding: '36px 20px', textAlign: 'center', color: '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
                       No visits recorded yet.
                     </td>
                   </tr>

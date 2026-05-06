@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server'
 const AUTH_COOKIE = 'megagym_auth'
 const AUTH_VALUE = 'ds2-mgym-v1'
 const VISITOR_COOKIE = 'mgym_visitor'
+const CLIENT_COOKIE = 'mgym_client'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -53,6 +54,7 @@ export function middleware(request: NextRequest) {
         country: (request as NextRequest & { geo?: { country?: string } }).geo?.country ?? null,
         user_agent: request.headers.get('user-agent') ?? null,
         visitor_id: visitorId,
+        client_id: request.cookies.get(CLIENT_COOKIE)?.value ?? null,
       }),
     }).catch(() => {})
   }

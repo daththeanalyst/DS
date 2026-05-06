@@ -154,9 +154,9 @@ function LoginForm() {
       // Reset attempt counter on success
       localStorage.setItem(LS_ATTEMPTS, '0')
 
-      // Default destination is the clients listing — falls through to whatever
-      // path the middleware put in `?redirect=` if the user was deep-linked.
-      const redirect = searchParams.get('redirect') ?? '/clients'
+      const { redirect: passwordRedirect } = await res.json()
+      // Deep-link from middleware takes priority; fall back to password's own destination
+      const redirect = searchParams.get('redirect') ?? passwordRedirect ?? '/clients'
 
       // Prime sessionStorage so the MegaGym preloader skips itself when the
       // user navigates from the clients page into /MegaGym-Website. Same
