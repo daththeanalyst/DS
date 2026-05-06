@@ -176,7 +176,7 @@ function LoginForm() {
           </form>
         </div>
 
-        <p className="lock-foot">DS2 · DIGITAL SOLUTIONS</p>
+        <p className="lock-foot">DS2 · DIGITAL SOLUTIONS CONSULTING</p>
       </div>
     </div>
   )

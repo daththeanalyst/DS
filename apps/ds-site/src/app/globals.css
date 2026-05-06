@@ -989,7 +989,7 @@ footer a:hover { color: var(--silver); }
   justify-content: center;
 }
 .lock-brand img {
-  height: 44px;
+  height: 132px;
   width: auto;
   opacity: 0.7;
 }
