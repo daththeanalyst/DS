@@ -1,6 +1,0 @@
-{
-  "installCommand": "git submodule update --init --recursive && pnpm install",
-  "buildCommand": "turbo run build --filter=@ds/site",
-  "outputDirectory": "apps/ds-site/.next",
-  "framework": "nextjs"
-}
