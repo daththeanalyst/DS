@@ -6,10 +6,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 function LockIcon() {
   return (
     <svg width="52" height="60" viewBox="0 0 52 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="3" y="26" width="46" height="34" rx="5" stroke="#b0b0b0" strokeWidth="2" fill="none" />
-      <path d="M13 26V19C13 9.5 39 9.5 39 19V26" stroke="#b0b0b0" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <circle cx="26" cy="41" r="4.5" stroke="#b0b0b0" strokeWidth="1.8" fill="none" />
-      <line x1="26" y1="45.5" x2="26" y2="51" stroke="#b0b0b0" strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="3" y="26" width="46" height="34" rx="5" stroke="rgba(255,255,255,0.6)" strokeWidth="2" fill="none" />
+      <path d="M13 26V19C13 9.5 39 9.5 39 19V26" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <circle cx="26" cy="41" r="4.5" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" fill="none" />
+      <line x1="26" y1="45.5" x2="26" y2="51" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   )
 }
@@ -126,12 +126,12 @@ function LoginForm() {
 
       {/* Password card */}
       <div className="lock-overlay">
-        <div className="lock-brand">
-          <img src="/logos/black_DS2_logo.png" alt="DS2" />
-        </div>
-
         <div className="lock-card">
           <LockIcon />
+
+          <div className="lock-brand">
+            <img src="/logos/ds2-white.png" alt="DS2" />
+          </div>
 
           <h1 className="lock-title">This content is protected.</h1>
           <p className="lock-sub">To view, please enter the password.</p>
