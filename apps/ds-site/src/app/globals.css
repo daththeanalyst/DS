@@ -970,51 +970,6 @@ footer a:hover { color: var(--silver); }
   background:
     linear-gradient(180deg, #f2efe9 0%, #e6e2db 60%, #d9d4cb 100%);
 }
-.lock-blob {
-  position: absolute;
-  width: 70vmax; height: 70vmax;
-  border-radius: 50%;
-  filter: blur(90px);
-  will-change: transform;
-}
-.lock-blob--a {
-  background: radial-gradient(circle, rgba(212,206,196,0.95), rgba(212,206,196,0) 70%);
-  top: -25%; left: -20%;
-  animation: lockOrbitA 38s ease-in-out infinite;
-}
-.lock-blob--b {
-  background: radial-gradient(circle, rgba(232,228,219,0.85), rgba(232,228,219,0) 70%);
-  bottom: -30%; right: -25%;
-  animation: lockOrbitB 32s ease-in-out infinite;
-}
-.lock-blob--c {
-  background: radial-gradient(circle, rgba(196,189,178,0.6), rgba(196,189,178,0) 70%);
-  top: 20%; right: -15%;
-  animation: lockOrbitC 44s ease-in-out infinite;
-}
-@keyframes lockOrbitA {
-  0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(35vw, 28vh); }
-}
-@keyframes lockOrbitB {
-  0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(-28vw, -32vh); }
-}
-@keyframes lockOrbitC {
-  0%, 100% { transform: translate(0, 0); }
-  50%      { transform: translate(-22vw, 24vh); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lock-blob { animation: none; }
-}
-.lock-grain {
-  position: absolute; inset: 0;
-  background:
-    repeating-radial-gradient(circle at 20% 20%, rgba(0,0,0,0.012) 0 1px, transparent 1px 2px),
-    repeating-radial-gradient(circle at 80% 70%, rgba(0,0,0,0.012) 0 1px, transparent 1px 2px);
-  mix-blend-mode: multiply;
-  opacity: 0.5;
-}
 
 .lock-overlay {
   position: relative;

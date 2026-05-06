@@ -185,13 +185,7 @@ function LoginForm() {
 
   return (
     <div className="lock-shell">
-      {/* Animated drifting-blob background — pure CSS */}
-      <div className="lock-bg" aria-hidden="true">
-        <span className="lock-blob lock-blob--a" />
-        <span className="lock-blob lock-blob--b" />
-        <span className="lock-blob lock-blob--c" />
-        <span className="lock-grain" />
-      </div>
+      <div className="lock-bg" aria-hidden="true" />
 
       {/* Pixel dissolve canvas — hidden until auth success */}
       <canvas
