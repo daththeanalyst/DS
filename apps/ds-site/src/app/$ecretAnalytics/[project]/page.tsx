@@ -60,10 +60,10 @@ export default async function ProjectAnalytics({
   searchParams,
 }: {
   params: Promise<{ project: string }>
-  searchParams: Promise<{ from?: string; to?: string; tz?: string }>
+  searchParams: Promise<{ from?: string; to?: string; tz?: string; client?: string }>
 }) {
   const { project: slug } = await params
-  const { from, to, tz = 'Europe/London' } = await searchParams
+  const { from, to, tz = 'Europe/London', client } = await searchParams
 
   const project = getProject(slug)
   if (!project) notFound()
@@ -93,10 +93,14 @@ export default async function ProjectAnalytics({
     }
   }
 
-  // Apply date range filter
+  // Collect available client IDs for the filter UI
+  const clientIds = [...new Set(visits.map(v => v.client_id).filter(Boolean))] as string[]
+
+  // Apply date range + client filter
   const all = visits.filter(v => {
     if (from && v.created_at < `${from}T00:00:00Z`) return false
     if (to && v.created_at > `${to}T23:59:59Z`) return false
+    if (client && v.client_id !== client) return false
     return true
   })
 
@@ -171,7 +175,7 @@ export default async function ProjectAnalytics({
               </p>
             </div>
             <Suspense>
-              <FilterBar initialTz={tz} />
+              <FilterBar initialTz={tz} clientIds={clientIds} activeClient={client ?? null} />
             </Suspense>
           </div>
         </div>
