@@ -278,7 +278,7 @@ export default async function ProjectAnalytics({
                     <td style={{ padding: '12px 20px', color: '#777' }}>
                       {v.country ?? '—'}
                     </td>
-                    <td style={{ padding: '12px 20px', color: v.client_id ? (v.client_id.endsWith('-admin') ? '#f87171' : '#a78bfa') : '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '12px 20px', color: v.client_id ? (v.client_id.includes('[blocked]') ? '#f87171' : v.client_id.endsWith('-admin') ? '#4ade80' : '#a78bfa') : '#444', fontFamily: 'ui-monospace, monospace', fontSize: '12px', whiteSpace: 'nowrap' }}>
                       {v.client_id ?? '—'}
                     </td>
                     <td style={{ padding: '12px 20px', color: '#555', maxWidth: '260px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
