@@ -29,6 +29,28 @@ export function middleware(request: NextRequest) {
   // if their auth cookie is still valid
   const clientId = request.cookies.get(CLIENT_COOKIE)?.value ?? null
   if (clientId && getBlockedIds().includes(clientId)) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (supabaseUrl && serviceKey) {
+      fetch(`${supabaseUrl}/rest/v1/visits`, {
+        method: 'POST',
+        headers: {
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          path: pathname,
+          referrer: request.headers.get('referer') ?? null,
+          country: (request as NextRequest & { geo?: { country?: string } }).geo?.country ?? null,
+          user_agent: request.headers.get('user-agent') ?? null,
+          visitor_id: request.cookies.get(VISITOR_COOKIE)?.value ?? null,
+          client_id: `${clientId} [blocked]`,
+        }),
+      }).catch(() => {})
+    }
+
     const url = request.nextUrl.clone()
     url.pathname = '/megagym-login'
     url.searchParams.set('redirect', pathname)
