@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function LockIcon() {
@@ -14,46 +14,6 @@ function LockIcon() {
   )
 }
 
-function dissolve(canvas: HTMLCanvasElement, bgColor: string, onDone: () => void) {
-  const ctx = canvas.getContext('2d')!
-
-  ctx.fillStyle = bgColor
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  const BLOCK = 26
-  const cols = Math.ceil(canvas.width / BLOCK)
-  const rows = Math.ceil(canvas.height / BLOCK)
-
-  const blocks: Array<[number, number]> = []
-  for (let r = 0; r < rows; r++)
-    for (let c = 0; c < cols; c++)
-      blocks.push([c * BLOCK, r * BLOCK])
-
-  for (let i = blocks.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tmp = blocks[i]!
-    blocks[i] = blocks[j]!
-    blocks[j] = tmp
-  }
-
-  const DURATION = 1100
-  const start = performance.now()
-  let last = 0
-
-  function frame(now: number) {
-    const t = Math.min((now - start) / DURATION, 1)
-    const eased = 1 - Math.pow(1 - t, 2.8)
-    const count = Math.floor(eased * blocks.length)
-    for (let i = last; i < count; i++) {
-      const b = blocks[i]!
-      ctx.clearRect(b[0], b[1], BLOCK, BLOCK)
-    }
-    last = count
-    t < 1 ? requestAnimationFrame(frame) : onDone()
-  }
-
-  requestAnimationFrame(frame)
-}
 
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
@@ -91,22 +51,8 @@ function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [lockedOut, setLockedOut] = useState(false)
   const [secondsLeft, setSecondsLeft] = useState(0)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const overlayRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-    return () => window.removeEventListener('resize', resize)
-  }, [])
 
   useEffect(() => {
     const check = () => {
@@ -167,16 +113,7 @@ function LoginForm() {
         /* private browsing or quota — non-fatal */
       }
 
-      const canvas = canvasRef.current!
-      const overlay = overlayRef.current!
-
-      overlay.style.transition = 'opacity 0.2s ease'
-      overlay.style.opacity = '0'
-
-      setTimeout(() => {
-        canvas.style.display = 'block'
-        dissolve(canvas, 'rgba(244, 243, 241, 0.96)', () => router.push(redirect))
-      }, 180)
+      router.push(redirect)
     } catch {
       setError(true)
       setLoading(false)
@@ -187,21 +124,8 @@ function LoginForm() {
     <div className="lock-shell">
       <div className="lock-bg" aria-hidden="true" />
 
-      {/* Pixel dissolve canvas — hidden until auth success */}
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 30,
-          display: 'none',
-          width: '100%',
-          height: '100%',
-        }}
-      />
-
       {/* Password card */}
-      <div ref={overlayRef} className="lock-overlay">
+      <div className="lock-overlay">
         <div className="lock-brand">
           <img src="/logos/black_DS2_logo.png" alt="DS2" />
         </div>
