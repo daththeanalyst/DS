@@ -10,6 +10,7 @@ interface Props {
   description: string
   total: number
   weekCount: number
+  uniqueVisitors: number
   topCountry: string | null
   lastVisit: string | null
 }
@@ -24,9 +25,9 @@ function timeAgo(iso: string) {
   return `${Math.floor(hrs / 24)}d ago`
 }
 
-function MiniStat({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
+function MiniStat({ label, value, highlight, wide }: { label: string; value: string | number; highlight?: boolean; wide?: boolean }) {
   return (
-    <div style={{ background: '#111', padding: '16px 18px' }}>
+    <div style={{ background: '#111', padding: '16px 18px', gridColumn: wide ? 'span 2' : undefined }}>
       <p style={{ fontSize: '10px', color: '#444', letterSpacing: '0.1em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', margin: '0 0 6px' }}>
         {label}
       </p>
@@ -37,7 +38,7 @@ function MiniStat({ label, value, highlight }: { label: string; value: string | 
   )
 }
 
-export default function ProjectCard({ slug, name, url, description, total, weekCount, topCountry, lastVisit }: Props) {
+export default function ProjectCard({ slug, name, url, description, total, weekCount, uniqueVisitors, topCountry, lastVisit }: Props) {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -71,8 +72,9 @@ export default function ProjectCard({ slug, name, url, description, total, weekC
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', overflow: 'hidden' }}>
-          <MiniStat label="Total visits" value={total} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', borderRadius: '8px', overflow: 'hidden' }}>
+          <MiniStat label="Unique visitors" value={uniqueVisitors} highlight={uniqueVisitors > 0} />
+          <MiniStat label="Total views" value={total} />
           <MiniStat label="This week" value={weekCount} highlight={weekCount > 0} />
           <MiniStat label="Top country" value={topCountry ?? '—'} />
         </div>

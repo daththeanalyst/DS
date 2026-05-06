@@ -8,6 +8,7 @@ interface VisitRow {
   path: string | null
   created_at: string
   country: string | null
+  visitor_id: string | null
 }
 
 function getSupabase() {
@@ -35,7 +36,7 @@ export default async function AnalyticsOverview() {
     try {
       const { data, error } = await sb
         .from('visits')
-        .select('path, created_at, country')
+        .select('path, created_at, country, visitor_id')
         .order('created_at', { ascending: false })
       if (error) {
         fetchError = error.message
@@ -54,6 +55,9 @@ export default async function AnalyticsOverview() {
       v.path?.startsWith(project.pathPrefix),
     )
     const weekVisits = visits.filter(v => v.created_at > week)
+    const uniqueVisitors = new Set(
+      visits.map(v => v.visitor_id).filter(Boolean),
+    ).size
     const countryCounts = visits.reduce<Record<string, number>>((acc, v) => {
       const k = v.country ?? 'Unknown'
       acc[k] = (acc[k] ?? 0) + 1
@@ -65,6 +69,7 @@ export default async function AnalyticsOverview() {
       project,
       total: visits.length,
       weekCount: weekVisits.length,
+      uniqueVisitors,
       topCountry: topCountry?.[0] ?? null,
       lastVisit: visits[0]?.created_at ?? null,
     }
@@ -110,7 +115,7 @@ export default async function AnalyticsOverview() {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '14px' }}>
-          {projectStats.map(({ project, total, weekCount, topCountry, lastVisit }) => (
+          {projectStats.map(({ project, total, weekCount, uniqueVisitors, topCountry, lastVisit }) => (
             <ProjectCard
               key={project.slug}
               slug={project.slug}
@@ -119,6 +124,7 @@ export default async function AnalyticsOverview() {
               description={project.description}
               total={total}
               weekCount={weekCount}
+              uniqueVisitors={uniqueVisitors}
               topCountry={topCountry}
               lastVisit={lastVisit}
             />

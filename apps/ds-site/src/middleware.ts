@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server'
 
 const AUTH_COOKIE = 'megagym_auth'
 const AUTH_VALUE = 'ds2-mgym-v1'
+const VISITOR_COOKIE = 'mgym_visitor'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -13,6 +14,25 @@ export function middleware(request: NextRequest) {
     url.pathname = '/megagym-login'
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
+  }
+
+  const response = NextResponse.next()
+
+  // Skip logging for asset requests (images, scripts, fonts, etc.)
+  // Browser page navigations always include text/html in Accept; assets don't.
+  const accept = request.headers.get('accept') ?? ''
+  if (!accept.includes('text/html')) return response
+
+  // Get or create a persistent visitor ID
+  let visitorId = request.cookies.get(VISITOR_COOKIE)?.value ?? null
+  if (!visitorId) {
+    visitorId = crypto.randomUUID()
+    response.cookies.set(VISITOR_COOKIE, visitorId, {
+      maxAge: 60 * 60 * 24 * 365,
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+    })
   }
 
   // Fire-and-forget visit logging
@@ -32,11 +52,12 @@ export function middleware(request: NextRequest) {
         referrer: request.headers.get('referer') ?? null,
         country: (request as NextRequest & { geo?: { country?: string } }).geo?.country ?? null,
         user_agent: request.headers.get('user-agent') ?? null,
+        visitor_id: visitorId,
       }),
     }).catch(() => {})
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
