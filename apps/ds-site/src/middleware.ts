@@ -6,6 +6,14 @@ const AUTH_VALUE = 'ds2-mgym-v1'
 const VISITOR_COOKIE = 'mgym_visitor'
 const CLIENT_COOKIE = 'mgym_client'
 
+function getBlockedIds(): string[] {
+  try {
+    return JSON.parse(process.env.MEGAGYM_BLOCKED ?? '[]')
+  } catch {
+    return []
+  }
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const cookie = request.cookies.get(AUTH_COOKIE)
@@ -15,6 +23,19 @@ export function middleware(request: NextRequest) {
     url.pathname = '/megagym-login'
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
+  }
+
+  // Check if this client_id has been blocked — kick them back to login even
+  // if their auth cookie is still valid
+  const clientId = request.cookies.get(CLIENT_COOKIE)?.value ?? null
+  if (clientId && getBlockedIds().includes(clientId)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/megagym-login'
+    url.searchParams.set('redirect', pathname)
+    const res = NextResponse.redirect(url)
+    res.cookies.delete(AUTH_COOKIE)
+    res.cookies.delete(CLIENT_COOKIE)
+    return res
   }
 
   const response = NextResponse.next()
