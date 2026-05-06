@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import { getProject } from '../projects'
+import FilterBar from './FilterBar'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +13,7 @@ interface VisitRow {
   created_at: string
   country: string | null
   referrer: string | null
+  visitor_id: string | null
 }
 
 function getSupabase() {
@@ -20,10 +23,11 @@ function getSupabase() {
   return createClient(url, key)
 }
 
-function formatDate(iso: string) {
+function formatDate(iso: string, tz: string) {
   return new Date(iso).toLocaleString('en-GB', {
     day: '2-digit', month: 'short', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
+    timeZone: tz,
   })
 }
 
@@ -32,12 +36,16 @@ function truncate(str: string | null, n: number) {
   return str.length > n ? str.slice(0, n) + '…' : str
 }
 
-function last30Days() {
+function last30DaysInTZ(tz: string): string[] {
   return Array.from({ length: 30 }, (_, i) => {
     const d = new Date()
     d.setDate(d.getDate() - (29 - i))
-    return d.toISOString().split('T')[0]!
+    return d.toLocaleDateString('en-CA', { timeZone: tz })
   })
+}
+
+function getLocalDay(iso: string, tz: string): string {
+  return new Date(iso).toLocaleDateString('en-CA', { timeZone: tz })
 }
 
 function sevenDaysAgo() {
@@ -48,10 +56,14 @@ function sevenDaysAgo() {
 
 export default async function ProjectAnalytics({
   params,
+  searchParams,
 }: {
   params: Promise<{ project: string }>
+  searchParams: Promise<{ from?: string; to?: string; tz?: string }>
 }) {
   const { project: slug } = await params
+  const { from, to, tz = 'Europe/London' } = await searchParams
+
   const project = getProject(slug)
   if (!project) notFound()
 
@@ -69,7 +81,7 @@ export default async function ProjectAnalytics({
         .select('*')
         .like('path', `${project.pathPrefix}%`)
         .order('created_at', { ascending: false })
-        .limit(500)
+        .limit(2000)
       if (error) {
         fetchError = error.message
       } else if (data) {
@@ -80,14 +92,21 @@ export default async function ProjectAnalytics({
     }
   }
 
-  const all = visits
+  // Apply date range filter
+  const all = visits.filter(v => {
+    if (from && v.created_at < `${from}T00:00:00Z`) return false
+    if (to && v.created_at > `${to}T23:59:59Z`) return false
+    return true
+  })
+
   const total = all.length
   const weekVisits = all.filter(v => v.created_at > sevenDaysAgo())
+  const uniqueVisitors = new Set(all.map(v => v.visitor_id).filter(Boolean)).size
 
-  // Visits per day (last 30 days)
-  const days = last30Days()
+  // Chart grouped by day in selected timezone
+  const days = last30DaysInTZ(tz)
   const byDay = all.reduce<Record<string, number>>((acc, v) => {
-    const day = v.created_at.split('T')[0]!
+    const day = getLocalDay(v.created_at, tz)
     acc[day] = (acc[day] ?? 0) + 1
     return acc
   }, {})
@@ -138,15 +157,22 @@ export default async function ProjectAnalytics({
           <Link href="/$ecretAnalytics" style={{ fontSize: '12px', color: '#555', textDecoration: 'none', fontFamily: 'ui-monospace, monospace', letterSpacing: '0.04em', display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px' }}>
             ← All projects
           </Link>
-          <p style={{ fontSize: '11px', color: '#444', letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '8px' }}>
-            DS2 · Analytics
-          </p>
-          <h1 style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.025em', margin: 0 }}>
-            {project.name}
-          </h1>
-          <p style={{ marginTop: '6px', fontSize: '12px', color: '#555', fontFamily: 'ui-monospace, monospace' }}>
-            {project.url}
-          </p>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap' }}>
+            <div>
+              <p style={{ fontSize: '11px', color: '#444', letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '8px' }}>
+                DS2 · Analytics
+              </p>
+              <h1 style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.025em', margin: 0 }}>
+                {project.name}
+              </h1>
+              <p style={{ marginTop: '6px', fontSize: '12px', color: '#555', fontFamily: 'ui-monospace, monospace' }}>
+                {project.url}
+              </p>
+            </div>
+            <Suspense>
+              <FilterBar initialTz={tz} />
+            </Suspense>
+          </div>
         </div>
 
         {fetchError && (
@@ -168,10 +194,10 @@ export default async function ProjectAnalytics({
 
         {/* Stat cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '32px' }}>
-          <StatCard label="Total visits" value={total} />
+          <StatCard label="Unique visitors" value={uniqueVisitors} />
+          <StatCard label="Total views" value={total} />
           <StatCard label="This week" value={weekVisits.length} />
           <StatCard label="Top country" value={topCountries[0]?.[0] ?? '—'} />
-          <StatCard label="Unique pages" value={topPages.length} />
         </div>
 
         {/* Visits over time chart */}
@@ -183,7 +209,7 @@ export default async function ProjectAnalytics({
           marginBottom: '16px',
         }}>
           <p style={{ fontSize: '11px', color: '#555', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: 'ui-monospace, monospace', marginBottom: '24px' }}>
-            Visits — last 30 days
+            Visits — last 30 days ({tz === 'Europe/Athens' ? 'Athens time' : 'London time'})
           </p>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '80px' }}>
             {chartData.map(({ day, count }) => (
@@ -241,7 +267,7 @@ export default async function ProjectAnalytics({
                 {all.slice(0, 50).map(v => (
                   <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
                     <td style={{ padding: '12px 20px', color: '#555', whiteSpace: 'nowrap', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
-                      {formatDate(v.created_at)}
+                      {formatDate(v.created_at, tz)}
                     </td>
                     <td style={{ padding: '12px 20px', color: '#ccc', fontFamily: 'ui-monospace, monospace', fontSize: '12px' }}>
                       {(v.path ?? '/').replace(project.pathPrefix, '') || '/'}
