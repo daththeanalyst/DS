@@ -23,7 +23,7 @@ function fromYMD(str: string) {
   return new Date(y!, m! - 1, d!)
 }
 
-export default function FilterBar({ initialTz, clientIds, activeClient }: { initialTz: string; clientIds: string[]; activeClient: string | null }) {
+export default function FilterBar({ initialTz, activeGroup }: { initialTz: string; activeGroup: string | null }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -35,7 +35,7 @@ export default function FilterBar({ initialTz, clientIds, activeClient }: { init
     fromParam ? { from: fromYMD(fromParam), to: toParam ? fromYMD(toParam) : undefined } : undefined,
   )
   const [tz, setTz] = useState(searchParams.get('tz') ?? initialTz)
-  const [client, setClient] = useState<string | null>(activeClient)
+  const [group, setGroup] = useState<string | null>(activeGroup)
   const [calOpen, setCalOpen] = useState(false)
   const [btnState, setBtnState] = useState<'idle' | 'applied'>('idle')
   const calRef = useRef<HTMLDivElement>(null)
@@ -56,17 +56,17 @@ export default function FilterBar({ initialTz, clientIds, activeClient }: { init
     if (range?.from) params.set('from', toYMD(range.from))
     if (range?.to) params.set('to', toYMD(range.to))
     params.set('tz', tz)
-    if (client) params.set('client', client)
+    if (group) params.set('group', group)
     router.replace(`${pathname}?${params.toString()}`)
     setCalOpen(false)
     setBtnState('applied')
     setTimeout(() => setBtnState('idle'), 1800)
-  }, [range, tz, client, pathname, router])
+  }, [range, tz, group, pathname, router])
 
   const reset = useCallback(() => {
     setRange(undefined)
     setTz('Europe/London')
-    setClient(null)
+    setGroup(null)
     router.replace(pathname)
     setBtnState('idle')
   }, [pathname, router])
@@ -77,7 +77,7 @@ export default function FilterBar({ initialTz, clientIds, activeClient }: { init
       : `${formatDisplay(range.from)} – …`
     : 'All time'
 
-  const isDirty = range?.from || tz !== 'Europe/London' || client
+  const isDirty = range?.from || tz !== 'Europe/London' || group
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', position: 'relative' }}>
@@ -183,16 +183,22 @@ export default function FilterBar({ initialTz, clientIds, activeClient }: { init
         )}
       </div>
 
-      {/* Client ID filter */}
-      {clientIds.length > 0 && (
-        <div style={{ display: 'flex', background: '#111', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}>
+      {/* Group filter */}
+      <div style={{ display: 'flex', background: '#111', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}>
+        {[
+          { label: 'All', value: null, activeColor: '#f5f5f5', activeBg: 'rgba(255,255,255,0.1)' },
+          { label: 'Leads', value: 'leads', activeColor: '#a78bfa', activeBg: 'rgba(99,102,241,0.2)' },
+          { label: 'Admins', value: 'admins', activeColor: '#f87171', activeBg: 'rgba(248,113,113,0.15)' },
+        ].map((opt, i) => (
           <button
-            onClick={() => setClient(null)}
+            key={opt.label}
+            onClick={() => setGroup(opt.value)}
             style={{
-              padding: '7px 12px',
-              background: !client ? 'rgba(255,255,255,0.1)' : 'transparent',
+              padding: '7px 14px',
+              background: group === opt.value ? opt.activeBg : 'transparent',
               border: 'none',
-              color: !client ? '#f5f5f5' : '#555',
+              borderLeft: i > 0 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+              color: group === opt.value ? opt.activeColor : '#555',
               fontSize: '11px',
               fontFamily: 'ui-monospace, monospace',
               letterSpacing: '0.06em',
@@ -200,31 +206,10 @@ export default function FilterBar({ initialTz, clientIds, activeClient }: { init
               transition: 'background 0.15s, color 0.15s',
             }}
           >
-            All
+            {opt.label}
           </button>
-          {clientIds.map(id => (
-            <button
-              key={id}
-              onClick={() => setClient(id)}
-              style={{
-                padding: '7px 12px',
-                background: client === id ? 'rgba(99,102,241,0.2)' : 'transparent',
-                border: 'none',
-                borderLeft: '1px solid rgba(255,255,255,0.07)',
-                color: client === id ? '#a5b4fc' : '#555',
-                fontSize: '11px',
-                fontFamily: 'ui-monospace, monospace',
-                letterSpacing: '0.06em',
-                cursor: 'pointer',
-                transition: 'background 0.15s, color 0.15s',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {id}
-            </button>
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
 
       {/* Apply button with feedback */}
       <button
